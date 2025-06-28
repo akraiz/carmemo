@@ -8,21 +8,20 @@ echo "Installing dependencies..."
 npm install --include=dev
 
 echo "Checking if TypeScript is available..."
-if ! command -v tsc &> /dev/null; then
-    echo "TypeScript not found in PATH, installing locally..."
+if [ -f "./node_modules/.bin/tsc" ]; then
+    echo "TypeScript found in node_modules/.bin/"
+    TSC_CMD="./node_modules/.bin/tsc"
+elif command -v tsc &> /dev/null; then
+    echo "TypeScript found in PATH"
+    TSC_CMD="tsc"
+else
+    echo "TypeScript not found, installing locally..."
     npm install typescript@~5.7.2
+    TSC_CMD="./node_modules/.bin/tsc"
 fi
 
 echo "Building TypeScript..."
-if command -v tsc &> /dev/null; then
-    tsc
-elif [ -f "./node_modules/.bin/tsc" ]; then
-    ./node_modules/.bin/tsc
-else
-    echo "Installing TypeScript globally and trying again..."
-    npm install -g typescript@~5.7.2
-    tsc
-fi
+$TSC_CMD
 
 echo "Build completed. Checking dist directory:"
 ls -la dist/ || echo "dist directory not found!"
