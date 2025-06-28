@@ -1,0 +1,3384 @@
+{
+  "toyota_corolla_2020": {
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2020,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 12,
+        "category": "Engine",
+        "urgency": "High",
+        "notes": "Use 0W-20 synthetic oil"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 12,
+        "category": "Tires",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Inspection",
+        "interval_km": 20000,
+        "interval_months": 24,
+        "category": "Safety",
+        "urgency": "High"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 15000,
+        "interval_months": 24,
+        "category": "Other",
+        "urgency": "Low"
+      },
+      {
+        "item": "Coolant Flush",
+        "interval_km": 80000,
+        "interval_months": 60,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid Change",
+        "interval_km": 96000,
+        "interval_months": 72,
+        "category": "Transmission",
+        "urgency": "High"
+      }
+    ]
+  },
+  "ford_f-series_super_duty_2019": {
+    "make": "Ford",
+    "model": "F-Series Super Duty",
+    "year": 2019,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter",
+        "interval_km": 16000,
+        "interval_months": 12,
+        "category": "Engine",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Wheels/Tires",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Multi-Point Inspection (Brakes, Steering, Suspension, Fluid Levels, Belts, Hoses, Lights, etc.)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "HVAC",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 60000,
+        "interval_months": 36,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "Engine Coolant Replacement (Initial Service)",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Cooling System",
+        "urgency": "High"
+      },
+      {
+        "item": "Transmission Fluid/Filter Service (Normal Duty)",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Transmission",
+        "urgency": "High"
+      },
+      {
+        "item": "Transfer Case Fluid Service (4x4)",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Differential Fluid Service (Front & Rear, Normal Duty)",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Fuel Filter Replacement (Diesel Engines Only)",
+        "interval_km": 30000,
+        "interval_months": 18,
+        "category": "Fuel System",
+        "urgency": "High"
+      },
+      {
+        "item": "Accessory Drive Belt Replacement",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement (Gas Engines Only)",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Steering Linkage & Ball Joints Greasing (if equipped with grease fittings)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_f-150_2015": {
+    "make": "Ford",
+    "model": "F-150",
+    "year": 2015,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Engine",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tires",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "HVAC",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Flush",
+        "interval_km": 0,
+        "interval_months": 48,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "Coolant Flush",
+        "interval_km": 80000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid Change (Severe Duty)",
+        "interval_km": 150000,
+        "interval_months": 0,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plugs",
+        "interval_km": 100000,
+        "interval_months": 0,
+        "category": "Engine",
+        "urgency": "High"
+      },
+      {
+        "item": "Differential Fluid Change (Severe Duty)",
+        "interval_km": 100000,
+        "interval_months": 0,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Change (Severe Duty) (4x4)",
+        "interval_km": 100000,
+        "interval_months": 0,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_f-150_2020": {
+    "make": "Ford",
+    "model": "F-150",
+    "year": 2020,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Engine",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tires/Wheels",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Inspect Brake System (Pads, Discs, Lines)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "Inspect Suspension & Steering Components",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Inspect Exhaust System",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Exhaust",
+        "urgency": "Low"
+      },
+      {
+        "item": "Inspect Drive Belts & Hoses",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Engine",
+        "urgency": "Low"
+      },
+      {
+        "item": "Replace Engine Air Filter",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Cabin Air Filter",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "HVAC",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Brake Fluid",
+        "interval_km": 60000,
+        "interval_months": 36,
+        "category": "Brakes",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Test Battery & Charging System",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Low"
+      },
+      {
+        "item": "Replace Spark Plugs",
+        "interval_km": 100000,
+        "interval_months": 120,
+        "category": "Engine/Ignition",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Engine Coolant (Initial)",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Cooling",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Transmission Fluid (Normal Service)",
+        "interval_km": 150000,
+        "interval_months": 120,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Transfer Case Fluid (4x4, Normal Service)",
+        "interval_km": 150000,
+        "interval_months": 120,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Differential Fluid (Front/Rear, Normal Service)",
+        "interval_km": 150000,
+        "interval_months": 120,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Accessory Drive Belts",
+        "interval_km": 150000,
+        "interval_months": 120,
+        "category": "Engine",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_escape_2019": {
+    "make": "Ford",
+    "model": "Escape",
+    "year": 2019,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 16000,
+        "interval_months": 12,
+        "category": "Engine",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Wheels/Tires",
+        "urgency": "High"
+      },
+      {
+        "item": "Brake System Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "General Fluid Level Check (Brake, Coolant, Washer)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Battery Terminal Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Wiper Blade Inspection/Replacement (as needed)",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Exterior",
+        "urgency": "Low"
+      },
+      {
+        "item": "Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Filters",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Filters",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension & Steering Component Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Chassis",
+        "urgency": "High"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Exhaust",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Battery Health Test",
+        "interval_km": 60000,
+        "interval_months": 36,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Accessory Drive Belt Inspection",
+        "interval_km": 60000,
+        "interval_months": 48,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Coolant Replacement",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Spark Plugs Replacement",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Accessory Drive Belt Replacement",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid Change",
+        "interval_km": 240000,
+        "interval_months": 120,
+        "category": "Fluids",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "kia_sportage_2020": {
+    "make": "KIA",
+    "model": "Sportage",
+    "year": 2020,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Engine",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tires",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "Check Fluid Levels (Coolant, Brake, Washer)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Fluids/Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Inspect Steering & Suspension Components",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Suspension/Steering/Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Inspect Drive Shafts & Boots",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Drivetrain/Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Inspect Battery Condition & Terminals",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Electrical/Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Inspect Drive Belts & Hoses",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Engine/Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Engine Air Filter",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Cabin Air Filter",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "HVAC",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Brake Fluid",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Brakes/Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Inspect Automatic Transmission Fluid",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Transmission/Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Check Wheel Alignment",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Tires/Suspension",
+        "urgency": "Low"
+      },
+      {
+        "item": "Replace Automatic Transmission Fluid (Severe Duty Reference)",
+        "interval_km": 96000,
+        "interval_months": 48,
+        "category": "Transmission/Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Replace Engine Coolant (First Service)",
+        "interval_km": 120000,
+        "interval_months": 60,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Replace Spark Plugs",
+        "interval_km": 160000,
+        "interval_months": 96,
+        "category": "Engine",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_explorer_2019": {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2019,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Engine",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tires",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Engine/Air Intake",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "HVAC",
+        "urgency": "Low"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 40000,
+        "interval_months": 36,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "Coolant Flush & Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "High"
+      },
+      {
+        "item": "Transmission Fluid Replacement",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Transmission",
+        "urgency": "High"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 160000,
+        "interval_months": 96,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Drive Belt Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "Steering & Suspension Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Chassis/Suspension",
+        "urgency": "High"
+      },
+      {
+        "item": "Battery & Charging System Check",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Electrical",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "tesla_model_3_2020": {
+    "make": "Tesla",
+    "model": "Model 3",
+    "year": 2020,
+    "schedule": [
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 12,
+        "category": "Wheels & Tires",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": null,
+        "interval_months": 24,
+        "category": "Filters",
+        "urgency": "Medium"
+      },
+      {
+        "item": "HEPA Filter Replacement (If equipped)",
+        "interval_km": null,
+        "interval_months": 36,
+        "category": "Filters",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Check & Replacement",
+        "interval_km": null,
+        "interval_months": 24,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "Brake Caliper Cleaning & Lubrication (Cold Climates)",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Brakes",
+        "urgency": "Medium"
+      },
+      {
+        "item": "AC Desiccant Bag Replacement",
+        "interval_km": null,
+        "interval_months": 36,
+        "category": "HVAC",
+        "urgency": "Medium"
+      },
+      {
+        "item": "General Vehicle Inspection (Wipers, Lights, Suspension, Steering, etc.)",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "General",
+        "urgency": "Low"
+      }
+    ]
+  },
+  "toyota_camry_2021": {
+    "make": "Toyota",
+    "model": "Camry",
+    "year": 2021,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Replacement",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Engine",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Chassis/Tires",
+        "urgency": "High"
+      },
+      {
+        "item": "Brake System Inspection (pads, rotors, lines)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "Inspect Fluid Levels (Coolant, Brake, Washer)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "HVAC",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "Inspect Drive Belts",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Coolant Replacement (Initial Change)",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plugs Replacement",
+        "interval_km": 120000,
+        "interval_months": 72,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid Inspection",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_explorer_2016": {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2016,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 16000,
+        "interval_months": 12,
+        "category": "Engine",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 16000,
+        "interval_months": 12,
+        "category": "Tires",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Multi-Point Inspection (Brakes, Steering, Suspension, Fluids, Belts, Hoses)",
+        "interval_km": 16000,
+        "interval_months": 12,
+        "category": "General",
+        "urgency": "High"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 48000,
+        "interval_months": 36,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 48000,
+        "interval_months": 36,
+        "category": "HVAC",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 60000,
+        "interval_months": 36,
+        "category": "Brakes",
+        "urgency": "High"
+      },
+      {
+        "item": "Transmission Fluid Replacement (Proactive/Severe Service)",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Powertrain",
+        "urgency": "High"
+      },
+      {
+        "item": "Differential/Transfer Case Fluid Replacement (AWD - Proactive/Severe Service)",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Powertrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plugs Replacement",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Engine",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Coolant Replacement",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Cooling System",
+        "urgency": "High"
+      },
+      {
+        "item": "Accessory Drive Belt Replacement",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Engine",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "honda_accord_2018": {
+    "make": "Honda",
+    "model": "Accord",
+    "year": 2018,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation & Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 45000,
+        "interval_months": 36,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 25000,
+        "interval_months": 18,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 25000,
+        "interval_months": 18,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Engine Tune-Up",
+        "urgency": "High"
+      },
+      {
+        "item": "Transmission Fluid Replacement (Automatic/CVT)",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Transmission",
+        "urgency": "High"
+      },
+      {
+        "item": "Coolant Replacement",
+        "interval_km": 200000,
+        "interval_months": 120,
+        "category": "Cooling System",
+        "urgency": "High"
+      },
+      {
+        "item": "Steering & Suspension Component Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Exhaust",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Check All Fluid Levels and Condition",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Battery & Terminals Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Check Lights and Wiper Operation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Safety",
+        "urgency": "High"
+      },
+      {
+        "item": "Drive Belt Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "General Vehicle Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Wiper Blade Replacement",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Other",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "honda_accord_1998": {
+    "make": "Honda",
+    "model": "Accord",
+    "year": 1998,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 6000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation & Balance",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "General Inspection (Fluids, Lights, Belts, Hoses)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 25000,
+        "interval_months": 18,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Battery Inspection & Test",
+        "interval_km": 25000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension & Steering Components Inspection",
+        "interval_km": 25000,
+        "interval_months": 12,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 25000,
+        "interval_months": 12,
+        "category": "Exhaust",
+        "urgency": "Low"
+      },
+      {
+        "item": "Spark Plugs Replacement",
+        "interval_km": 80000,
+        "interval_months": 60,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid Replacement (Automatic)",
+        "interval_km": 60000,
+        "interval_months": 48,
+        "category": "Transmission",
+        "urgency": "High"
+      },
+      {
+        "item": "Transmission Filter Replacement (Automatic, if applicable)",
+        "interval_km": 60000,
+        "interval_months": 48,
+        "category": "Transmission",
+        "urgency": "High"
+      },
+      {
+        "item": "Cooling System Flush & Coolant Replacement",
+        "interval_km": 80000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "High"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 60000,
+        "interval_months": 36,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Power Steering Fluid Replacement",
+        "interval_km": 80000,
+        "interval_months": 60,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Timing Belt & Water Pump Replacement",
+        "interval_km": 100000,
+        "interval_months": 84,
+        "category": "Engine Tune-Up",
+        "urgency": "High"
+      },
+      {
+        "item": "Serpentine/Accessory Belt Replacement",
+        "interval_km": 100000,
+        "interval_months": 84,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Fuel Filter Replacement",
+        "interval_km": 100000,
+        "interval_months": 84,
+        "category": "Fuel System",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "toyota_camry_2020": {
+    "make": "Toyota",
+    "model": "Camry",
+    "year": 2020,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 16000,
+        "interval_months": 12,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "High"
+      },
+      {
+        "item": "General Inspection (Fluids, lights, wipers, visual check)",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines, Hoses)",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 16000,
+        "interval_months": 12,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 48000,
+        "interval_months": 36,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 48000,
+        "interval_months": 36,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid Replacement (Preventative/Severe Service)",
+        "interval_km": 96000,
+        "interval_months": 60,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Differential/Transfer Case Fluid Replacement (AWD, Preventative/Severe Service)",
+        "interval_km": 96000,
+        "interval_months": 60,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plugs Replacement (3.5L V6 Engine)",
+        "interval_km": 96000,
+        "interval_months": 72,
+        "category": "Engine Tune-Up",
+        "urgency": "Low"
+      },
+      {
+        "item": "Spark Plugs Replacement (2.5L L4 Engine)",
+        "interval_km": 192000,
+        "interval_months": 120,
+        "category": "Engine Tune-Up",
+        "urgency": "Low"
+      },
+      {
+        "item": "Coolant Replacement (Initial, Toyota Super Long Life)",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Inspect Drive Belts",
+        "interval_km": 96000,
+        "interval_months": 72,
+        "category": "Other",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "honda_civic_1999": {
+    "make": "Honda",
+    "model": "Civic",
+    "year": 1999,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation & Balance",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "General Vehicle Inspection",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Fluid Levels Check (All Major Systems)",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Safety Inspection (Lights, Horn, Belts, etc.)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Safety",
+        "urgency": "High"
+      },
+      {
+        "item": "Wiper Blades Replacement",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Exterior",
+        "urgency": "Low"
+      },
+      {
+        "item": "Battery Inspection & Service",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Flush",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Accessory Drive Belts Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension & Steering Components Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Suspension/Steering",
+        "urgency": "High"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Exhaust",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid Change (Automatic)",
+        "interval_km": 80000,
+        "interval_months": 48,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Coolant Replacement",
+        "interval_km": 80000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Power Steering Fluid Replacement",
+        "interval_km": 80000,
+        "interval_months": 60,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plugs Replacement",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Valve Adjustment",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Fuel Filter Replacement",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Fuel System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Timing Belt & Water Pump Replacement",
+        "interval_km": 100000,
+        "interval_months": 84,
+        "category": "Engine Tune-Up",
+        "urgency": "High"
+      }
+    ]
+  },
+  "honda_accord_2021": {
+    "make": "Honda",
+    "model": "Accord",
+    "year": 2021,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation & Balancing",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (pads, rotors, lines, fluid level)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "General Vehicle Inspection (incl. steering, suspension, exhaust, fuel lines, fluids, lights, wipers, etc.)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension & Steering Components Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Suspension/Steering",
+        "urgency": "High"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": null,
+        "interval_months": 36,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Automatic/CVT Transmission Fluid Replacement",
+        "interval_km": 60000,
+        "interval_months": null,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 100000,
+        "interval_months": null,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Coolant Replacement (First Replacement)",
+        "interval_km": 200000,
+        "interval_months": 120,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Battery Health Test & Terminal Cleaning",
+        "interval_km": null,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_explorer_2011": {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2011,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 50000,
+        "interval_months": 36,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 160000,
+        "interval_months": 96,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid & Filter Change",
+        "interval_km": 150000,
+        "interval_months": 96,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Differential Fluid Change (If Applicable)",
+        "interval_km": 150000,
+        "interval_months": 96,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Change (If Applicable)",
+        "interval_km": 150000,
+        "interval_months": 96,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Coolant Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Accessory Drive Belt Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Accessory Drive Belt Replacement",
+        "interval_km": 150000,
+        "interval_months": null,
+        "category": "Other",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Fuel Filter Replacement (If External)",
+        "interval_km": 150000,
+        "interval_months": null,
+        "category": "Fuel System",
+        "urgency": "Low"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Exhaust",
+        "urgency": "Low"
+      },
+      {
+        "item": "Suspension & Steering Components Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Battery Test & Terminals Cleaning",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Wiper Blade Replacement",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Exterior",
+        "urgency": "Safety"
+      },
+      {
+        "item": "Lights, Horn, and Safety Features Check",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Safety",
+        "urgency": "High"
+      },
+      {
+        "item": "All Fluid Levels Check (Coolant, Washer, Power Steering, Brake)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "General Vehicle Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      }
+    ]
+  },
+  "ford_explorer_2009": {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2009,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Check all Fluid Levels (Brake, Coolant, Power Steering, Washer)",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Check Tire Condition & Pressure",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Safety",
+        "urgency": "High"
+      },
+      {
+        "item": "General Vehicle Inspection (Lights, Hoses, Belts, Wipers, Battery Test, Visual Leak Check)",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 24000,
+        "interval_months": 18,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement (if equipped)",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension and Steering Component Inspection",
+        "interval_km": 24000,
+        "interval_months": 18,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 24000,
+        "interval_months": 18,
+        "category": "Exhaust",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Chassis and Undercarriage Inspection",
+        "interval_km": 24000,
+        "interval_months": 18,
+        "category": "Chassis",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 50000,
+        "interval_months": 30,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Accessory Drive Belt Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid & Filter Service",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Differential Fluid Replacement (if 4WD)",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Replacement (if 4WD)",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Coolant Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Power Steering Fluid Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Fluids",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_explorer_2020": {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2020,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Fluid Levels Check (Coolant, Brake, Washer, etc.)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "General Vehicle Inspection (Lights, Horn, Wipers)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Wiper Blades Replacement",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Exterior",
+        "urgency": "Low"
+      },
+      {
+        "item": "Battery Test & Terminal Condition Check",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "HVAC System Performance Check",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "HVAC",
+        "urgency": "Low"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Accessory Drive Belt Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Other",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension & Steering Component Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Exhaust",
+        "urgency": "Low"
+      },
+      {
+        "item": "Cooling System Hoses & Clamps Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Fuel System Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Fuel System",
+        "urgency": "Low"
+      },
+      {
+        "item": "Brake Fluid Condition Check",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 60000,
+        "interval_months": 36,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Coolant Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid & Filter Service",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Differential Fluid Replacement (If equipped)",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Replacement (If equipped)",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_explorer_2008": {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2008,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 24000,
+        "interval_months": 12,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 24000,
+        "interval_months": 12,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 160000,
+        "interval_months": 96,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Automatic Transmission Fluid & Filter Service",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Front/Rear Differential Fluid Service",
+        "interval_km": 80000,
+        "interval_months": 48,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Service (4x4/AWD)",
+        "interval_km": 80000,
+        "interval_months": 48,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension & Steering Component Inspection",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Suspension/Steering",
+        "urgency": "High"
+      },
+      {
+        "item": "Power Steering Fluid Check & Replacement",
+        "interval_km": 80000,
+        "interval_months": 48,
+        "category": "Fluids",
+        "urgency": "Low"
+      },
+      {
+        "item": "Brake Fluid Flush/Replacement",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Coolant Flush/Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "HVAC System Performance Check",
+        "interval_km": 24000,
+        "interval_months": 12,
+        "category": "HVAC",
+        "urgency": "Low"
+      },
+      {
+        "item": "Battery & Charging System Check",
+        "interval_km": 24000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Exhaust",
+        "urgency": "Low"
+      },
+      {
+        "item": "Chassis Lubrication (Doors, Hinges, etc.)",
+        "interval_km": null,
+        "interval_months": 12,
+        "category": "Chassis",
+        "urgency": "Low"
+      },
+      {
+        "item": "Wiper Blade Replacement",
+        "interval_km": null,
+        "interval_months": 12,
+        "category": "Exterior",
+        "urgency": "Medium"
+      },
+      {
+        "item": "General Vehicle Inspection (Fluids, Lights, Belts, Hoses, etc.)",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Accessory Drive Belt Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Other",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_explorer_2004": {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2004,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 25000,
+        "interval_months": 18,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 25000,
+        "interval_months": 18,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cooling System Flush & Fill",
+        "interval_km": 90000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Automatic Transmission Fluid & Filter Replacement",
+        "interval_km": 90000,
+        "interval_months": 60,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plugs Replacement",
+        "interval_km": 100000,
+        "interval_months": 120,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Serpentine Drive Belt Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Serpentine Drive Belt Replacement",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Differential Fluid Change (Front & Rear if applicable)",
+        "interval_km": 90000,
+        "interval_months": 60,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Change (if 4WD/AWD)",
+        "interval_km": 90000,
+        "interval_months": 60,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Power Steering Fluid Flush",
+        "interval_km": 90000,
+        "interval_months": 60,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Fuel Filter Replacement",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Fuel System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "General Vehicle Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Fluid Level Check (All fluids including washer fluid)",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Safety Systems Check (Lights, Wipers, Horn, etc.)",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Safety",
+        "urgency": "High"
+      },
+      {
+        "item": "Suspension & Steering Component Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Exhaust",
+        "urgency": "Low"
+      },
+      {
+        "item": "Chassis & Underbody Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Chassis",
+        "urgency": "Low"
+      },
+      {
+        "item": "Battery & Charging System Check",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Low"
+      },
+      {
+        "item": "HVAC System Performance Check",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "HVAC",
+        "urgency": "Low"
+      }
+    ]
+  },
+  "ford_explorer_2002": {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2002,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation & Balance Check",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 25000,
+        "interval_months": 12,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement (if equipped)",
+        "interval_km": 25000,
+        "interval_months": 12,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines, Fluid Level)",
+        "interval_km": 15000,
+        "interval_months": 12,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Replacement/Flush",
+        "interval_km": 48000,
+        "interval_months": 36,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Ignition System Check (Coils, Wires - as applicable)",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Engine Tune-Up",
+        "urgency": "Low"
+      },
+      {
+        "item": "Transmission Fluid & Filter Change",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Front/Rear Differential Fluid Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Replacement (4WD models)",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension & Steering Components Inspection",
+        "interval_km": 15000,
+        "interval_months": 12,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Power Steering Fluid Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Suspension/Steering",
+        "urgency": "Low"
+      },
+      {
+        "item": "Engine Coolant Replacement (Flush)",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cooling System Hoses & Belts Inspection",
+        "interval_km": 15000,
+        "interval_months": 12,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "HVAC System Check (Operation, Blower, Vents)",
+        "interval_km": 15000,
+        "interval_months": 12,
+        "category": "HVAC",
+        "urgency": "Low"
+      },
+      {
+        "item": "Battery & Charging System Check",
+        "interval_km": 15000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Exterior & Interior Lighting Check",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Electrical",
+        "urgency": "Low"
+      },
+      {
+        "item": "Fuel Filter Replacement",
+        "interval_km": 80000,
+        "interval_months": null,
+        "category": "Fuel System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Exhaust System Inspection (Leaks, Condition)",
+        "interval_km": 15000,
+        "interval_months": 12,
+        "category": "Exhaust",
+        "urgency": "Low"
+      },
+      {
+        "item": "Chassis & Underbody Inspection (Rust, Damage)",
+        "interval_km": 15000,
+        "interval_months": 12,
+        "category": "Chassis",
+        "urgency": "Low"
+      },
+      {
+        "item": "Wiper Blade Check/Replacement",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Exterior",
+        "urgency": "Low"
+      },
+      {
+        "item": "Check All Fluid Levels (Brake, Power Steering, Washer, Coolant)",
+        "interval_km": 8000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Drive Belt & Hose Inspection",
+        "interval_km": 15000,
+        "interval_months": 12,
+        "category": "Safety",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Tire Pressure Check & Adjustment",
+        "interval_km": 1000,
+        "interval_months": 1,
+        "category": "Safety",
+        "urgency": "High"
+      },
+      {
+        "item": "General Vehicle Inspection (Fluids, Filters, Belts, Hoses, Lights, Wiper Blades, Chassis)",
+        "interval_km": 15000,
+        "interval_months": 12,
+        "category": "General Inspection",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_explorer_2023": {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2023,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation & Pressure Check",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines, Fluid Level)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Steering & Suspension Component Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Suspension/Steering",
+        "urgency": "High"
+      },
+      {
+        "item": "Fluid Levels Check (Coolant, Brake, Washer, etc.)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "General Multi-Point Inspection (Lights, Horn, Wipers, Belts, Hoses, Exhaust, etc.)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Battery Inspection & Cleaning",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Accessory Drive Belt Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "General Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Drivetrain Fluid Inspection (Differential, Transfer Case - AWD models)",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 160000,
+        "interval_months": 96,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Coolant Replacement",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_f-150_2019": {
+    "make": "Ford",
+    "model": "F-150",
+    "year": 2019,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Fluid Levels Check (All Major)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Lights, Wipers, Horn Check",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Safety",
+        "urgency": "High"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension and Steering Component Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Exhaust",
+        "urgency": "Low"
+      },
+      {
+        "item": "Chassis and Underbody Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Chassis",
+        "urgency": "Low"
+      },
+      {
+        "item": "Belts and Hoses Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "General Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Battery and Charging System Check",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 100000,
+        "interval_months": 96,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid and Filter Service",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Differential Fluid Service (Front & Rear)",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Service (4x4)",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cooling System Fluid Replacement",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_edge_2019": {
+    "make": "Ford",
+    "model": "Edge",
+    "year": 2019,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation & Balance Check",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines, Fluid Level)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Comprehensive Multi-Point Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "All Fluid Levels Check (Brake, Coolant, Washer, etc.)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Pressure Monitoring System (TPMS) & Tire Condition Check",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Safety",
+        "urgency": "High"
+      },
+      {
+        "item": "Exterior Lighting & Wiper Operation Check",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Exterior",
+        "urgency": "High"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Filters",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Automatic Transmission Fluid Level/Condition Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cooling System Hoses & Clamps Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Steering & Suspension Components Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 60000,
+        "interval_months": 48,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Automatic Transmission Fluid & Filter Service",
+        "interval_km": 96000,
+        "interval_months": 72,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Differential Fluid Service (Front/Rear)",
+        "interval_km": 96000,
+        "interval_months": 72,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Service (AWD models)",
+        "interval_km": 96000,
+        "interval_months": 72,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Coolant Replacement",
+        "interval_km": 96000,
+        "interval_months": 72,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plugs Replacement",
+        "interval_km": 96000,
+        "interval_months": 72,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Battery Test & Cable Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Electrical",
+        "urgency": "Low"
+      },
+      {
+        "item": "Fuel System Lines & Connections Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Fuel System",
+        "urgency": "Low"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Exhaust",
+        "urgency": "Low"
+      },
+      {
+        "item": "Chassis and Underbody Inspection",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Chassis",
+        "urgency": "Low"
+      },
+      {
+        "item": "HVAC System Operation Check",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "HVAC",
+        "urgency": "Low"
+      },
+      {
+        "item": "Lubricate Latches, Hinges, Lock Cylinders",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Other",
+        "urgency": "Low"
+      }
+    ]
+  },
+  "ford_figo_2020": {
+    "make": "Ford",
+    "model": "figo",
+    "year": 2020,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "General Vehicle Inspection (fluids, belts, hoses, battery, lights, etc.)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Safety Systems Check (lights, horn, seatbelts, tire pressure)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Safety",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Fluids",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension & Steering Component Inspection",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Manual Transmission Fluid Level Check (if applicable)",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Transmission",
+        "urgency": "Low"
+      },
+      {
+        "item": "Automatic Transmission Fluid & Filter Service (if applicable, check manual)",
+        "interval_km": 90000,
+        "interval_months": 72,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plug Replacement",
+        "interval_km": 100000,
+        "interval_months": null,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Coolant Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Accessory Drive Belt Replacement (inspect periodically)",
+        "interval_km": 100000,
+        "interval_months": null,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Fuel Filter Replacement (if serviceable, check manual)",
+        "interval_km": 100000,
+        "interval_months": null,
+        "category": "Fuel System",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_taurus_2019": {
+    "make": "Ford",
+    "model": "taurus",
+    "year": 2019,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation & Balancing",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Hoses, Lines)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "General Vehicle Inspection (Fluids, Hoses, Belts, Leaks)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Suspension & Steering Components Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Suspension/Steering",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Exhaust",
+        "urgency": "Low"
+      },
+      {
+        "item": "Chassis & Undercarriage Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Chassis",
+        "urgency": "Low"
+      },
+      {
+        "item": "Safety Systems Inspection (Seatbelts, Horn, Lights)",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Safety",
+        "urgency": "High"
+      },
+      {
+        "item": "Battery and Electrical System Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Low"
+      },
+      {
+        "item": "Drive Belts and Hoses Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Wiper Blades Replacement",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Exterior",
+        "urgency": "Low"
+      },
+      {
+        "item": "HVAC System Performance Check",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "HVAC",
+        "urgency": "Low"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Differential Fluid Service (If AWD)",
+        "interval_km": 80000,
+        "interval_months": 60,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Service (If AWD)",
+        "interval_km": 80000,
+        "interval_months": 60,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plugs Replacement",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid & Filter Service",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Coolant Replacement",
+        "interval_km": 160000,
+        "interval_months": 120,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      }
+    ]
+  },
+  "ford_f-series_super_duty_chassis_cab_2019": {
+    "make": "Ford",
+    "model": "F-Series Super Duty Chassis Cab",
+    "year": 2019,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation & Balance",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines, Fluid)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "Brake Fluid Flush & Replacement",
+        "interval_km": 40000,
+        "interval_months": 24,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Low"
+      },
+      {
+        "item": "Fuel Filter Replacement (Common for Diesel Engines)",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Fuel System",
+        "urgency": "High"
+      },
+      {
+        "item": "Transmission Fluid & Filter Service",
+        "interval_km": 80000,
+        "interval_months": 48,
+        "category": "Transmission",
+        "urgency": "High"
+      },
+      {
+        "item": "Differential Fluid Service (Front & Rear)",
+        "interval_km": 80000,
+        "interval_months": 48,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Service (4x4 models)",
+        "interval_km": 80000,
+        "interval_months": 48,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cooling System Flush & Fluid Replacement",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plugs Replacement (Gasoline Engines Only)",
+        "interval_km": 100000,
+        "interval_months": 60,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Lubricate Chassis Components (If Equipped)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Chassis",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Battery & Charging System Test",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Wiper Blades Replacement",
+        "interval_km": 0,
+        "interval_months": 12,
+        "category": "Exterior",
+        "urgency": "Low"
+      },
+      {
+        "item": "General Vehicle Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "High"
+      },
+      {
+        "item": "Fluid Levels Check & Top-Off (Oil, Coolant, Brake, Power Steering, Washer Fluid, DEF if applicable)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Fluids",
+        "urgency": "High"
+      },
+      {
+        "item": "Safety Systems Check (Lights, Horn, Seatbelts, etc.)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Safety",
+        "urgency": "High"
+      }
+    ]
+  },
+  "ford_expedition_2019": {
+    "make": "Ford",
+    "model": "Expedition",
+    "year": 2019,
+    "schedule": [
+      {
+        "item": "Engine Oil & Filter Change",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Oil Change",
+        "urgency": "High"
+      },
+      {
+        "item": "Tire Rotation & Inspection",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Tire Rotation",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Brake System Inspection (Pads, Rotors, Lines)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "Brake Service",
+        "urgency": "High"
+      },
+      {
+        "item": "General Vehicle Inspection (Lights, Wipers, Belts, Hoses, Fluid Levels)",
+        "interval_km": 10000,
+        "interval_months": 6,
+        "category": "General Inspection",
+        "urgency": "Recommended"
+      },
+      {
+        "item": "Engine Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Air Filter",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Cabin Air Filter Replacement",
+        "interval_km": 30000,
+        "interval_months": 24,
+        "category": "Filters",
+        "urgency": "Low"
+      },
+      {
+        "item": "Battery Test & Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Electrical",
+        "urgency": "Recommended"
+      },
+      {
+        "item": "Cooling System Inspection (Level, Hoses, Condition)",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Steering and Suspension Components Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Suspension/Steering",
+        "urgency": "Recommended"
+      },
+      {
+        "item": "Exhaust System Inspection",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Exhaust",
+        "urgency": "Recommended"
+      },
+      {
+        "item": "Brake Fluid Replacement",
+        "interval_km": 50000,
+        "interval_months": 36,
+        "category": "Brake Service",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Spark Plugs Replacement",
+        "interval_km": 100000,
+        "interval_months": 72,
+        "category": "Engine Tune-Up",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transmission Fluid & Filter Service (Severe Duty may be sooner)",
+        "interval_km": 150000,
+        "interval_months": 120,
+        "category": "Transmission",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Transfer Case Fluid Service (4x4, Severe Duty may be sooner)",
+        "interval_km": 150000,
+        "interval_months": 120,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Front/Rear Differential Fluid Service (if applicable, Severe Duty may be sooner)",
+        "interval_km": 150000,
+        "interval_months": 120,
+        "category": "Drivetrain",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Engine Coolant Replacement",
+        "interval_km": 150000,
+        "interval_months": 120,
+        "category": "Cooling System",
+        "urgency": "Medium"
+      },
+      {
+        "item": "Fuel System Check",
+        "interval_km": 20000,
+        "interval_months": 12,
+        "category": "Fuel System",
+        "urgency": "Recommended"
+      }
+    ]
+  }
+}

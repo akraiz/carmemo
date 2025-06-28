@@ -1,0 +1,8 @@
+{
+  "name": "CarMemo",
+  "description": "A smart vehicle maintenance logbook to track services, forecast needs, and manage multiple cars post-warranty. Helps you take ownership of your vehicle's health and maintain its value.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "prompt": ""
+}

@@ -1,0 +1,48 @@
+# CarMemo Environment Variables Template
+# Copy these and replace with your actual values
+
+# ========================================
+# BACKEND ENVIRONMENT VARIABLES (Railway)
+# ========================================
+
+NODE_ENV=production
+PORT=3001
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/carmemo?retryWrites=true&w=majority
+API_NINJAS_KEY=your_api_ninjas_key_here
+API_KEY=your_gemini_api_key_here
+CORS_ORIGIN=https://your-app-name.vercel.app
+
+# ========================================
+# FRONTEND ENVIRONMENT VARIABLES (Vercel)
+# ========================================
+
+VITE_API_BASE_URL=https://your-backend-name.up.railway.app/api
+VITE_USE_BACKEND=true
+VITE_DEBUG_API=false
+
+# ========================================
+# INSTRUCTIONS
+# ========================================
+
+# 1. Replace 'username' and 'password' in MONGODB_URI with your MongoDB Atlas credentials
+# 2. Replace 'your_api_ninjas_key_here' with your API Ninjas key
+# 3. Replace 'your_gemini_api_key_here' with your Google Gemini API key
+# 4. Replace 'your-app-name.vercel.app' with your actual Vercel URL
+# 5. Replace 'your-backend-name.up.railway.app' with your actual Railway URL
+
+# ========================================
+# WHERE TO PUT THESE VARIABLES
+# ========================================
+
+# Backend variables (Railway):
+# - Go to Railway dashboard
+# - Click on your backend service
+# - Click the gear icon ⚙️
+# - Go to "Variables" tab
+# - Add each variable one by one
+
+# Frontend variables (Vercel):
+# - Go to Vercel dashboard
+# - Click on your frontend project
+# - Go to "Settings" → "Environment Variables"
+# - Add each variable one by one 

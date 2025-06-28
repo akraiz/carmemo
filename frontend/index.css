@@ -1,0 +1,23 @@
+html[dir="rtl"], html[lang="ar"] {
+  font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+}
+
+html[dir="rtl"] *, html[lang="ar"] * {
+  font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+} 
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: 'Lato', sans-serif; /* Default body font */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Bottom navigation hiding */
+.bottom-nav {
+  transition: transform 0.3s ease-in-out;
+}
+
+.bottom-nav.hidden {
+  transform: translateY(100%);
+} 

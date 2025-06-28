@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoLog Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Poppins:wght@400;500;600;700;800&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Custom scrollbar for new dark theme */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1c1c1c; 
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #404040; 
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555555; 
+    }
+    html, body, #root {
+      height: 100%;
+      margin: 0;
+      font-family: 'Lato', sans-serif; /* Default body font */
+      color: #cfcfcf; /* Default text color */
+    }
+    body {
+      background-color: #0f0f0f; 
+      background-image: linear-gradient(to bottom, #0f0f0f, #0a0a0a); 
+    }
+    .font-heading {
+        font-family: 'Poppins', sans-serif; /* Headings font */
+    }
+
+    /* Global Form & Button Styles for New Dark Theme */
+    .form-label {
+      display: block; text-sm font-medium text-[#a0a0a0] mb-1; /* Darker secondary text for labels */
+    }
+    html[dir="rtl"] .form-label {
+        text-align: right;
+    }
+    .form-label-sm {
+       display: block; text-xs font-medium text-[#707070] mb-0.5; /* Even more subtle labels */
+    }
+    .styled-input, .styled-textarea, .styled-select {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #333333; 
+      border-radius: 0.5rem; /* rounded-lg */
+      background-color: #1c1c1c; 
+      color: #ffffff; 
+      font-size: 1rem;
+      line-height: 1.5rem;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    .styled-input:focus, .styled-textarea:focus, .styled-select:focus {
+      outline: none;
+      border-color: #F7C843; /* Primary Accent */
+      background-color: #181818; /* Slightly darker focus background */
+      box-shadow: 0 0 0 2px rgba(247, 200, 67, 0.3); 
+    }
+     .styled-input-sm { 
+      padding: 0.625rem 0.875rem; 
+      font-size: 0.875rem; /* text-sm */
+      border-radius: 0.375rem; /* rounded-md */
+      border: 1px solid #404040; 
+      background-color: #2a2a2a; 
+    }
+    .styled-input-sm:focus {
+         outline: none; border-color: #F7C843; box-shadow: 0 0 0 2px rgba(247, 200, 67, 0.2); 
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem; 
+      font-size: 1rem; 
+      line-height: 1.5rem;
+      font-weight: 600; /* semibold */
+      border-radius: 0.5rem; /* rounded-lg */
+      transition: all 0.2s ease-in-out; 
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center;
+      text-transform: uppercase; 
+      letter-spacing: 0.05em;
+    }
+    .btn-sm { padding: 0.625rem 1.25rem; font-size: 0.875rem; }
+    .btn-xs { padding: 0.5rem 1rem; font-size: 0.75rem; line-height: 1rem; border-radius: 0.375rem; }
+
+    /* Primary Accent Button (New Amber/Yellow) */
+    .btn-primary { 
+      background-color: #F7C843; 
+      color: #0f0f0f; /* High contrast for readability */ 
+      border-color: #F7C843; 
+      box-shadow: 0 4px 14px 0 rgba(247, 200, 67, 0.3); 
+    }
+    .btn-primary:hover { 
+      background-color: #e0b330; /* Slightly darker accent for hover */
+      border-color: #e0b330; 
+      box-shadow: 0 6px 20px 0 rgba(247, 200, 67, 0.4);
+      filter: brightness(1.05); 
+    }
+    .btn-primary:disabled, .btn-primary.disabled { 
+      background-color: #75622F; /* Muted accent */
+      border-color: #75622F; 
+      color: #707070; 
+      opacity: 0.7; 
+      cursor: not-allowed; 
+      box-shadow: none;
+      filter: none;
+    }
+
+    .btn-secondary { 
+      background-color: #2a2a2a; 
+      color: #ffffff; 
+      border-color: #404040; 
+    }
+    .btn-secondary:hover { 
+      background-color: #333333; 
+      border-color: #505050; 
+    }
+    .btn-secondary:disabled, .btn-secondary.disabled { 
+      background-color: #1c1c1c; 
+      border-color: #2a2a2a; 
+      color:#505050; 
+      opacity:0.7; 
+      cursor:not-allowed; 
+    }
+    
+    /* Semantic buttons retain their base colors but should fit the dark theme */
+    .btn-success { background-color: #16a34a; color: white; border-color: #16a34a; } /* green-600 */
+    .btn-success:hover { background-color: #15803d; border-color: #15803d; } /* green-700 */
+
+    .btn-danger { background-color: #dc2626; color: white; border-color: #dc2626; } /* red-600 */
+    .btn-danger:hover { background-color: #b91c1c; border-color: #b91c1c; } /* red-700 */
+    
+    .btn-warning { background-color: #d97706; color: white; border-color: #d97706; } /* amber-600 */
+    .btn-warning:hover { background-color: #b45309; border-color: #b45309; } /* amber-700 */
+
+    .scrollbar-thin { scrollbar-width: thin; scrollbar-color: #404040 #1c1c1c; } 
+    .scrollbar-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: #1c1c1c; border-radius:10px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background-color: #404040; border-radius: 10px; border: 2px solid #1c1c1c; }
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover { background-color: #555555; }
+
+    /* Garage Shutter Loading Screen Styles - New Dark Theme */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      background-color: #000; 
+      z-index: 9999;
+      display: flex; /* Kept as flex for alignment */
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      opacity: 1; /* Ensure it's visible initially */
+      transition: opacity 0.5s ease-out; /* For JS-controlled fade-out */
+    }
+    .garage-door { 
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background-color: #0f0f0f; /* Deepest dark for wall */
+    }
+    .shutter { 
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 100%; 
+      background-color: #1c1c1c; /* Shutter color */
+      box-shadow: 0 5px 25px rgba(0,0,0,0.5); 
+      border-bottom: 3px solid #000; 
+      animation: open-shutter 2.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; 
+      animation-delay: 0.5s; 
+    }
+    .shutter-inner-panel {
+        position: absolute;
+        top: 0;
+        left: 0; 
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(to bottom, 
+            #2a2a2a 0%, #2a2a2a 9.5%, /* Darker panels */
+            #333333 9.5%, #333333 10%, /* Darker highlight */
+            #2a2a2a 10%, #2a2a2a 19.5%,
+            #333333 19.5%, #333333 20%,
+            #2a2a2a 20%, #2a2a2a 29.5%,
+            #333333 29.5%, #333333 30%,
+            #2a2a2a 30%, #2a2a2a 39.5%,
+            #333333 39.5%, #333333 40%,
+            #2a2a2a 40%, #2a2a2a 49.5%,
+            #333333 49.5%, #333333 50%,
+            #2a2a2a 50%, #2a2a2a 59.5%,
+            #333333 59.5%, #333333 60%,
+            #2a2a2a 60%, #2a2a2a 69.5%,
+            #333333 69.5%, #333333 70%,
+            #2a2a2a 70%, #2a2a2a 79.5%,
+            #333333 79.5%, #333333 80%,
+            #2a2a2a 80%, #2a2a2a 89.5%,
+            #333333 89.5%, #333333 90%,
+            #2a2a2a 90%, #2a2a2a 100%
+        );
+         background-size: 100% 100px; 
+    }
+
+    .loading-text {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #F7C843; /* New Accent color */
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.5rem; /* text-2xl */
+      font-weight: 700; /* bold */
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0;
+      animation: fade-in-text 1s ease-in forwards;
+      animation-delay: 1.2s; 
+      text-shadow: 0 0 10px rgba(247, 200, 67, 0.5); /* Subtle glow for text */
+    }
+
+    @keyframes open-shutter {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-100%); } 
+    }
+    @keyframes fade-in-text {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Montserrat:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.5.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.417.0",
+    "react-dom": "https://esm.sh/react-dom@^19.1.0",
+    "framer-motion": "https://esm.sh/framer-motion@^11.3.12" 
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="loading-screen">
+    <div class="garage-door">
+      <div class="shutter">
+        <div class="shutter-inner-panel"></div>
+      </div>
+    </div>
+    <span class="loading-text font-heading">Opening Garage...</span>
+  </div>
+  <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
