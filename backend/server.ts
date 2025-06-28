@@ -70,14 +70,7 @@ const upload = multer({ storage });
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    service: 'CarMemo Backend',
-    version: '1.0.0',
-    uptime: process.uptime(),
-    environment: process.env.NODE_ENV || 'development'
-  });
+  res.send('OK');
 });
 
 // VIN Lookup endpoint using API Ninjas
@@ -1087,5 +1080,5 @@ app.post('/api/vehicles/:id/image', upload.single('image'), async (req, res) => 
 });
 
 app.listen(PORT, () => {
-  console.log(`Backend server running on http://localhost:${PORT}`);
+  console.log(`✅ CarMemo backend running on port ${PORT}`);
 }); 
