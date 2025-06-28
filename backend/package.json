@@ -5,12 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "./build.sh",
     "verify": "node verify-build.js",
-    "prepare": "npm run build",
     "prestart": "npm run build && npm run verify",
     "start": "node index.js",
-    "postinstall": "npm run build",
     "test:vin": "node test-vin-lookup.js",
     "test:connection": "node test-backend-connection.js",
     "dev": "npx tsx proxy-server.ts"
