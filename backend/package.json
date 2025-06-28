@@ -6,6 +6,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "verify": "node verify-build.js",
+    "prestart": "npm run build && npm run verify",
     "start": "node index.js",
     "postinstall": "npm run build",
     "test:vin": "node test-vin-lookup.js",
