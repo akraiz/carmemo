@@ -17,12 +17,12 @@ export const initializeAIService = () => {
     }
   });
   console.log('🔍 AI Service Initialization Debug:');
-  console.log('  - CONFIG.GOOGLE_AI_API_KEY:', CONFIG.GOOGLE_AI_API_KEY ? `[${CONFIG.GOOGLE_AI_API_KEY.substring(0, 10)}...]` : 'undefined');
-  console.log('  - CONFIG.GOOGLE_AI_API_KEY length:', CONFIG.GOOGLE_AI_API_KEY.length);
+  console.log('  - CONFIG.GEMINI_API_KEY:', CONFIG.GEMINI_API_KEY ? `[${CONFIG.GEMINI_API_KEY.substring(0, 10)}...]` : 'undefined');
+  console.log('  - CONFIG.GEMINI_API_KEY length:', CONFIG.GEMINI_API_KEY.length);
 
-  const apiKey = CONFIG.GOOGLE_AI_API_KEY.trim();
-  console.log('  - Trimmed GOOGLE_AI_API_KEY length:', apiKey.length);
-  console.log('  - GOOGLE_AI_API_KEY is truthy:', !!apiKey);
+  const apiKey = CONFIG.GEMINI_API_KEY.trim();
+  console.log('  - Trimmed GEMINI_API_KEY length:', apiKey.length);
+  console.log('  - GEMINI_API_KEY is truthy:', !!apiKey);
 
   if (apiKey && apiKey.length > 0) {
     try {
@@ -33,12 +33,12 @@ export const initializeAIService = () => {
       ai = null;
     }
   } else {
-    if (!CONFIG.GOOGLE_AI_API_KEY) {
-      console.warn('⚠️ GOOGLE_AI_API_KEY is not set. Gemini AI features will be disabled.');
-    } else if (CONFIG.GOOGLE_AI_API_KEY.trim() === '') {
-      console.warn('⚠️ GOOGLE_AI_API_KEY is empty or contains only whitespace. Gemini AI features will be disabled.');
+    if (!CONFIG.GEMINI_API_KEY) {
+      console.warn('⚠️ GEMINI_API_KEY is not set. Gemini AI features will be disabled.');
+    } else if (CONFIG.GEMINI_API_KEY.trim() === '') {
+      console.warn('⚠️ GEMINI_API_KEY is empty or contains only whitespace. Gemini AI features will be disabled.');
     } else {
-      console.warn('⚠️ GOOGLE_AI_API_KEY is not a string or is empty. Gemini AI features will be disabled.');
+      console.warn('⚠️ GEMINI_API_KEY is not a string or is empty. Gemini AI features will be disabled.');
     }
     ai = null;
   }
