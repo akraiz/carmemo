@@ -4,12 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "tsx proxy-server.ts",
-    "start:proxy": "tsx proxy-server.ts",
+    "start": "npx tsx proxy-server.ts",
+    "start:proxy": "npx tsx proxy-server.ts",
     "build": "echo 'No build step required for TypeScript with tsx'",
     "test:vin": "node test-vin-lookup.js",
     "test:connection": "node test-backend-connection.js",
-    "dev": "tsx proxy-server.ts"
+    "dev": "npx tsx proxy-server.ts"
   },
   "engines": {
     "node": ">=18.0.0"
