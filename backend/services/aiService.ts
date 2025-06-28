@@ -3,44 +3,44 @@ import { Vehicle, ExtractedReceiptInfo, RecallInfo } from '../types.js';
 import { SaudiRecallManager } from './saudiRecallService.js';
 import fs from 'fs';
 import util from 'util';
+import { CONFIG } from '../config.js';
 
 let ai: GoogleGenAI | null = null;
 const readFileAsync = util.promisify(fs.readFile);
 
 export const initializeAIService = () => {
   // Enhanced debugging for API key validation
+  console.log('[DEBUG] process.env Keys:');
+  Object.entries(process.env).forEach(([k, v]) => {
+    if (k.toLowerCase().includes('api')) {
+      console.log(`🔑 ${k} = ${v?.slice(0, 6)}...`);
+    }
+  });
   console.log('🔍 AI Service Initialization Debug:');
-  console.log('  - process exists:', typeof process !== 'undefined');
-  console.log('  - process.env exists:', !!process.env);
-  console.log('  - GOOGLE_AI_API_KEY type:', typeof process.env?.GOOGLE_AI_API_KEY);
-  console.log('  - GOOGLE_AI_API_KEY value:', process.env?.GOOGLE_AI_API_KEY ? `[${process.env.GOOGLE_AI_API_KEY.substring(0, 10)}...]` : 'undefined');
-  console.log('  - GOOGLE_AI_API_KEY length:', process.env?.GOOGLE_AI_API_KEY?.length || 0);
-  
-  // Check if process and process.env are defined and GOOGLE_AI_API_KEY is present and a string
-  const apiKey = typeof process !== 'undefined' && process.env && typeof process.env.GOOGLE_AI_API_KEY === 'string' ? process.env.GOOGLE_AI_API_KEY.trim() : undefined;
-  
-  console.log('  - Trimmed GOOGLE_AI_API_KEY length:', apiKey?.length || 0);
+  console.log('  - CONFIG.GOOGLE_AI_API_KEY:', CONFIG.GOOGLE_AI_API_KEY ? `[${CONFIG.GOOGLE_AI_API_KEY.substring(0, 10)}...]` : 'undefined');
+  console.log('  - CONFIG.GOOGLE_AI_API_KEY length:', CONFIG.GOOGLE_AI_API_KEY.length);
+
+  const apiKey = CONFIG.GOOGLE_AI_API_KEY.trim();
+  console.log('  - Trimmed GOOGLE_AI_API_KEY length:', apiKey.length);
   console.log('  - GOOGLE_AI_API_KEY is truthy:', !!apiKey);
-  
+
   if (apiKey && apiKey.length > 0) {
     try {
       ai = new GoogleGenAI({ apiKey });
       console.log('✅ Gemini AI service initialized successfully');
     } catch (e) {
-      console.error("❌ Error initializing GoogleGenAI:", e);
+      console.error('❌ Error initializing GoogleGenAI:', e);
       ai = null;
     }
   } else {
-    if (typeof process === 'undefined' || !process.env) {
-      console.warn("⚠️ `process.env` is not available. GOOGLE_AI_API_KEY cannot be accessed. Gemini AI features will be disabled.");
-    } else if (typeof process.env.GOOGLE_AI_API_KEY !== 'string') {
-      console.warn("⚠️ GOOGLE_AI_API_KEY environment variable is not a string. Gemini AI features will be disabled.");
-    } else if (!process.env.GOOGLE_AI_API_KEY || process.env.GOOGLE_AI_API_KEY.trim() === '') {
-      console.warn("⚠️ GOOGLE_AI_API_KEY environment variable is empty or contains only whitespace. Gemini AI features will be disabled.");
+    if (!CONFIG.GOOGLE_AI_API_KEY) {
+      console.warn('⚠️ GOOGLE_AI_API_KEY is not set. Gemini AI features will be disabled.');
+    } else if (CONFIG.GOOGLE_AI_API_KEY.trim() === '') {
+      console.warn('⚠️ GOOGLE_AI_API_KEY is empty or contains only whitespace. Gemini AI features will be disabled.');
     } else {
-      console.warn("⚠️ GOOGLE_AI_API_KEY environment variable not set, not a string, or empty. Gemini AI features will be disabled.");
+      console.warn('⚠️ GOOGLE_AI_API_KEY is not a string or is empty. Gemini AI features will be disabled.');
     }
-    ai = null; // Ensure ai is null if not initialized
+    ai = null;
   }
 };
 
