@@ -10,5 +10,8 @@
   },
   "source": {
     "directory": "backend"
+  },
+  "start": {
+    "command": "npm start"
   }
 } 
