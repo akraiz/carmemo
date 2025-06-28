@@ -1,4 +1,4 @@
-import Vehicle from '../models/Vehicle.js';
+import { Vehicle } from '../models/Vehicle.js';
 import { Vehicle as VehicleType } from '../types.js';
 import { decodeVinMerged } from './vinLookupService.js';
 import { getOrCreateMaintenanceSchedule } from './maintenanceScheduleService.js';

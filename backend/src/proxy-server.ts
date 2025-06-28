@@ -3,7 +3,7 @@ dotenv.config();
 
 import mongoose from 'mongoose';
 import type { Request } from 'express';
-import Vehicle from './models/Vehicle.js';
+import { Vehicle } from './models/Vehicle.js';
 import Tesseract from 'tesseract.js';
 import Fuse from 'fuse.js';
 import { ocrImageFieldsWithGemini, ocrTextFieldsWithGemini } from './services/aiService.js';

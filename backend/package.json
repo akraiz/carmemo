@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "postinstall": "mkdir -p dist && npm run build",
+    "postinstall": "npm run build",
     "verify": "node verify-build.js",
     "test:vin": "node test-vin-lookup.js",
     "test:connection": "node test-backend-connection.js",
