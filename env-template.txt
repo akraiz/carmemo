@@ -7,9 +7,9 @@
 
 NODE_ENV=production
 PORT=3001
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/carmemo?retryWrites=true&w=majority
-API_NINJAS_KEY=your_api_ninjas_key_here
-API_KEY=your_gemini_api_key_here
+API_NINJAS_KEY="J0ILtcCNU4NKK6G1iziXsg==BQc00V9vrocJ6Le4"
+GEMINI_API_KEY="AIzaSyCsKQy3zhLHhT52kyXQfKU30Ie_wqhGWsI"
+MONGODB_URI="mongodb+srv://akraiz:aScmA3OvOUnQ2jtA@testnumoor.2zlsf0h.mongodb.net/?retryWrites=true&w=majority&appName=TestNumoor"
 CORS_ORIGIN=https://your-app-name.vercel.app
 
 # ========================================
