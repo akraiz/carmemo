@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "npx tsx proxy-server.ts",
-    "start:proxy": "npx tsx proxy-server.ts",
-    "build": "echo 'No build step required for TypeScript with tsx'",
+    "build": "tsc",
+    "start": "node dist/proxy-server.js",
+    "postinstall": "npm run build",
     "test:vin": "node test-vin-lookup.js",
     "test:connection": "node test-backend-connection.js",
     "dev": "npx tsx proxy-server.ts"
@@ -25,7 +25,6 @@
     "node-fetch": "^3.3.2",
     "react-confetti": "^6.4.0",
     "tesseract.js": "^6.0.1",
-    "tsx": "^4.20.3",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
@@ -36,6 +35,7 @@
     "@types/web-push": "^3.6.4",
     "multer": "^2.0.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "~5.7.2"
   }
 }
