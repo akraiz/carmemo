@@ -6,9 +6,13 @@
   "scripts": {
     "start": "tsx proxy-server.ts",
     "start:proxy": "tsx proxy-server.ts",
+    "build": "echo 'No build step required for TypeScript with tsx'",
     "test:vin": "node test-vin-lookup.js",
     "test:connection": "node test-backend-connection.js",
     "dev": "tsx proxy-server.ts"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "axios": "^1.10.0",
@@ -21,6 +25,7 @@
     "node-fetch": "^3.3.2",
     "react-confetti": "^6.4.0",
     "tesseract.js": "^6.0.1",
+    "tsx": "^4.20.3",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
@@ -31,7 +36,6 @@
     "@types/web-push": "^3.6.4",
     "multer": "^2.0.1",
     "ts-node": "^10.9.2",
-    "tsx": "^4.20.3",
     "typescript": "~5.7.2"
   }
 }
