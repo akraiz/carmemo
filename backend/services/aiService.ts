@@ -12,15 +12,15 @@ export const initializeAIService = () => {
   console.log('🔍 AI Service Initialization Debug:');
   console.log('  - process exists:', typeof process !== 'undefined');
   console.log('  - process.env exists:', !!process.env);
-  console.log('  - API_KEY type:', typeof process.env?.API_KEY);
-  console.log('  - API_KEY value:', process.env?.API_KEY ? `[${process.env.API_KEY.substring(0, 10)}...]` : 'undefined');
-  console.log('  - API_KEY length:', process.env?.API_KEY?.length || 0);
+  console.log('  - GOOGLE_AI_API_KEY type:', typeof process.env?.GOOGLE_AI_API_KEY);
+  console.log('  - GOOGLE_AI_API_KEY value:', process.env?.GOOGLE_AI_API_KEY ? `[${process.env.GOOGLE_AI_API_KEY.substring(0, 10)}...]` : 'undefined');
+  console.log('  - GOOGLE_AI_API_KEY length:', process.env?.GOOGLE_AI_API_KEY?.length || 0);
   
-  // Check if process and process.env are defined and API_KEY is present and a string
-  const apiKey = typeof process !== 'undefined' && process.env && typeof process.env.API_KEY === 'string' ? process.env.API_KEY.trim() : undefined;
+  // Check if process and process.env are defined and GOOGLE_AI_API_KEY is present and a string
+  const apiKey = typeof process !== 'undefined' && process.env && typeof process.env.GOOGLE_AI_API_KEY === 'string' ? process.env.GOOGLE_AI_API_KEY.trim() : undefined;
   
-  console.log('  - Trimmed API_KEY length:', apiKey?.length || 0);
-  console.log('  - API_KEY is truthy:', !!apiKey);
+  console.log('  - Trimmed GOOGLE_AI_API_KEY length:', apiKey?.length || 0);
+  console.log('  - GOOGLE_AI_API_KEY is truthy:', !!apiKey);
   
   if (apiKey && apiKey.length > 0) {
     try {
@@ -32,13 +32,13 @@ export const initializeAIService = () => {
     }
   } else {
     if (typeof process === 'undefined' || !process.env) {
-      console.warn("⚠️ `process.env` is not available. API_KEY cannot be accessed. Gemini AI features will be disabled.");
-    } else if (typeof process.env.API_KEY !== 'string') {
-      console.warn("⚠️ API_KEY environment variable is not a string. Gemini AI features will be disabled.");
-    } else if (!process.env.API_KEY || process.env.API_KEY.trim() === '') {
-      console.warn("⚠️ API_KEY environment variable is empty or contains only whitespace. Gemini AI features will be disabled.");
+      console.warn("⚠️ `process.env` is not available. GOOGLE_AI_API_KEY cannot be accessed. Gemini AI features will be disabled.");
+    } else if (typeof process.env.GOOGLE_AI_API_KEY !== 'string') {
+      console.warn("⚠️ GOOGLE_AI_API_KEY environment variable is not a string. Gemini AI features will be disabled.");
+    } else if (!process.env.GOOGLE_AI_API_KEY || process.env.GOOGLE_AI_API_KEY.trim() === '') {
+      console.warn("⚠️ GOOGLE_AI_API_KEY environment variable is empty or contains only whitespace. Gemini AI features will be disabled.");
     } else {
-      console.warn("⚠️ API_KEY environment variable not set, not a string, or empty. Gemini AI features will be disabled.");
+      console.warn("⚠️ GOOGLE_AI_API_KEY environment variable not set, not a string, or empty. Gemini AI features will be disabled.");
     }
     ai = null; // Ensure ai is null if not initialized
   }
