@@ -18,13 +18,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/carmemo';
+// Temporary hardcoded URI for testing
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://akraiz:aScmA3OvOUnQ2jtA@testnumoor.2zlsf0h.mongodb.net/?retryWrites=true&w=majority&appName=TestNumoor';
 
 // Debug logging for MongoDB connection
 console.log('🔍 MongoDB Connection Debug:');
 console.log('  - MONGODB_URI from env:', process.env.MONGODB_URI ? 'SET' : 'NOT SET');
 console.log('  - Using URI:', MONGODB_URI.substring(0, 20) + '...');
 console.log('  - Environment variables available:', Object.keys(process.env).filter(key => key.includes('MONGODB')).join(', '));
+console.log('  - All env vars:', Object.keys(process.env).join(', '));
 
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
