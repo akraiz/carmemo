@@ -5,8 +5,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npx tsc",
     "verify": "node verify-build.js",
+    "prepare": "npm run build",
     "prestart": "npm run build && npm run verify",
     "start": "node index.js",
     "postinstall": "npm run build",
@@ -28,6 +29,7 @@
     "node-fetch": "^3.3.2",
     "react-confetti": "^6.4.0",
     "tesseract.js": "^6.0.1",
+    "typescript": "~5.7.2",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
@@ -38,7 +40,6 @@
     "@types/web-push": "^3.6.4",
     "multer": "^2.0.1",
     "ts-node": "^10.9.2",
-    "tsx": "^4.20.3",
-    "typescript": "~5.7.2"
+    "tsx": "^4.20.3"
   }
 }
