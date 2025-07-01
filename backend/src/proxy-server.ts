@@ -52,7 +52,10 @@ const PORT = process.env.PORT || 3001;
 
 // Enhanced CORS configuration for production
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: [
+    'https://cardaftar.vercel.app', // Vercel frontend domain
+    'http://localhost:5173'         // Local development
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
