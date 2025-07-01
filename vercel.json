@@ -49,7 +49,7 @@
     }
   ],
   "env": {
-    "VITE_API_BASE_URL": "@vite_api_base_url",
+    "VITE_API_BASE_URL": "https://carmemo-production.up.railway.app",
     "VITE_USE_BACKEND": "@vite_use_backend",
     "VITE_DEBUG_API": "@vite_debug_api"
   }
