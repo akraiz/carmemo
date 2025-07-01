@@ -6,7 +6,7 @@
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/proxy-server.js",
     "postinstall": "npm run build",
     "verify": "node verify-build.js",
     "test:vin": "node test-vin-lookup.js",
