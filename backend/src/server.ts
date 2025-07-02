@@ -17,6 +17,8 @@ import webpush from 'web-push';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
+import { MongoClient, ObjectId, GridFSBucket } from 'mongodb';
+import { GridFsStorage } from 'multer-gridfs-storage';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/carmemo';
 mongoose.connect(MONGODB_URI)
@@ -56,17 +58,25 @@ const __dirname = path.dirname(__filename);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${ext}`;
-    cb(null, uniqueName);
+// Set up GridFS storage for vehicle images
+const mongoClient = new MongoClient(MONGODB_URI);
+let gfsBucket: GridFSBucket;
+mongoClient.connect().then(client => {
+  gfsBucket = new GridFSBucket(client.db(), { bucketName: 'vehicleImages' });
+  console.log('✅ GridFSBucket for vehicle images initialized');
+});
+
+const gridFsStorage = new GridFsStorage({
+  url: MONGODB_URI,
+  file: (req: any, file: Express.Multer.File) => {
+    return {
+      filename: `vehicle_${Date.now()}_${file.originalname}`,
+      bucketName: 'vehicleImages',
+      metadata: { originalName: file.originalname }
+    };
   }
 });
-const upload = multer({ storage });
+const uploadGridFS = multer({ storage: gridFsStorage });
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -362,7 +372,7 @@ app.get('/api/tasks/:vehicleId', async (req, res) => {
 });
 
 // --- Upload and link scanned image to a task ---
-app.post('/api/tasks/:vehicleId/upload-receipt', upload.single('file'), async (req: Request, res) => {
+app.post('/api/tasks/:vehicleId/upload-receipt', uploadGridFS.single('file'), async (req: Request, res) => {
   const { vehicleId } = req.params;
   const { taskId } = req.body;
   const file = req.file as Express.Multer.File | undefined;
@@ -411,7 +421,7 @@ app.post('/api/tasks/:vehicleId/upload-receipt', upload.single('file'), async (r
 });
 
 // --- Mark forecasted task as completed via OCR match (±500km) ---
-app.post('/api/tasks/:vehicleId/ocr-complete', upload.single('file'), async (req: Request, res) => {
+app.post('/api/tasks/:vehicleId/ocr-complete', uploadGridFS.single('file'), async (req: Request, res) => {
   const { vehicleId } = req.params;
   const file = req.file as Express.Multer.File | undefined;
   if (!file) {
@@ -1028,74 +1038,67 @@ app.get('/api/vehicles/stats', async (req, res) => {
 });
 
 /**
- * Upload vehicle image
+ * Upload vehicle image (GridFS version)
  * POST /api/vehicles/:id/image
  */
-app.post('/api/vehicles/:id/image', upload.single('image'), async (req, res) => {
+app.post('/api/vehicles/:id/image', uploadGridFS.single('image'), async (req, res) => {
   try {
     const { id } = req.params;
-    const file = req.file as Express.Multer.File | undefined;
-    
-    if (!file) {
-      res.status(400).json({
-        success: false,
-        error: 'No image file uploaded'
-      });
+    const file = req.file as any;
+    if (!file || !file.id) {
+      res.status(400).json({ success: false, error: 'No image file uploaded' });
       return;
     }
-
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-    if (!allowedTypes.includes(file.mimetype)) {
-      res.status(400).json({
-        success: false,
-        error: 'Invalid file type. Only JPEG, PNG, and WebP images are allowed.'
-      });
-      return;
-    }
-
-    // Validate file size (max 5MB)
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSize) {
-      res.status(400).json({
-        success: false,
-        error: 'File size too large. Maximum size is 5MB.'
-      });
-      return;
-    }
-
-    const imageUrl = `/uploads/${file.filename}`;
-    
-    // Update vehicle with new image URL
+    // Update vehicle with new imageId (allow imageId in update call)
     const result = await VehicleService.updateVehicle({
       id,
-      imageUrl
-    });
-    
+      imageId: file.id as any // allow extra field
+    } as any);
     if (result.success) {
       res.json({
         success: true,
         data: {
-          imageUrl,
+          imageId: file.id,
           filename: file.filename,
-          originalName: file.originalname,
+          originalName: file.metadata?.originalName,
           size: file.size,
           mimetype: file.mimetype
         },
-        message: 'Vehicle image uploaded successfully'
+        message: 'Vehicle image uploaded successfully (GridFS)'
       });
     } else {
-      res.status(400).json({
-        success: false,
-        error: result.error
-      });
+      res.status(400).json({ success: false, error: result.error });
     }
   } catch (error) {
-    console.error('Error in upload vehicle image endpoint:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal server error'
+    console.error('Error in upload vehicle image endpoint (GridFS):', error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
+
+// GET /api/vehicles/:id/image (stream from GridFS)
+app.get('/api/vehicles/:id/image', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const vehicle = await Vehicle.findById(id);
+    if (!vehicle || !vehicle.imageId) {
+      res.status(404).json({ error: 'Vehicle or image not found' });
+      return;
+    }
+    const fileId = typeof vehicle.imageId === 'string' ? new ObjectId(vehicle.imageId) : vehicle.imageId;
+    const files = await gfsBucket.find({ _id: fileId }).toArray();
+    if (!files || files.length === 0) {
+      res.status(404).json({ error: 'Image not found in GridFS' });
+      return;
+    }
+    res.set('Content-Type', files[0].contentType || 'image/jpeg');
+    const readStream = gfsBucket.openDownloadStream(fileId);
+    readStream.on('error', err => {
+      res.status(500).json({ error: 'Error streaming image from GridFS', details: String(err) });
     });
+    readStream.pipe(res);
+  } catch (error) {
+    console.error('Error in GET vehicle image endpoint (GridFS):', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

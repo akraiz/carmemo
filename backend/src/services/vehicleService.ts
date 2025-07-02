@@ -33,6 +33,7 @@ export interface CreateVehicleRequest {
   plantCountry?: string;
   plantState?: string;
   plantCity?: string;
+  recalls?: string[];
 }
 
 export interface UpdateVehicleRequest extends Partial<CreateVehicleRequest> {
@@ -84,7 +85,7 @@ export class VehicleService {
     const vehicle = new Vehicle({
       ...vehicleData,
       maintenanceSchedule: [],
-      recalls: [],
+      recalls: vehicleData.recalls || [],
       createdAt: new Date(),
       updatedAt: new Date()
     });
@@ -162,16 +163,7 @@ export class VehicleService {
     } catch (scheduleError) {
       console.warn('Failed to generate maintenance schedule:', scheduleError);
     }
-    // 4. Fetch and attach recalls
-    try {
-      const recalls = await getRecallsByVinWithGemini(vehicle.vin, vehicle.make, vehicle.model);
-      if (recalls && recalls.length > 0) {
-        (vehicle.recalls as any) = recalls;
-        await vehicle.save();
-      }
-    } catch (recallError) {
-      console.warn('Failed to fetch or save recalls:', recallError);
-    }
+    // Skipping backend recall enrichment: rely only on recalls provided by the frontend
     // After mapping, ensure no nulls in dueMileage
     vehicle.maintenanceSchedule = vehicle.maintenanceSchedule.map((task: any) => ({
       ...task,

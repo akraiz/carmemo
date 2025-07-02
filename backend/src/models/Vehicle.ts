@@ -20,6 +20,7 @@ const VehicleSchema = new Schema({
   currentMileage: { type: Number },
   maintenanceSchedule: [MaintenanceTaskSchema],
   recalls: { type: Schema.Types.Mixed },
+  imageId: { type: Schema.Types.ObjectId, ref: 'fs.files' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });
