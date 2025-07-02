@@ -136,42 +136,8 @@ export const formatVin = (vin: string): string => {
   return vin.toUpperCase().replace(/(.{4})/g, '$1 ').trim();
 };
 
-export const decodeVinMerged = async (vin: string): Promise<{ merged: Partial<Vehicle>, apiNinjas: Partial<Vehicle> | null, gemini: Partial<Vehicle> | null } | null> => {
-  const [apiNinjasResult, geminiResult] = await Promise.allSettled([
-    decodeVinWithApiNinjas(vin),
-    decodeVinWithGemini(vin)
-  ]);
-
-  const apiNinjas = apiNinjasResult.status === 'fulfilled' ? apiNinjasResult.value : null;
-  const gemini = geminiResult.status === 'fulfilled' ? geminiResult.value : null;
-
-  if (!apiNinjas && !gemini) return null;
-
-  // Helper to check for the premium placeholder
-  const isPremiumPlaceholder = (val?: string) =>
-    typeof val === 'string' && val.trim().toLowerCase().includes('only available for premium subscribers');
-
-  // Helper to get the best value for a field
-  const bestValue = (apiVal: any, geminiVal: any) => {
-    if (apiVal && !isPremiumPlaceholder(apiVal)) return apiVal;
-    if (typeof apiVal === 'number') return apiVal; // for year, etc.
-    return geminiVal;
-  };
-
-  // Always use year from API Ninjas if present
-  const merged: Partial<Vehicle> = {
-    ...gemini,
-    ...apiNinjas,
-    year: apiNinjas?.year ?? gemini?.year,
-    make: bestValue(apiNinjas?.make, gemini?.make),
-    model: bestValue(apiNinjas?.model, gemini?.model),
-    trim: bestValue(apiNinjas?.trim, gemini?.trim),
-    driveType: bestValue(apiNinjas?.driveType, gemini?.driveType),
-    primaryFuelType: bestValue(apiNinjas?.primaryFuelType, gemini?.primaryFuelType),
-    bodyClass: bestValue(apiNinjas?.bodyClass, gemini?.bodyClass),
-    manufacturerName: bestValue(apiNinjas?.manufacturerName, gemini?.manufacturerName),
-    // Add similar logic for any other fields that may have the placeholder
-  };
-
-  return { merged, apiNinjas, gemini };
+export const decodeVinMerged = async (vin: string): Promise<{ merged: Partial<Vehicle>, apiNinjas: Partial<Vehicle> | null, gemini: null } | null> => {
+  const apiNinjasResult = await decodeVinWithApiNinjas(vin);
+  if (!apiNinjasResult) return null;
+  return { merged: apiNinjasResult, apiNinjas: apiNinjasResult, gemini: null };
 }; 
