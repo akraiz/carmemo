@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Vehicle, MaintenanceTask, TaskCategory, TaskStatus, RecallInfo } from '../../types';
 import { COMMON_MAINTENANCE_PRESETS, MaintenanceTaskPreset } from '../../constants';
 import { getISODateString, formatDate } from '../../utils/dateUtils';
-import { decodeVinMerged, validateVin } from '../../services/vinLookupService';
+import { decodeVinWithApiNinjas, decodeVinWithGeminiBackend, mergeVinResults, validateVin } from '../../services/vinLookupService';
 import { getRecallsByVinWithGemini, enrichBaselineSchedule } from '../../services/aiService';
 import { Icons, IconMap, DefaultTaskIcon } from '../Icon';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -140,16 +140,20 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
       }
       try {
         setIsDecodingVin(true);
-        const decodeResult = await decodeVinMerged(wizardData.vin.trim());
+        // Call both endpoints in parallel and merge
+        const [vinNinjas, vinGemini] = await Promise.all([
+          decodeVinWithApiNinjas(wizardData.vin.trim()),
+          decodeVinWithGeminiBackend(wizardData.vin.trim())
+        ]);
+        const merged = mergeVinResults(vinNinjas, vinGemini);
         setIsDecodingVin(false);
 
-        if (decodeResult && (decodeResult.merged.year || decodeResult.merged.make || decodeResult.merged.model)) {
-          const { merged, apiNinjas } = decodeResult;
+        if (merged && (merged.year || merged.make || merged.model)) {
           setWizardData(prev => ({
               ...prev,
               make: merged.make || prev.make,
               model: merged.model || prev.model,
-              year: (apiNinjas && typeof apiNinjas.year !== 'undefined' && apiNinjas.year !== null) ? String(apiNinjas.year) : '',
+              year: (vinNinjas && typeof vinNinjas.year !== 'undefined' && vinNinjas.year !== null) ? String(vinNinjas.year) : (merged.year ? String(merged.year) : ''),
               vin: merged.vin || prev.vin, 
               trim: merged.trim || prev.trim,
               driveType: merged.driveType || prev.driveType,
@@ -173,7 +177,6 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
           }));
           // Fetch recalls for the decoded VIN
           setIsFetchingRecalls(true);
-          // Only call the backend API, do not call Gemini fallback
           const recallsResponse = await fetch(buildApiUrl(`/recall/${wizardData.vin}`));
           let recalls: RecallInfo[] = [];
           if (recallsResponse.ok) {
