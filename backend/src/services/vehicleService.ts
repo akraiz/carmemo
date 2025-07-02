@@ -233,6 +233,16 @@ export class VehicleService {
   static async getAllVehicles(): Promise<VehicleResponse> {
     try {
       const vehicles = await Vehicle.find().sort({ createdAt: -1 });
+      // Ensure all tasks have an id
+      vehicles.forEach(vehicle => {
+        if (Array.isArray(vehicle.maintenanceSchedule)) {
+          vehicle.maintenanceSchedule.forEach((task: any) => {
+            if (!task.id || typeof task.id !== 'string' || task.id.trim().length === 0) {
+              task.id = crypto.randomUUID();
+            }
+          });
+        }
+      });
       return {
         success: true,
         data: vehicles,
@@ -266,7 +276,14 @@ export class VehicleService {
           error: 'Vehicle not found'
         };
       }
-
+      // Ensure all tasks have an id
+      if (Array.isArray(vehicle.maintenanceSchedule)) {
+        vehicle.maintenanceSchedule.forEach((task: any) => {
+          if (!task.id || typeof task.id !== 'string' || task.id.trim().length === 0) {
+            task.id = crypto.randomUUID();
+          }
+        });
+      }
       return {
         success: true,
         data: vehicle,
