@@ -9,6 +9,7 @@ import { Icons, IconMap, DefaultTaskIcon } from '../Icon';
 import { useTranslation } from '../../hooks/useTranslation';
 import useVehicleManager, { mergeBaselineSchedule } from '../../hooks/useVehicleManager';
 import { Button, TextField, Box } from '@mui/material';
+import { buildApiUrl } from '../../config/api';
 
 interface AddVehicleModalProps {
   isOpen: boolean;
@@ -173,7 +174,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
           // Fetch recalls for the decoded VIN
           setIsFetchingRecalls(true);
           // Only call the backend API, do not call Gemini fallback
-          const recallsResponse = await fetch(`/api/recall/${wizardData.vin}`);
+          const recallsResponse = await fetch(buildApiUrl(`/recall/${wizardData.vin}`));
           let recalls: RecallInfo[] = [];
           if (recallsResponse.ok) {
             recalls = await recallsResponse.json();

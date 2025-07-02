@@ -3,6 +3,7 @@ import { Vehicle, ExtractedReceiptInfo, RecallInfo } from '../types';
 import { SaudiRecallManager } from './saudiRecallService';
 import { VAPID_PUBLIC_KEY } from '../constants';
 import { setPushSubscription, getPushSubscription } from './localStorageService';
+import { buildApiUrl } from '../config/api';
 
 let ai: GoogleGenAI | null = null;
 
@@ -226,9 +227,11 @@ export const ocrReceiptWithGemini = async (file: File): Promise<ExtractedReceipt
 };
 
 export const enrichBaselineSchedule = async (make: string, model: string, year: number) => {
-  const response = await fetch('/api/enrich-baseline', {
+  const response = await fetch(buildApiUrl('/enrich-baseline'), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({ make, model, year }),
   });
   if (!response.ok) throw new Error('Failed to fetch baseline schedule');
@@ -263,10 +266,12 @@ export async function registerPushNotifications() {
   }
   setPushSubscription(sub);
   // Send to backend
-  await fetch('/api/push/register', {
+  await fetch(buildApiUrl('/push/register'), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(sub)
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ subscription: sub })
   });
   return sub;
 }

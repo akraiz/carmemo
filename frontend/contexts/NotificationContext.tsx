@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { buildApiUrl } from '../config/api';
 
 interface Notification {
   id: string;
@@ -40,7 +41,7 @@ export const NotificationProvider: React.FC<{ userId: string; children: ReactNod
 
   const fetchNotifications = async () => {
     try {
-      const res = await fetch(`/api/notifications/${userId}`);
+      const res = await fetch(buildApiUrl(`/notifications/${userId}`));
       if (res.ok) {
         const data = await res.json();
         setNotifications(data.notifications || []);

@@ -42,7 +42,7 @@ export const decodeVinWithApiNinjas = async (vinToDecode: string): Promise<Parti
   try {
     console.log(`🔍 Decoding VIN with API Ninjas: ${vinToDecode}`);
     
-    const response = await fetch('/api/vin-lookup', {
+    const response = await fetch(buildApiUrl('/vin-lookup'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

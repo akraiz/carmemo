@@ -303,7 +303,7 @@ export class RecallsSaCrawler {
   static async searchRecallsByMakeModel(make: string, model: string): Promise<SaudiRecallInfo[]> {
     try {
       // Route through backend proxy or return empty array
-      // const response = await fetch(`/api/recall/search?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}`);
+      // const response = await fetch(buildApiUrl(`/recall/search?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}`));
       // if (!response.ok) throw new Error(`Proxy error! status: ${response.status}`);
       // return await response.json();
       return [];
@@ -319,7 +319,7 @@ export class RecallsSaCrawler {
   static async getRecentRecalls(limit: number = 10): Promise<SaudiRecallInfo[]> {
     try {
       // Route through backend proxy or return empty array
-      // const response = await fetch(`/api/recall/recent?limit=${limit}`);
+      // const response = await fetch(buildApiUrl(`/recall/recent?limit=${limit}`));
       // if (!response.ok) throw new Error(`Proxy error! status: ${response.status}`);
       // return await response.json();
       return [];
