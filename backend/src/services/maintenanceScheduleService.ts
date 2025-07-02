@@ -73,6 +73,7 @@ export function saveBaseline(data: Record<string, any>): void {
 
 // Add type for schedule item
 interface GenericScheduleItem {
+  id: string;
   item: string;
   interval_km: number;
   interval_months: number;
@@ -87,6 +88,7 @@ export function getGenericSchedule(make: string, model: string, year: number, cu
   const schedule: GenericScheduleItem[] = [];
   for (let km = 10000; km <= maxKm; km += 10000) {
     schedule.push({
+      id: crypto.randomUUID(),
       item: "Engine Oil & Filter",
       interval_km: 10000,
       interval_months: 6,
@@ -95,6 +97,7 @@ export function getGenericSchedule(make: string, model: string, year: number, cu
       due_km: km
     });
     schedule.push({
+      id: crypto.randomUUID(),
       item: "Tire Rotation",
       interval_km: 10000,
       interval_months: 6,
@@ -104,6 +107,7 @@ export function getGenericSchedule(make: string, model: string, year: number, cu
     });
     if (km % 20000 === 0) {
       schedule.push({
+        id: crypto.randomUUID(),
         item: "Air Filter Replacement",
         interval_km: 20000,
         interval_months: 12,
