@@ -12,7 +12,7 @@ import { decodeVinWithApiNinjas } from './services/vinLookupService.js';
 import { initializeAIService } from './services/aiService.js';
 import { decodeVinWithGemini } from './services/aiService.js';
 import { VehicleService } from './services/vehicleService.js';
-import multer from 'multer';
+import multer, { StorageEngine } from 'multer';
 import webpush from 'web-push';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -76,7 +76,7 @@ const gridFsStorage = new GridFsStorage({
     };
   }
 });
-const uploadGridFS = multer({ storage: gridFsStorage });
+const uploadGridFS = multer({ storage: gridFsStorage as unknown as StorageEngine });
 
 // Health check endpoint
 app.get('/health', (req, res) => {
