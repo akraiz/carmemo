@@ -1098,6 +1098,25 @@ app.post('/api/vehicles/:id/image', upload.single('image'), async (req, res) => 
   }
 });
 
+app.post('/api/vin-lookup-gemini', async (req, res) => {
+  const { vin } = req.body;
+  if (!vin || typeof vin !== 'string' || vin.length !== 17) {
+    res.status(400).json({ error: 'VIN is required and must be 17 characters.' });
+    return;
+  }
+  try {
+    const result = await decodeVinWithGemini(vin);
+    if (!result) {
+      res.status(404).json({ error: 'Could not decode VIN with Gemini.' });
+      return;
+    }
+    res.json(result);
+  } catch (error) {
+    console.error('Error in Gemini VIN lookup endpoint:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
 }); 
