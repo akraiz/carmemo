@@ -1,5 +1,6 @@
 import { Vehicle } from '../types';
 import { decodeVinWithGemini } from './aiService';
+import { buildApiUrl } from '../config/api';
 
 export interface VinLookupResponse {
   make: string;
