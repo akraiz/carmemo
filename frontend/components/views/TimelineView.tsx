@@ -417,7 +417,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({
       }
       
       // Ensure the task has an 'id' field for consistency
-      return task.id ? task : { ...task, id: taskId };
+      return task.id && task.id.trim().length > 0 ? task : { ...task, id: taskId };
     }).filter(task => task && task.id); // Final safety check
 
     if (validTasks.length === 0) {

@@ -273,7 +273,7 @@ const useVehicleManagement = () => {
 
         const completedInitialTasks = (initialMaintenanceTasks || []).map(task => ({
           ...task,
-          id: task.id || self.crypto.randomUUID(),
+          id: typeof task.id === 'string' && task.id.trim().length > 0 ? task.id : self.crypto.randomUUID(),
           creationDate: task.creationDate || getISODateString(),
           status: TaskStatus.Completed,
         }));
@@ -386,10 +386,15 @@ const useVehicleManagement = () => {
         const vehicle = { ...vehiclesCopy[vehicleIndex] };
         const taskIndex = vehicle.maintenanceSchedule.findIndex(t => t.id === taskData.id);
         
+        const safeTask = {
+          ...taskData,
+          id: typeof taskData.id === 'string' && taskData.id.trim().length > 0 ? taskData.id : self.crypto.randomUUID(),
+        };
+
         if (taskIndex !== -1) {
-          vehicle.maintenanceSchedule[taskIndex] = taskData;
+          vehicle.maintenanceSchedule[taskIndex] = safeTask;
         } else {
-          vehicle.maintenanceSchedule.push(taskData);
+          vehicle.maintenanceSchedule.push(safeTask);
         }
         
         vehiclesCopy[vehicleIndex] = vehicle;

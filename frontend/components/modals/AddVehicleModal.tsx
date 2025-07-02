@@ -301,7 +301,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
       initialMaintenanceTasks: wizardData.initialMaintenanceTasks
         .filter(task => task.title)
         .map(task => ({
-          id: self.crypto.randomUUID(),
+          id: typeof task.id === 'string' && task.id.trim().length > 0 ? task.id : self.crypto.randomUUID(),
           title: task.titleKey || task.title!, 
           category: task.category || TaskCategory.Other,
           status: TaskStatus.Completed,
