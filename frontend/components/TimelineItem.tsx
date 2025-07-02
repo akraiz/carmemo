@@ -98,7 +98,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
           style={{
             borderRadius: '12px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-            borderLeft: `4px solid ${statusConfig.border.replace('border-', '').replace('[#', '#').replace(']', '')}`,
+            borderLeft: `4px solid ${(statusConfig.border || '').replace('border-', '').replace('[#', '#').replace(']', '')}`,
             border: 'none',
           }}
         >
@@ -122,7 +122,8 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
                 <span className="ml-2 px-2 py-0.5 text-xs font-bold rounded-full bg-blue-700 text-blue-100">Planned</span>
               ) : null}
             </div>
-            <p className="text-[13px] text-[#bbbbbb] mb-1 truncate">{t('task.category')}: {t(`taskCategories.${((task.category || 'Other') + '').replace(/\s+/g, '')}` as any, {defaultValue: task.category || 'Other'})}</p>
+            <p className="text-[13px] text-[#bbbbbb] mb-1 truncate">{t('task.category')}: {t(`taskCategories.${((task.category || 'Other') + '').replace(/\s+/g, '')}` as any, {defaultValue: task.category || 'Other'})}
+            </p>
             {task.dueDate && (
               <p className="text-[13px] font-semibold text-[#F7C843] mb-1">
                 Due: <span className={isDateOverdue(task.dueDate) && task.status !== TaskStatus.Completed ? 'text-red-400 font-bold' : 'text-[#F7C843] font-bold'}>{formatDate(task.dueDate, language)}</span>

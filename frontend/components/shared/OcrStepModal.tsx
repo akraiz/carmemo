@@ -151,7 +151,7 @@ const OcrStepModal: React.FC<OcrStepModalProps> = ({ isOpen, onClose, onSave }) 
                 >
                   {Object.values(TaskCategory).map(cat => (
                     <MenuItem key={cat} value={cat}>
-                      {t(`taskCategories.${cat.replace(/\s+/g, '')}` as any) || cat}
+                      {t(`taskCategories.${(cat || '').replace(/\s+/g, '')}` as any) || cat || 'Other'}
                     </MenuItem>
                   ))}
                 </Select>
@@ -186,7 +186,7 @@ const OcrStepModal: React.FC<OcrStepModalProps> = ({ isOpen, onClose, onSave }) 
               <p><strong>{t('Task Title')}:</strong> {fields.title}</p>
               <p><strong>{t('Date')}:</strong> {fields.completedDate}</p>
               <p><strong>{t('Cost')}:</strong> {fields.cost ? `$${fields.cost}` : t('Not specified')}</p>
-              <p><strong>{t('Category')}:</strong> {t(`taskCategories.${fields.category?.replace(/\s+/g, '')}` as any) || fields.category}</p>
+              <p><strong>{t('Category')}:</strong> {t(`taskCategories.${(fields.category || '').replace(/\s+/g, '')}` as any) || fields.category || 'Other'}</p>
               {fields.notes && <p><strong>{t('Notes')}:</strong> {fields.notes}</p>}
             </div>
             <div className="flex justify-between mt-4">

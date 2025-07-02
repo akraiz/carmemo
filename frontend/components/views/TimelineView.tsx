@@ -245,7 +245,7 @@ const OutlookStyleTaskCard: React.FC<{
               {task.status !== TaskStatus.Completed ? getPredictiveDueText(task.dueDate) : `Completed ${formatDate(task.completedDate)}`}
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 400, color: '#A0A0A0' }}>
-              {t(`taskCategories.${task.category.replace(/\s+/g, '')}` as any) || task.category}
+              {t(`taskCategories.${(task.category || '').replace(/\s+/g, '')}` as any) || task.category || 'Other'}
             </Typography>
           </Box>
 
@@ -363,7 +363,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({
         const Icon = IconMap[category] || DefaultTaskIcon;
         return {
           id: category,
-          label: t(`taskCategories.${category.replace(/[\s-]/g, '')}` as any) || category,
+          label: t(`taskCategories.${(category || '').replace(/[\s-]/g, '')}` as any) || category || 'Other',
           icon: <Icon />
         };
       });
@@ -506,7 +506,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({
                 boxShadow: 'none',
               }}
             >
-              {t(`taskCategories.${activeCategory.replace(/[\s-]/g, '')}` as any) || activeCategory}
+              {t(`taskCategories.${(activeCategory || '').replace(/[\s-]/g, '')}` as any) || activeCategory || 'Other'}
             </Button>
           ) : (
             <Button

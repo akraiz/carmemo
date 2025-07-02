@@ -233,7 +233,7 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
   const handleExport = (format: 'txt' | 'csv' | 'json') => {
     const content = generateExportContent(format);
     const safeNickname = vehicle.nickname ? vehicle.nickname.replace(/[^a-z0-9]/gi, '_').toLowerCase() : '';
-    const safeMakeModel = `${vehicle.make}_${vehicle.model}`.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    const safeMakeModel = `${vehicle.make || ''}_${vehicle.model || ''}`.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     const baseFilename = safeNickname || safeMakeModel;
     const filename = `${baseFilename}_maintenance_log.${format}`;
     const blob = new Blob([content], { type: `text/${format === 'json' ? 'json' : format};charset=utf-8;` });
@@ -410,7 +410,7 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
                     layout
                     className={`bg-[#1c1c1c] p-4 flex flex-col justify-between`}
                     style={{
-                      borderLeft: `4px solid ${TASK_STATUS_COLORS[task.status]?.border.replace('border-', '').replace('[#', '#').replace(']', '')}`,
+                      borderLeft: `4px solid ${(TASK_STATUS_COLORS[task.status]?.border || '').replace('border-', '').replace('[#', '#').replace(']', '')}`,
                       border: '1px solid #333333',
                       borderRadius: '12px',
                       boxShadow: '0 2px 8px rgba(0,0,0,0.15)',

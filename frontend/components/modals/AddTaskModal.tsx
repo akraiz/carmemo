@@ -469,7 +469,7 @@ const ModernTaskForm = ({ task, onSave, onClose, currentMileage }: { task: Maint
               >
                 {Object.values(TaskCategory).map(category => (
                   <option key={category} value={category}>
-                    {t(`taskCategories.${category.replace(/\s+/g, '')}` as any) || category}
+                    {t(`taskCategories.${(category || '').replace(/\s+/g, '')}` as any) || category || 'Other'}
                   </option>
                 ))}
               </select>
@@ -488,7 +488,7 @@ const ModernTaskForm = ({ task, onSave, onClose, currentMileage }: { task: Maint
               >
                 {Object.values(TaskImportance).map(importance => (
                   <option key={importance} value={importance}>
-                    {t(`taskImportances.${importance.replace(/\s+/g, '')}` as any) || importance}
+                    {t(`taskImportances.${(importance || '').replace(/\s+/g, '')}` as any) || importance || 'Recommended'}
                   </option>
                 ))}
               </select>
