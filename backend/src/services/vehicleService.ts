@@ -47,6 +47,20 @@ export interface VehicleResponse {
   message?: string;
 }
 
+// Utility to ensure all tasks in a vehicle have a unique id
+function ensureTaskIds(vehicle: any): boolean {
+  let updated = false;
+  if (Array.isArray(vehicle.maintenanceSchedule)) {
+    vehicle.maintenanceSchedule.forEach((task: any) => {
+      if (!task.id || typeof task.id !== 'string' || task.id.trim().length === 0) {
+        task.id = crypto.randomUUID();
+        updated = true;
+      }
+    });
+  }
+  return updated;
+}
+
 export class VehicleService {
   /**
    * Synchronous: Validate, check, create, and save vehicle
@@ -136,26 +150,22 @@ export class VehicleService {
         // Coerce nulls to undefined for currentMileage
         if (vehicle.currentMileage === null) vehicle.currentMileage = undefined;
         vehicle.maintenanceSchedule = (maintenanceSchedule.schedule.map((item: any) => {
-          const intervalKm = (item.interval_km !== null && item.interval_km !== undefined ? item.interval_km : undefined) as unknown as number | undefined;
-          const intervalMonths = (item.interval_months !== null && item.interval_months !== undefined ? item.interval_months : undefined) as unknown as number | undefined;
-          const currentMileage = (vehicle.currentMileage !== null && vehicle.currentMileage !== undefined ? vehicle.currentMileage : undefined) as unknown as number | undefined;
-          const dueMileage = (currentMileage !== undefined && intervalKm !== undefined)
-            ? (Number(currentMileage) + Number(intervalKm)) as unknown as number | undefined
-            : undefined;
+          // Always assign a unique id
           return {
             id: crypto.randomUUID(),
             title: item.item,
             category: item.category || 'Other',
             status: 'Upcoming',
-            dueMileage,
+            dueMileage: (vehicle.currentMileage !== null && vehicle.currentMileage !== undefined && item.interval_km !== null && item.interval_km !== undefined)
+              ? (Number(vehicle.currentMileage) + Number(item.interval_km)) : undefined,
             dueDate: item.dueDate,
             importance: item.urgency === 'High' ? 'Required' : item.urgency === 'Medium' ? 'Recommended' : 'Optional',
             creationDate: new Date().toISOString(),
             isRecurring: true,
-            recurrenceInterval: `${intervalKm ? intervalKm + ' km' : ''}${intervalKm && intervalMonths ? ' / ' : ''}${intervalMonths ? intervalMonths + ' months' : ''}`,
+            recurrenceInterval: `${item.interval_km ? item.interval_km + ' km' : ''}${item.interval_km && item.interval_months ? ' / ' : ''}${item.interval_months ? item.interval_months + ' months' : ''}`,
             urgencyBaseline: item.urgency,
-            interval_km: typeof intervalKm === 'number' ? intervalKm : undefined,
-            interval_months: typeof intervalMonths === 'number' ? intervalMonths : undefined,
+            interval_km: typeof item.interval_km === 'number' ? item.interval_km : undefined,
+            interval_months: typeof item.interval_months === 'number' ? item.interval_months : undefined,
           };
         }) as any);
         await vehicle.save();
@@ -163,12 +173,12 @@ export class VehicleService {
     } catch (scheduleError) {
       console.warn('Failed to generate maintenance schedule:', scheduleError);
     }
-    // Skipping backend recall enrichment: rely only on recalls provided by the frontend
-    // After mapping, ensure no nulls in dueMileage
     vehicle.maintenanceSchedule = vehicle.maintenanceSchedule.map((task: any) => ({
       ...task,
       dueMileage: task.dueMileage === null ? undefined : task.dueMileage
     })) as any;
+    // Ensure all tasks have ids after enrichment
+    if (ensureTaskIds(vehicle)) await vehicle.save();
   }
 
   /**
@@ -186,26 +196,21 @@ export class VehicleService {
       });
       if (maintenanceSchedule && maintenanceSchedule.schedule) {
         vehicle.maintenanceSchedule = (maintenanceSchedule.schedule.map((item: any) => {
-          const intervalKm = (item.interval_km !== null && item.interval_km !== undefined ? item.interval_km : undefined) as unknown as number | undefined;
-          const intervalMonths = (item.interval_months !== null && item.interval_months !== undefined ? item.interval_months : undefined) as unknown as number | undefined;
-          const currentMileage = (vehicle.currentMileage !== null && vehicle.currentMileage !== undefined ? vehicle.currentMileage : undefined) as unknown as number | undefined;
-          const dueMileage = (currentMileage !== undefined && intervalKm !== undefined)
-            ? (Number(currentMileage) + Number(intervalKm)) as unknown as number | undefined
-            : undefined;
           return {
             id: crypto.randomUUID(),
             title: item.item,
             category: item.category || 'Other',
             status: 'Upcoming',
-            dueMileage,
+            dueMileage: (vehicle.currentMileage !== null && vehicle.currentMileage !== undefined && item.interval_km !== null && item.interval_km !== undefined)
+              ? (Number(vehicle.currentMileage) + Number(item.interval_km)) : undefined,
             dueDate: item.dueDate,
             importance: item.urgency === 'High' ? 'Required' : item.urgency === 'Medium' ? 'Recommended' : 'Optional',
             creationDate: new Date().toISOString(),
             isRecurring: true,
-            recurrenceInterval: `${intervalKm ? intervalKm + ' km' : ''}${intervalKm && intervalMonths ? ' / ' : ''}${intervalMonths ? intervalMonths + ' months' : ''}`,
+            recurrenceInterval: `${item.interval_km ? item.interval_km + ' km' : ''}${item.interval_km && item.interval_months ? ' / ' : ''}${item.interval_months ? item.interval_months + ' months' : ''}`,
             urgencyBaseline: item.urgency,
-            interval_km: typeof intervalKm === 'number' ? intervalKm : undefined,
-            interval_months: typeof intervalMonths === 'number' ? intervalMonths : undefined,
+            interval_km: typeof item.interval_km === 'number' ? item.interval_km : undefined,
+            interval_months: typeof item.interval_months === 'number' ? item.interval_months : undefined,
           };
         }) as any);
         await vehicle.save();
@@ -213,6 +218,8 @@ export class VehicleService {
     } catch (scheduleError) {
       console.warn('Failed to update maintenance schedule:', scheduleError);
     }
+    // Ensure all tasks have ids after update
+    if (ensureTaskIds(vehicle)) await vehicle.save();
   }
 
   /**
@@ -233,16 +240,9 @@ export class VehicleService {
   static async getAllVehicles(): Promise<VehicleResponse> {
     try {
       const vehicles = await Vehicle.find().sort({ createdAt: -1 });
-      // Ensure all tasks have an id
-      vehicles.forEach(vehicle => {
-        if (Array.isArray(vehicle.maintenanceSchedule)) {
-          vehicle.maintenanceSchedule.forEach((task: any) => {
-            if (!task.id || typeof task.id !== 'string' || task.id.trim().length === 0) {
-              task.id = crypto.randomUUID();
-            }
-          });
-        }
-      });
+      for (const vehicle of vehicles) {
+        if (ensureTaskIds(vehicle)) await vehicle.save();
+      }
       return {
         success: true,
         data: vehicles,
@@ -276,14 +276,7 @@ export class VehicleService {
           error: 'Vehicle not found'
         };
       }
-      // Ensure all tasks have an id
-      if (Array.isArray(vehicle.maintenanceSchedule)) {
-        vehicle.maintenanceSchedule.forEach((task: any) => {
-          if (!task.id || typeof task.id !== 'string' || task.id.trim().length === 0) {
-            task.id = crypto.randomUUID();
-          }
-        });
-      }
+      if (ensureTaskIds(vehicle)) await vehicle.save();
       return {
         success: true,
         data: vehicle,
@@ -317,7 +310,7 @@ export class VehicleService {
           error: 'Vehicle not found'
         };
       }
-
+      if (ensureTaskIds(vehicle)) await vehicle.save();
       return {
         success: true,
         data: vehicle,
