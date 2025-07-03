@@ -86,10 +86,8 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
   const [isDecodingVin, setIsDecodingVin] = useState(false);
   const [vinError, setVinError] = useState<string | null>(null);
   const [isFetchingRecalls, setIsFetchingRecalls] = useState(false);
-  const [vehiclePhotoPreview, setVehiclePhotoPreview] = useState<string | null>(null);
   const [showManualEntry, setShowManualEntry] = useState(false);
   const [showCustomInitialTaskForm, setShowCustomInitialTaskForm] = useState(false);
-  const [vehiclePhotoFile, setVehiclePhotoFile] = useState<File | null>(null);
 
   const totalSteps = 4;
 
@@ -97,7 +95,6 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     if (isOpen) {
       setWizardStep(0);
       setWizardData(initialWizardData);
-      setVehiclePhotoPreview(null);
       setVinError(null);
       setIsDecodingVin(false);
       setIsFetchingRecalls(false);
@@ -115,14 +112,6 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setWizardData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setVehiclePhotoFile(file);
-      setVehiclePhotoPreview(URL.createObjectURL(file));
-    }
   };
 
   const handleNextStep = async () => {
@@ -325,8 +314,8 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     };
     
     const vehicleId = await onAddVehicle(finalVehicleData);
-    if (vehicleId && vehiclePhotoFile && onUploadVehicleImage) {
-      await onUploadVehicleImage(vehicleId, vehiclePhotoFile);
+    if (vehicleId && onUploadVehicleImage) {
+      await onUploadVehicleImage(vehicleId, new File([], ''));
     }
     onClose();
   };
@@ -527,11 +516,6 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
             size="small"
         />
       </Box>
-       <div className="mb-4">
-          <label htmlFor="vehiclePhoto" className="block text-sm font-medium text-white mb-1.5">{t('addVehicleModal.step1.vehiclePhoto')} ({t('common.optional')})</label>
-          <input type="file" name="vehiclePhoto" id="vehiclePhoto" accept="image/*" onChange={handlePhotoUpload} className="block w-full text-sm text-[#a0a0a0] file:me-4 rtl:file:ms-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#F7C843] file:text-[#0f0f0f] hover:file:bg-[#e0b330] transition file:cursor-pointer"/>
-          {vehiclePhotoPreview && <motion.img initial={{opacity:0, scale:0.8}} animate={{opacity:1, scale:1, transition: {duration:0.3}}} src={vehiclePhotoPreview} alt={t('addVehicleModal.step1.photoPreviewAlt')} className="mt-3 h-32 md:h-36 w-auto rounded-md object-cover border border-[#333333] shadow-md"/>}
-      </div>
     </motion.div>
   );
 

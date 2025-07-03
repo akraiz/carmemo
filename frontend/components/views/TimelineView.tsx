@@ -47,7 +47,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { isDateOverdue, daysUntil, getPredictiveDueText, getShortRelativeDate, formatDate } from '../../utils/dateUtils';
 import { IconMap, DefaultTaskIcon } from '../Icon';
 import OverdueAlertBanner from '../shared/OverdueAlertBanner';
-import { useVehicleManagement } from '../../hooks/useVehicleManagement';
+import useVehicleManagement from '../../hooks/useVehicleManagement';
 
 const FilterIcon = () => <FilterListIcon sx={{ fontSize: 20 }} />;
 

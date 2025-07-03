@@ -48,34 +48,30 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
   const { t } = useTranslation();
   const [formData, setFormData] = useState<VehicleFormData | null>(null);
   const [vehiclePhotoPreview, setVehiclePhotoPreview] = useState<string | null>(null);
-  const [isDecodingVin, setIsDecodingVin] = useState(false);
-  const [isFetchingRecalls, setIsFetchingRecalls] = useState(false);
-  const [vinError, setVinError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'basic' | 'specs'>('basic');
-  const [originalVin, setOriginalVin] = useState<string>('');
   const { vehicles, setState } = useVehicleManager();
 
   useEffect(() => {
     setFormData({
+      id: vehicle.id,
       make: vehicle.make,
       model: vehicle.model,
-      year: vehicle.year,
+      year: vehicle.year ? vehicle.year.toString() : '',
       nickname: vehicle.nickname || '',
       vin: vehicle.vin || '',
-      currentMileage: vehicle.currentMileage,
+      currentMileage: vehicle.currentMileage ? vehicle.currentMileage.toString() : '',
       purchaseDate: vehicle.purchaseDate || '',
       trim: vehicle.trim || '',
       driveType: vehicle.driveType || '',
       engineDisplacementL: vehicle.engineDisplacementL || '',
-      cylinders: vehicle.cylinders || '',
-      engineBrakeHP: vehicle.engineBrakeHP || '',
+      cylinders: vehicle.cylinders ? vehicle.cylinders.toString() : '',
+      engineBrakeHP: vehicle.engineBrakeHP ? vehicle.engineBrakeHP.toString() : '',
       transmissionStyle: vehicle.transmissionStyle || '',
       primaryFuelType: vehicle.primaryFuelType || '',
       bodyClass: vehicle.bodyClass || '',
-      doors: vehicle.doors || '',
+      doors: vehicle.doors ? vehicle.doors.toString() : '',
       manufacturerName: vehicle.manufacturerName || '',
     });
-    setOriginalVin(vehicle.vin || '');
   }, [vehicle]);
 
   if (!isOpen || !formData) return null;
@@ -98,72 +94,6 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
     }
   };
 
-   const handleDecodeAndFillVin = async () => {
-    if (!formData.vin.trim()) {
-      setVinError(t('editVehicleModal.error.enterVinToDecode'));
-      return;
-    }
-
-    if (!validateVin(formData.vin)) {
-      setVinError(t('editVehicleModal.error.invalidVin'));
-      return;
-    }
-
-    setIsDecodingVin(true);
-    setVinError(null);
-
-    try {
-      const decodedData = await decodeVinMerged(formData.vin);
-      
-      if (decodedData) {
-        setFormData(prev => ({
-          ...prev,
-          make: decodedData.make || prev.make,
-          model: decodedData.model || prev.model,
-          year: decodedData.year || prev.year,
-          trim: decodedData.trim || prev.trim,
-          driveType: decodedData.driveType || prev.driveType,
-          engineDisplacementL: decodedData.engineDisplacementL || prev.engineDisplacementL,
-          cylinders: decodedData.cylinders || prev.cylinders,
-          engineBrakeHP: decodedData.engineBrakeHP || prev.engineBrakeHP,
-          transmissionStyle: decodedData.transmissionStyle || prev.transmissionStyle,
-          primaryFuelType: decodedData.primaryFuelType || prev.primaryFuelType,
-          bodyClass: decodedData.bodyClass || prev.bodyClass,
-          doors: decodedData.doors || prev.doors,
-          manufacturerName: decodedData.manufacturerName || prev.manufacturerName,
-        }));
-
-        // Fetch recalls if VIN changed
-        if (formData.vin !== originalVin) {
-          setIsFetchingRecalls(true);
-          try {
-            const recalls = await getRecallsByVinWithGemini(formData.vin);
-            if (recalls && recalls.length > 0) {
-              const enrichedSchedule = await enrichBaselineSchedule(vehicle, recalls);
-              setState(prev => ({
-                ...prev,
-                vehicles: prev.vehicles.map(v => 
-                  v.id === vehicle.id 
-                    ? { ...v, recalls, maintenanceSchedule: enrichedSchedule }
-                    : v
-                )
-              }));
-            }
-          } catch (error) {
-            console.error('Error fetching recalls:', error);
-          } finally {
-            setIsFetchingRecalls(false);
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Error decoding VIN:', error);
-      setVinError(t('editVehicleModal.error.couldNotDecodeVin'));
-    } finally {
-      setIsDecodingVin(false);
-    }
-  };
-
   const handleSubmit = async () => {
     if (!formData.make || !formData.model || !formData.year) {
       alert(t('addVehicleModal.error.makeModelYearRequired'));
@@ -176,19 +106,6 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
       return;
     }
 
-    // Check if VIN has changed and fetch new recalls if it has
-    let updatedRecalls = formData.recalls;
-    let recallsUpdated = false;
-    if (formData.vin && formData.vin !== originalVin) {
-      setIsFetchingRecalls(true);
-      const newRecalls = await getRecallsByVinWithGemini(formData.vin, formData.make, formData.model);
-      if (newRecalls !== null) {
-        updatedRecalls = newRecalls;
-        recallsUpdated = true;
-      }
-      setIsFetchingRecalls(false);
-    }
-
     const finalVehicleData: Partial<Vehicle> & { id: string } = {
       ...formData,
       id: vehicle.id,
@@ -197,37 +114,30 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
       engineBrakeHP: formData.engineBrakeHP ? parseInt(formData.engineBrakeHP, 10) : undefined,
       cylinders: formData.cylinders ? parseInt(formData.cylinders, 10) : undefined,
       doors: formData.doors ? parseInt(formData.doors, 10) : undefined,
-      recalls: updatedRecalls,
     };
     
     // Update vehicle first (this is the critical user action)
     onUpdateVehicle(finalVehicleData);
     
     // Show success message if recalls were updated, then close modal after a delay
-    if (recallsUpdated) {
-      setVinError(t('editVehicleModal.recallsUpdated'));
-      setTimeout(() => {
-        setVinError(null);
-        onClose();
-      }, 2000);
-    } else {
+    setTimeout(() => {
       onClose();
-    }
+    }, 2000);
 
     // Trigger baseline enrichment in the background (non-blocking)
     enrichBaselineInBackground(finalVehicleData.make as string, finalVehicleData.model as string, finalVehicleData.year as number, finalVehicleData.id);
   };
 
-  // Separate function for background enrichment
+  // Fix enrichment logic to only return Vehicle objects
   const enrichBaselineInBackground = async (make: string, model: string, year: number, vehicleId: string) => {
     try {
       console.log('[ENRICHMENT] Starting background enrichment for vehicle:', vehicleId);
       const baseline = await enrichBaselineSchedule(make, model, year);
-      
       // Find the updated vehicle
       const updatedVehicle = vehicles.find(v => v.id === vehicleId);
       if (updatedVehicle) {
-        const mergedVehicle = enrichBaselineSchedule(updatedVehicle, baseline);
+        // If enrichBaselineSchedule returns a schedule, merge it manually
+        const mergedVehicle = { ...updatedVehicle, maintenanceSchedule: baseline };
         setState(prev => ({
           ...prev,
           vehicles: prev.vehicles.map(v => v.id === mergedVehicle.id ? mergedVehicle : v)
@@ -236,8 +146,6 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
       }
     } catch (err) {
       console.error('[ENRICHMENT] Failed to enrich baseline in background:', err);
-      // Don't show error to user since this is background process
-      // The vehicle is already updated and functional
     }
   };
 
@@ -314,38 +222,6 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
                 InputLabelProps={{ shrink: true }}
             />
         </Box>
-        <div>
-            <TextField
-              fullWidth
-              label={t('vehicle.vin')}
-              name="vin"
-              id="vin"
-              value={formData.vin}
-              onChange={handleInputChange}
-              inputProps={{ maxLength: 17 }}
-              variant="outlined"
-              size="small"
-            />
-            <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
-              <Button 
-                onClick={handleDecodeAndFillVin} 
-                disabled={isDecodingVin || isFetchingRecalls} 
-                variant="outlined"
-                color="primary"
-                size="small"
-                sx={{ whiteSpace: 'nowrap' }}
-              >
-                {isDecodingVin ? t('common.decoding') : t('editVehicleModal.redecodeVinButton')}
-              </Button>
-            </Box>
-            {(isDecodingVin || isFetchingRecalls) && (
-              <p className="text-sm text-[#F7C843] mt-1.5 flex items-center">
-                <Icons.Wrench className="animate-spin w-4 h-4 me-2 rtl:ms-2 rtl:me-0" />
-                {isDecodingVin ? t('common.decoding') : t('addVehicleModal.step0.fetchingRecalls')}
-              </p>
-            )}
-             {vinError && <p className={`text-sm mt-1.5 ${vinError.includes(t('editVehicleModal.error.couldNotDecodeVin').substring(0,10)) || vinError.includes(t('editVehicleModal.error.enterVinToDecode').substring(0,10)) ? 'text-red-400' : 'text-[#F7C843]'}`}>{vinError}</p>}
-        </div>
     </motion.div>
   );
 
@@ -519,19 +395,11 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
           <Button 
             type="button" 
             onClick={handleSubmit} 
-            disabled={isFetchingRecalls}
             variant="contained"
             color="primary"
             size="small"
           >
-            {isFetchingRecalls ? (
-              <span className="flex items-center">
-                <Icons.Wrench className="animate-spin w-4 h-4 me-2 rtl:ms-2 rtl:me-0" />
-                {t('addVehicleModal.step0.fetchingRecalls')}
-              </span>
-            ) : (
-              t('common.saveChanges')
-            )}
+            {t('common.saveChanges')}
           </Button>
         </div>
       </motion.div>
