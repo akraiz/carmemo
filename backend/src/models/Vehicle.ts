@@ -1,14 +1,36 @@
 import mongoose, { Schema } from 'mongoose';
 
 const MaintenanceTaskSchema = new Schema({
-  title: String,
-  dueMileage: Number,
-  isForecast: Boolean,
-  status: String,
-  completedDate: String,
-  cost: Number,
-  notes: String,
-  receipts: [String]
+  id: { type: String }, // Frontend-compatible ID
+  title: { type: String, required: true },
+  category: { type: String },
+  status: { type: String, required: true },
+  dueDate: { type: String },
+  dueMileage: { type: Number },
+  completedDate: { type: String },
+  cost: { type: Number },
+  notes: { type: String },
+  isForecast: { type: Boolean, default: false },
+  archived: { type: Boolean, default: false },
+  receipts: [{
+    url: String,
+    uploadedDate: String,
+    name: String,
+    type: String
+  }],
+  photos: [{
+    url: String,
+    uploadedDate: String,
+    name: String,
+    type: String
+  }],
+  importance: { type: String },
+  creationDate: { type: String },
+  interval_km: { type: Number },
+  interval_months: { type: Number },
+  urgencyBaseline: { type: String },
+  isRecurring: { type: Boolean, default: false },
+  recurrenceInterval: { type: String },
 }, { _id: false });
 
 const VehicleSchema = new Schema({
@@ -17,7 +39,10 @@ const VehicleSchema = new Schema({
   year: { type: Number, required: true },
   vin: { type: String, required: true, unique: true },
   owner: { type: String },
+  nickname: { type: String },
   currentMileage: { type: Number },
+  purchaseDate: { type: String },
+  imageUrl: { type: String },
   maintenanceSchedule: [MaintenanceTaskSchema],
   recalls: { type: Schema.Types.Mixed },
   imageId: { type: Schema.Types.ObjectId, ref: 'fs.files' },
