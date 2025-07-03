@@ -3,6 +3,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, I
 import CloseIcon from '@mui/icons-material/Close';
 import { MaintenanceTask, Part, TaskStatus } from '../../types';
 import { getISODateString } from '../../utils/dateUtils';
+import { v4 as uuidv4 } from 'uuid';
 
 interface CompleteTaskModalProps {
   isOpen: boolean;

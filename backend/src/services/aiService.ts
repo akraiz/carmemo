@@ -110,20 +110,44 @@ export const decodeVinWithGemini = async (vinToDecode: string): Promise<Partial<
   }
 };
 
+// Utility: Retry async function with delay
+async function retryAsync<T>(fn: () => Promise<T>, retries: number = 3, delayMs: number = 1000): Promise<T> {
+  let lastError;
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err;
+      console.warn(`[RETRY] Attempt ${attempt} failed:`, err);
+      if (attempt < retries) {
+        await new Promise(res => setTimeout(res, delayMs));
+      }
+    }
+  }
+  throw lastError;
+}
+
 export const getRecallsByVinWithGemini = async (vin: string, make?: string, model?: string): Promise<RecallInfo[] | null> => {
   // Only try to get real Saudi recall data
   try {
     console.log('Attempting to fetch real Saudi recall data...');
-    const saudiRecalls = await SaudiRecallManager.getAllSaudiRecalls(vin, make, model);
+    const saudiRecalls = await retryAsync(() => SaudiRecallManager.getAllSaudiRecalls(vin, make, model), 3, 1500);
     if (saudiRecalls.length > 0) {
       console.log(`Found ${saudiRecalls.length} real Saudi recalls for VIN: ${vin}`);
-      // Convert SaudiRecallInfo to RecallInfo format
+      // Map all fields from the API response
       const convertedRecalls: RecallInfo[] = saudiRecalls.map(recall => ({
-        id: recall.id,
+        id: (recall.reference || recall.id || '').toString(),
+        reference: (recall.reference || recall.id || '').toString(),
+        date: recall.date || '',
+        brand: recall.brand || '',
+        model: recall.model || '',
+        status: recall.status || '',
+        detailUrl: recall.detailUrl || '',
+        // Compatibility/legacy fields
         component: recall.description || 'Unknown Component',
         summary: recall.description || 'No summary available',
-        reportReceivedDate: recall.reportReceivedDate,
-        nhtsaCampaignNumber: recall.reference
+        reportReceivedDate: recall.date ? (recall.date.split('/').reverse().join('-')) : '',
+        nhtsaCampaignNumber: (recall.reference || recall.id || '').toString()
       }));
       return convertedRecalls;
     } else {
@@ -131,7 +155,7 @@ export const getRecallsByVinWithGemini = async (vin: string, make?: string, mode
       return [];
     }
   } catch (error) {
-    console.warn('Saudi recall service unavailable:', error);
+    console.warn('[RECALLS] All attempts to fetch recalls failed:', error);
     return [];
   }
 };

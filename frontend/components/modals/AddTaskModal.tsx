@@ -439,6 +439,25 @@ const ModernTaskForm = ({ task, onSave, onClose, currentMileage }: { task: Maint
           </p>
         </div>
       </div>
+
+      {/* Category Field (moved out of advanced options) */}
+      <div>
+        <label className="block text-sm font-medium text-white mb-2">
+          {t('task.category')}
+        </label>
+        <select
+          name="category"
+          value={taskData.category}
+          onChange={handleChange}
+          className="w-full px-3 py-2 bg-[#2a2a2a] border border-[#404040] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#F7C843] focus:border-transparent"
+        >
+          {Object.values(TaskCategory).map(category => (
+            <option key={category} value={category}>
+              {t(`taskCategories.${(category || '').replace(/\s+/g, '')}` as any) || category || 'Other'}
+            </option>
+          ))}
+        </select>
+      </div>
       
       {/* Urgency Indicator */}
       <UrgencyIndicatorCard task={taskData} currentMileage={currentMileage} />
@@ -456,23 +475,19 @@ const ModernTaskForm = ({ task, onSave, onClose, currentMileage }: { task: Maint
         
         {showAdvanced && (
           <div className="space-y-3 pl-4 border-l-2 border-[#404040]">
-            {/* Category Selector */}
+            {/* Cost Field (always under advanced options) */}
             <div>
               <label className="block text-sm font-medium text-white mb-2">
-                {t('task.category')}
+                {t('task.cost')}
               </label>
-              <select
-                name="category"
-                value={taskData.category}
+              <input
+                type="number"
+                name="cost"
+                value={taskData.cost || ''}
                 onChange={handleChange}
                 className="w-full px-3 py-2 bg-[#2a2a2a] border border-[#404040] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#F7C843] focus:border-transparent"
-              >
-                {Object.values(TaskCategory).map(category => (
-                  <option key={category} value={category}>
-                    {t(`taskCategories.${(category || '').replace(/\s+/g, '')}` as any) || category || 'Other'}
-                  </option>
-                ))}
-              </select>
+                placeholder={t('task.costPlaceholder')}
+              />
             </div>
             
             {/* Importance Selector */}

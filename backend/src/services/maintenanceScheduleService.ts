@@ -4,58 +4,80 @@ import { fileURLToPath } from 'url';
 import { getMaintenanceScheduleWithGemini } from './aiService.js';
 import { addMonths, isAfter, parseISO } from 'date-fns';
 import crypto from 'crypto';
+import { TaskCategory } from '../types.js';
+import { spawnSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const BASELINE_PATH = path.join(__dirname, '../baselineMaintenance.json');
 
-// Category mapping function to convert baseline categories to TaskCategory enum values
-export function mapCategoryToTaskCategory(baselineCategory: string): string {
-  const categoryMap: Record<string, string> = {
-    // Direct mappings
-    'Engine': 'Engine',
-    'Brakes': 'Brakes',
-    'Tires': 'Tires',
-    'Transmission': 'Transmission',
-    'Drivetrain': 'Drivetrain',
-    'HVAC': 'HVAC',
-    'Electrical': 'Electrical',
-    'Fuel System': 'FuelSystem',
-    'Exhaust': 'Exhaust',
-    'Chassis': 'Chassis',
-    'Exterior': 'Exterior',
-    'Filters': 'Filters',
-    'Fluids': 'Fluids',
-    'Safety': 'Safety',
-    'General': 'General',
-    'Other': 'Other',
-    
-    // Compound mappings
-    'Wheels/Tires': 'WheelsTires',
-    'Wheels & Tires': 'WheelsAndTires',
-    'Tires/Wheels': 'TiresWheels',
-    'Tires/Suspension': 'TiresSuspension',
-    'Suspension/Steering': 'SuspensionSteering',
-    'Suspension/Steering/Inspection': 'SuspensionSteeringInspection',
-    'Chassis/Suspension': 'ChassisSuspension',
-    'Chassis/Tires': 'ChassisTires',
-    'Engine/Air Intake': 'EngineAirIntake',
-    'Engine/Ignition': 'EngineIgnition',
-    'Engine/Inspection': 'EngineInspection',
-    'Brakes/Fluids': 'BrakesFluids',
-    'Transmission/Fluids': 'TransmissionFluids',
-    'Transmission/Inspection': 'TransmissionInspection',
-    'Drivetrain/Inspection': 'DrivetrainInspection',
-    'Electrical/Inspection': 'ElectricalInspection',
-    'Fluids/Inspection': 'FluidsInspection',
-    'General Inspection': 'GeneralInspection',
-    'Cooling System': 'CoolingSystem',
-    'Cooling': 'Cooling',
-    
-    // Fallback for any unmapped categories
-  };
-  
-  return categoryMap[baselineCategory] || 'Other';
+// Add a simple Levenshtein distance function
+function levenshtein(a: string, b: string): number {
+  const matrix = Array.from({ length: b.length + 1 }, (_, i) => [i]);
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1, // substitution
+          matrix[i][j - 1] + 1,     // insertion
+          matrix[i - 1][j] + 1      // deletion
+        );
+      }
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+function normalizeCategory(str: string): string {
+  return (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+const canonicalCategories = Object.values(TaskCategory);
+
+export function mapCategoryToTaskCategory(baselineCategory: string): TaskCategory {
+  if (!baselineCategory) return TaskCategory.Other;
+  const normalized = normalizeCategory(baselineCategory);
+  // 1. Exact match
+  for (const cat of canonicalCategories) {
+    if (normalizeCategory(cat) === normalized) return cat as TaskCategory;
+  }
+  // 2. Fuzzy match (Levenshtein distance <= 2)
+  let minDist = Infinity;
+  let closest: string | null = null;
+  for (const cat of canonicalCategories) {
+    const dist = levenshtein(normalized, normalizeCategory(cat));
+    if (dist < minDist) {
+      minDist = dist;
+      closest = cat;
+    }
+  }
+  if (minDist <= 2 && closest) return closest as TaskCategory;
+  // 3. Synonym/substring matching
+  if (normalized.includes('oil')) return TaskCategory.OilChange;
+  if (normalized.includes('tire')) return TaskCategory.TireRotation;
+  if (normalized.includes('brake')) return TaskCategory.BrakeService;
+  if (normalized.includes('filter')) return TaskCategory.AirFilter;
+  if (normalized.includes('battery')) return TaskCategory.BatteryService;
+  if (normalized.includes('fluid')) return TaskCategory.FluidCheck;
+  if (normalized.includes('inspect')) return TaskCategory.Inspection;
+  // 4. Auto-enrich enums and translations if not in production
+  if (process.env.NODE_ENV !== 'production') {
+    try {
+      const scriptPath = path.join(__dirname, '../../../scripts/auto_add_category.js');
+      const result = spawnSync('node', [scriptPath, baselineCategory], { stdio: 'inherit' });
+      if (result.error) {
+        console.warn(`[Category Mapping] Failed to auto-add category '${baselineCategory}':`, result.error);
+      }
+    } catch (err) {
+      console.warn(`[Category Mapping] Exception while auto-adding category '${baselineCategory}':`, err);
+    }
+  } else {
+    console.warn(`[Category Mapping] Unmapped category: '${baselineCategory}'. Consider adding to TaskCategory enum and translations.`);
+  }
+  return TaskCategory.Other;
 }
 
 export function normalizeKey(make: string, model: string, year: number): string {

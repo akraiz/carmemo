@@ -1,11 +1,15 @@
 export interface RecallInfo {
-  id: string; // NHTSACampaignNumber or other unique identifier
-  component: string;
-  summary: string;
-  consequence?: string;
-  remedy?: string;
+  id: string;
+  reference: string;
+  date: string;
+  brand: string;
+  model: string;
+  status: string;
+  detailUrl: string;
+  component?: string;
+  summary?: string;
   reportReceivedDate?: string;
-  nhtsaCampaignNumber?: string; // This specific ID from NHTSA
+  nhtsaCampaignNumber?: string;
 }
 
 export interface SaudiRecallInfo {
