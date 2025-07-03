@@ -218,7 +218,7 @@ const useVehicleManagement = () => {
           nickname: baseVehicleData.nickname,
           currentMileage: baseVehicleData.currentMileage,
           purchaseDate: baseVehicleData.purchaseDate,
-          imageId: baseVehicleData.imageId,
+          // imageId: baseVehicleData.imageId, // Remove this line
           // Include VIN-derived fields
           trim: baseVehicleData.trim,
           driveType: baseVehicleData.driveType,
@@ -372,7 +372,8 @@ const useVehicleManagement = () => {
               maintenanceSchedule: [...(response.data.maintenanceSchedule || [])]
             };
           }
-          return { ...prev, vehicles: vehiclesCopy };
+          // Ensure selectedVehicleId is set to the refreshed vehicle
+          return { ...prev, vehicles: vehiclesCopy, selectedVehicleId: vehicleId };
         });
       }
     } catch (error) {
