@@ -27,10 +27,9 @@ const cardItemVariants = {
 };
 
 const BACKEND_BASE_URL = 'http://localhost:3001';
-const getVehicleImageUrl = (imageUrl?: string) => {
-  if (!imageUrl) return DEFAULT_VEHICLE_IMAGE_URL;
-  if (imageUrl.startsWith('http')) return imageUrl;
-  return BACKEND_BASE_URL + imageUrl;
+const getVehicleImageUrl = (vehicleId?: string) => {
+  if (!vehicleId) return DEFAULT_VEHICLE_IMAGE_URL;
+  return `${BACKEND_BASE_URL}/api/vehicles/${vehicleId}/image`;
 };
 
 const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle, isSelected, onSelect, onDelete }) => {
@@ -58,8 +57,8 @@ const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle, isSelected, onSelect
     >
       <div className="flex items-center space-x-3 rtl:space-x-reverse">
           <motion.img
-            src={getVehicleImageUrl(vehicle.imageUrl)}
-            alt={`${vehicle.make} ${vehicle.model}`}
+            src={getVehicleImageUrl(vehicle._id)}
+            alt={vehicle.nickname || vehicle.model}
             className={`w-10 h-10 md:w-12 md:h-12 rounded-md object-cover border-2 transition-colors ${isSelected ? 'border-[#F7C843]/70' : 'border-[#404040] group-hover:border-[#F7C843]/50'}`}
             transition={{ type: "spring", stiffness: 280, damping: 18 }}
           />

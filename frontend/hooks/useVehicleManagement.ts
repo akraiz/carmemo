@@ -218,7 +218,7 @@ const useVehicleManagement = () => {
           nickname: baseVehicleData.nickname,
           currentMileage: baseVehicleData.currentMileage,
           purchaseDate: baseVehicleData.purchaseDate,
-          imageUrl: baseVehicleData.imageUrl,
+          imageId: baseVehicleData.imageId,
           // Include VIN-derived fields
           trim: baseVehicleData.trim,
           driveType: baseVehicleData.driveType,
@@ -271,7 +271,7 @@ const useVehicleManagement = () => {
           id: self.crypto.randomUUID(),
           ...baseVehicleData,
           maintenanceSchedule: [],
-          imageUrl: vehicleData.imageUrl,
+          imageId: vehicleData.imageId,
           recalls: recalls || [],
         };
 
@@ -699,13 +699,13 @@ const useVehicleManagement = () => {
       if (state.useBackend && state.backendConnected) {
         const response: VehicleResponse = await vehicleService.uploadVehicleImage(vehicleId, file);
         if (response.success && response.data) {
-          const imageUrl = response.data.imageUrl;
-          await handleUpdateVehicle({ id: vehicleId, imageUrl });
+          const imageId = response.data.imageId;
+          await handleUpdateVehicle({ id: vehicleId, imageId });
         }
       } else {
         // Fallback to local file handling
-        const imageUrl = URL.createObjectURL(file);
-        await handleUpdateVehicle({ id: vehicleId, imageUrl });
+        const imageId = URL.createObjectURL(file);
+        await handleUpdateVehicle({ id: vehicleId, imageId });
       }
     } catch (error) {
       console.error("Error updating vehicle photo:", error);

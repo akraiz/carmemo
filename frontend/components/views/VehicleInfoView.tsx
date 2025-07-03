@@ -84,10 +84,9 @@ export interface VehicleInfoViewProps {
 }
 
 const BACKEND_BASE_URL = 'http://localhost:3001';
-const getVehicleImageUrl = (imageUrl?: string) => {
-  if (!imageUrl) return DEFAULT_VEHICLE_IMAGE_URL;
-  if (imageUrl.startsWith('http')) return imageUrl;
-  return BACKEND_BASE_URL + imageUrl;
+const getVehicleImageUrl = (vehicleId?: string) => {
+  if (!vehicleId) return DEFAULT_VEHICLE_IMAGE_URL;
+  return `${BACKEND_BASE_URL}/api/vehicles/${vehicleId}/image`;
 };
 
 // VehicleInfoView Component (moved from App.tsx)
@@ -314,9 +313,9 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-6">
           <div className="relative group flex-shrink-0">
             <motion.img
-              key={vehicle.imageUrl || DEFAULT_VEHICLE_IMAGE_URL}
-              src={getVehicleImageUrl(vehicle.imageUrl)}
-              alt={`${vehicle.make} ${vehicle.model}`}
+              key={vehicle._id || DEFAULT_VEHICLE_IMAGE_URL}
+              src={getVehicleImageUrl(vehicle._id)}
+              alt={vehicle.nickname || vehicle.model}
               className="w-28 h-28 md:w-36 md:h-36 rounded-lg object-cover border-2 border-[#333333] shadow-lg"
               initial={{ scale: 0.95, opacity: 0, y: 10 }}
               animate={{ scale: 1, opacity: 1, y: 0, transition: { type: "spring", stiffness: 150, damping: 15 } }}

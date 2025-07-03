@@ -137,7 +137,7 @@ const useVehicleManager = () => {
         id: self.crypto.randomUUID(),
         ...baseVehicleData,
         maintenanceSchedule: [],
-        imageUrl: vehicleData.imageUrl,
+        imageId: vehicleData.imageId,
         recalls: recalls || [],
       };
       const completedInitialTasks = (initialMaintenanceTasks || []).map(task => ({
@@ -399,12 +399,12 @@ const useVehicleManager = () => {
     });
   };
 
-  const handleUpdateVehiclePhoto = (vehicleId: string, imageUrl: string) => {
+  const handleUpdateVehiclePhoto = (vehicleId: string, imageId: string) => {
     setState(prev => {
       const vehiclesCopy = [...prev.vehicles];
       const vehicleIndex = vehiclesCopy.findIndex(v => v.id === vehicleId);
       if (vehicleIndex === -1) return prev; 
-      vehiclesCopy[vehicleIndex] = { ...vehiclesCopy[vehicleIndex], imageUrl };
+      vehiclesCopy[vehicleIndex] = { ...vehiclesCopy[vehicleIndex], imageId };
       return { ...prev, vehicles: vehiclesCopy };
     });
   };

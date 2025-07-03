@@ -38,6 +38,7 @@ export interface Vehicle {
   purchaseDate?: string;
   maintenanceSchedule: MaintenanceTask[];
   imageUrl?: string; // Optional: e.g., https://picsum.photos/300/200
+  imageId?: string; // Optional: GridFS ObjectId for vehicle image
   recalls?: RecallInfo[]; // Added for recall information
 
   // Detailed specifications from VIN decoding
