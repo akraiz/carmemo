@@ -47,10 +47,17 @@ export interface VehicleResponse {
   message?: string;
 }
 
-// Utility to ensure all tasks in a vehicle have a unique id
-function ensureTaskIds(vehicle: any): boolean {
+// Utility to clean and ensure all tasks in a vehicle have a unique id
+function cleanAndEnsureTaskIds(vehicle: any): boolean {
   let updated = false;
   if (Array.isArray(vehicle.maintenanceSchedule)) {
+    // Remove empty/malformed tasks
+    const originalLength = vehicle.maintenanceSchedule.length;
+    vehicle.maintenanceSchedule = vehicle.maintenanceSchedule.filter(
+      (t: any) => t && typeof t === 'object' && Object.keys(t).length > 0 && t.title
+    );
+    if (vehicle.maintenanceSchedule.length !== originalLength) updated = true;
+    // Ensure all valid tasks have an id
     vehicle.maintenanceSchedule.forEach((task: any) => {
       if (!task.id || typeof task.id !== 'string' || task.id.trim().length === 0) {
         task.id = crypto.randomUUID();
@@ -177,8 +184,8 @@ export class VehicleService {
       ...task,
       dueMileage: task.dueMileage === null ? undefined : task.dueMileage
     })) as any;
-    // Ensure all tasks have ids after enrichment
-    if (ensureTaskIds(vehicle)) await vehicle.save();
+    // Clean and ensure all tasks have ids after enrichment
+    if (cleanAndEnsureTaskIds(vehicle)) await vehicle.save();
   }
 
   /**
@@ -218,8 +225,8 @@ export class VehicleService {
     } catch (scheduleError) {
       console.warn('Failed to update maintenance schedule:', scheduleError);
     }
-    // Ensure all tasks have ids after update
-    if (ensureTaskIds(vehicle)) await vehicle.save();
+    // Clean and ensure all tasks have ids after update
+    if (cleanAndEnsureTaskIds(vehicle)) await vehicle.save();
   }
 
   /**
@@ -241,7 +248,7 @@ export class VehicleService {
     try {
       const vehicles = await Vehicle.find().sort({ createdAt: -1 });
       for (const vehicle of vehicles) {
-        if (ensureTaskIds(vehicle)) await vehicle.save();
+        if (cleanAndEnsureTaskIds(vehicle)) await vehicle.save();
       }
       return {
         success: true,
@@ -276,7 +283,7 @@ export class VehicleService {
           error: 'Vehicle not found'
         };
       }
-      if (ensureTaskIds(vehicle)) await vehicle.save();
+      if (cleanAndEnsureTaskIds(vehicle)) await vehicle.save();
       return {
         success: true,
         data: vehicle,
@@ -310,7 +317,7 @@ export class VehicleService {
           error: 'Vehicle not found'
         };
       }
-      if (ensureTaskIds(vehicle)) await vehicle.save();
+      if (cleanAndEnsureTaskIds(vehicle)) await vehicle.save();
       return {
         success: true,
         data: vehicle,
