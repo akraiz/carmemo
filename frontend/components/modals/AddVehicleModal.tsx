@@ -314,9 +314,6 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     };
     
     const vehicleId = await onAddVehicle(finalVehicleData);
-    if (vehicleId && onUploadVehicleImage) {
-      await onUploadVehicleImage(vehicleId, new File([], ''));
-    }
     onClose();
   };
 
