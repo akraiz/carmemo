@@ -5,6 +5,8 @@ import { Icons } from './Icon';
 import { DEFAULT_VEHICLE_IMAGE_URL } from '../constants';
 import { useTranslation } from '../hooks/useTranslation';
 import { IconButton } from '@mui/material';
+import { SiFord, SiToyota, SiHonda, SiBmw, SiMercedes, SiChevrolet, SiHyundai, SiKia, SiNissan, SiVolkswagen, SiAudi, SiMazda, SiJeep, SiSubaru, SiTesla, SiPorsche, SiJaguar, SiLandrover, SiMitsubishi, SiPeugeot, SiRenault, SiSuzuki, SiFiat, SiVolvo, SiCitroen, SiRam, SiMini, SiInfiniti, SiAcura, SiCadillac, SiChrysler, SiGmx, SiAlfaromeo, SiSmart, SiSaturn, SiSuzuki as SiDefaultCar } from 'react-icons/si';
+import { IconType } from 'react-icons';
 
 
 interface VehicleCardProps {
@@ -27,9 +29,54 @@ const cardItemVariants = {
 };
 
 const BACKEND_BASE_URL = 'http://localhost:3001';
-const getVehicleImageUrl = (vehicleId?: string) => {
-  if (!vehicleId) return DEFAULT_VEHICLE_IMAGE_URL;
-  return `${BACKEND_BASE_URL}/api/vehicles/${vehicleId}/image`;
+
+const makeIconMap: Record<string, IconType> = {
+  ford: SiFord,
+  toyota: SiToyota,
+  honda: SiHonda,
+  bmw: SiBmw,
+  mercedes: SiMercedes,
+  chevrolet: SiChevrolet,
+  hyundai: SiHyundai,
+  kia: SiKia,
+  nissan: SiNissan,
+  volkswagen: SiVolkswagen,
+  audi: SiAudi,
+  mazda: SiMazda,
+  jeep: SiJeep,
+  subaru: SiSubaru,
+  tesla: SiTesla,
+  porsche: SiPorsche,
+  jaguar: SiJaguar,
+  landrover: SiLandrover,
+  mitsubishi: SiMitsubishi,
+  peugeot: SiPeugeot,
+  renault: SiRenault,
+  suzuki: SiSuzuki,
+  fiat: SiFiat,
+  volvo: SiVolvo,
+  citroen: SiCitroen,
+  ram: SiRam,
+  mini: SiMini,
+  infiniti: SiInfiniti,
+  acura: SiAcura,
+  cadillac: SiCadillac,
+  chrysler: SiChrysler,
+  gmc: SiGmx,
+  alfaromeo: SiAlfaromeo,
+  smart: SiSmart,
+  saturn: SiSaturn,
+};
+
+const getBrandIcon = (make?: string) => {
+  if (!make) return SiDefaultCar;
+  const key = make.toLowerCase().replace(/[^a-z]/g, '');
+  return makeIconMap[key] || SiDefaultCar;
+};
+
+const getVehicleImageUrl = (vehicle: Vehicle) => {
+  if (vehicle.imageId) return `${BACKEND_BASE_URL}/api/vehicles/${vehicle._id}/image`;
+  return null; // Use icon fallback
 };
 
 const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle, isSelected, onSelect, onDelete }) => {
@@ -40,6 +87,9 @@ const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle, isSelected, onSelect
   const selectedClasses = "bg-[#F7C843]/20 border-[#F7C843] shadow-md ring-2 ring-[#F7C843]/80 focus:outline focus:ring-2 focus:ring-[#F7C843]";
   const nonSelectedClasses = "bg-gradient-to-br from-[#2a2a2a] to-[#222222]/80 border-[#333333] hover:from-[#333333] hover:to-[#2a2a2a]/70 hover:border-[#404040] focus:outline focus:ring-2 focus:ring-[#F7C843]";
   
+  const imageUrl = getVehicleImageUrl(vehicle);
+  const BrandIcon = getBrandIcon(vehicle.make);
+
   return (
     <motion.div
       layout 
@@ -56,12 +106,15 @@ const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle, isSelected, onSelect
       exit={{ opacity: 0, y:-5, transition: {duration: 0.15} }}
     >
       <div className="flex items-center space-x-3 rtl:space-x-reverse">
-          <motion.img
-            src={getVehicleImageUrl(vehicle._id)}
-            alt={vehicle.nickname || vehicle.model}
-            className={`w-10 h-10 md:w-12 md:h-12 rounded-md object-cover border-2 transition-colors ${isSelected ? 'border-[#F7C843]/70' : 'border-[#404040] group-hover:border-[#F7C843]/50'}`}
-            transition={{ type: "spring", stiffness: 280, damping: 18 }}
-          />
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={vehicle.nickname || vehicle.model}
+              className={`w-10 h-10 md:w-12 md:h-12 rounded-md object-cover border-2 transition-colors ${isSelected ? 'border-[#F7C843]/70' : 'border-[#404040] group-hover:border-[#F7C843]/50'}`}
+            />
+          ) : (
+            <BrandIcon size={48} color="#9ca3af" />
+          )}
           <div>
               <h3 className={`font-semibold text-sm md:text-base ${isSelected ? 'text-white' : 'text-white'}`}>{vehicle.nickname || `${vehicle.make} ${vehicle.model}`}</h3>
               <p className={`text-xs ${isSelected ? 'text-[#F7C843]/80' : 'text-[#a0a0a0] group-hover:text-[#cfcfcf]'} transition-colors`}>{vehicle.year} {vehicle.vin ? `• ${vehicle.vin.slice(-6)}` : ''}</p>

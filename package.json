@@ -20,5 +20,8 @@
   "workspaces": [
     "frontend",
     "backend"
-  ]
+  ],
+  "dependencies": {
+    "simple-icons": "^15.4.0"
+  }
 }

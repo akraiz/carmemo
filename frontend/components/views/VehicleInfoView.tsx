@@ -11,6 +11,8 @@ import { TASK_STATUS_COLORS, TASK_IMPORTANCE_COLORS, DEFAULT_VEHICLE_IMAGE_URL }
 import { formatDate, getISODateString, isDateOverdue, daysUntil, timeAgo } from '../../utils/dateUtils';
 import { Button, IconButton, TextField, Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
 import CompleteTaskModal from '../modals/CompleteTaskModal';
+import { SiFord, SiToyota, SiHonda, SiBmw, SiMercedes, SiChevrolet, SiHyundai, SiKia, SiNissan, SiVolkswagen, SiAudi, SiMazda, SiJeep, SiSubaru, SiTesla, SiPorsche, SiJaguar, SiLandrover, SiMitsubishi, SiPeugeot, SiRenault, SiSuzuki, SiFiat, SiVolvo, SiCitroen, SiRam, SiMini, SiInfiniti, SiAcura, SiCadillac, SiChrysler, SiGmx, SiAlfaromeo, SiSmart, SiSaturn, SiSuzuki as SiDefaultCar } from 'react-icons/si';
+import { IconType } from 'react-icons';
 
 // Animation Variants (moved from App.tsx)
 const sectionVariants = {
@@ -84,9 +86,54 @@ export interface VehicleInfoViewProps {
 }
 
 const BACKEND_BASE_URL = 'http://localhost:3001';
-const getVehicleImageUrl = (vehicleId?: string) => {
-  if (!vehicleId) return DEFAULT_VEHICLE_IMAGE_URL;
-  return `${BACKEND_BASE_URL}/api/vehicles/${vehicleId}/image`;
+
+const makeIconMap: Record<string, IconType> = {
+  ford: SiFord,
+  toyota: SiToyota,
+  honda: SiHonda,
+  bmw: SiBmw,
+  mercedes: SiMercedes,
+  chevrolet: SiChevrolet,
+  hyundai: SiHyundai,
+  kia: SiKia,
+  nissan: SiNissan,
+  volkswagen: SiVolkswagen,
+  audi: SiAudi,
+  mazda: SiMazda,
+  jeep: SiJeep,
+  subaru: SiSubaru,
+  tesla: SiTesla,
+  porsche: SiPorsche,
+  jaguar: SiJaguar,
+  landrover: SiLandrover,
+  mitsubishi: SiMitsubishi,
+  peugeot: SiPeugeot,
+  renault: SiRenault,
+  suzuki: SiSuzuki,
+  fiat: SiFiat,
+  volvo: SiVolvo,
+  citroen: SiCitroen,
+  ram: SiRam,
+  mini: SiMini,
+  infiniti: SiInfiniti,
+  acura: SiAcura,
+  cadillac: SiCadillac,
+  chrysler: SiChrysler,
+  gmc: SiGmx,
+  alfaromeo: SiAlfaromeo,
+  smart: SiSmart,
+  saturn: SiSaturn,
+};
+
+const getBrandIcon = (make?: string) => {
+  if (!make) return SiDefaultCar;
+  const key = make.toLowerCase().replace(/[^a-z]/g, '');
+  return makeIconMap[key] || SiDefaultCar;
+};
+
+const getVehicleImageUrl = (vehicle: Vehicle) => {
+  if (vehicle.imageId) return `${BACKEND_BASE_URL}/api/vehicles/${vehicle._id}/image`;
+  return null; // Use icon fallback
 };
 
 // VehicleInfoView Component (moved from App.tsx)
@@ -300,6 +347,9 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
 
   const specsToDisplay = showAllSpecs ? allSpecs : basicSpecs.slice(0, 5);
 
+  const imageUrl = getVehicleImageUrl(vehicle);
+  const BrandIcon = getBrandIcon(vehicle.make);
+
   return (
     <motion.div
       className="w-full max-w-4xl mx-auto px-2 md:px-0 space-y-4 md:space-y-6 pt-6 md:pt-8"
@@ -312,14 +362,15 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
       <motion.section variants={sectionVariants} aria-labelledby="vehicle-header" className="bg-[#1c1c1c] p-4 md:p-6 rounded-xl shadow-xl border border-[#333333]">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-6">
           <div className="relative group flex-shrink-0">
-            <motion.img
-              key={vehicle._id || DEFAULT_VEHICLE_IMAGE_URL}
-              src={getVehicleImageUrl(vehicle._id)}
-              alt={vehicle.nickname || vehicle.model}
-              className="w-28 h-28 md:w-36 md:h-36 rounded-lg object-cover border-2 border-[#333333] shadow-lg"
-              initial={{ scale: 0.95, opacity: 0, y: 10 }}
-              animate={{ scale: 1, opacity: 1, y: 0, transition: { type: "spring", stiffness: 150, damping: 15 } }}
-            />
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt={vehicle.nickname || vehicle.model}
+                className="w-28 h-28 md:w-36 md:h-36 rounded-lg object-cover border-2 border-[#333333] shadow-lg"
+              />
+            ) : (
+              <BrandIcon size={144} color="#9ca3af" />
+            )}
             <input type="file" ref={photoInputRef} onChange={handleVehiclePhotoChange} accept="image/*" className="hidden" aria-label={t('vehicle.uploadPhotoAria')} />
           </div>
           <div className="flex-grow text-center sm:text-start">
