@@ -524,7 +524,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({
   }, [selectedVehicleId]);
 
   return (
-    <Box ref={containerRef} sx={{ p: 2, pb: isMobile ? '120px' : '80px', backgroundColor: '#121212', minHeight: '100%', position: 'relative' }}>
+    <Box ref={containerRef} sx={{ p: 2, pb: isMobile ? '72px' : '80px', backgroundColor: '#121212', minHeight: '100%', position: 'relative' }}>
       <Box
         ref={headerRef}
         sx={{
@@ -601,7 +601,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({
       {renderContent()}
 
       {/* Add extra bottom spacer for FAB on mobile */}
-      {isMobile && <div style={{ height: 96 }} />}
+      {isMobile && <div style={{ height: 48 }} />}
 
       {/* NEW: Dropdown Filter Menu */}
       {isMobile ? (

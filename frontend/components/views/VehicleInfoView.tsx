@@ -339,7 +339,7 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
   return (
     <motion.div
       className="w-full max-w-4xl mx-auto px-2 md:px-0 space-y-4 md:space-y-6 pt-6 md:pt-8"
-      style={{ paddingBottom: '80px' }}
+      style={{ paddingBottom: '120px' }}
       initial="hidden"
       animate="visible"
       variants={{ visible: { transition: { staggerChildren: 0.08 } } }} 
