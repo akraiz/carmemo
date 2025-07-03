@@ -435,12 +435,14 @@ const App: React.FC = () => {
                 </div>
 
               {/* FAB and Menu */}
-              <FabButton
-                onClick={handleFabClick}
-                icon={<AddIcon />}
-                ariaLabel={t('addTask')}
-                position={{ bottom: isMobile ? bottomNavHeight + 16 : 32, right: 32, zIndex: 1200 }}
-              />
+              {!isModalOpen && (
+                <FabButton
+                  onClick={handleFabClick}
+                  icon={<AddIcon />}
+                  ariaLabel={t('addTask')}
+                  position={{ bottom: isMobile ? bottomNavHeight + 16 : 32, right: 32, zIndex: 1200 }}
+                />
+              )}
             </main>
           </div>
           
