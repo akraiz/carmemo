@@ -6,6 +6,7 @@
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
+    "railway-build": "npm install --legacy-peer-deps && npm run build",
     "start": "node dist/proxy-server.js",
     "postinstall": "npm run build",
     "verify": "node verify-build.js",
@@ -33,7 +34,8 @@
     "web-push": "^3.6.7",
     "mongodb": "^6.0.0",
     "multer-gridfs-storage": "^5.0.0",
-    "multer": "^2.0.1",
+    "multer": "^1.4.5-lts.1",
+    "gridfs-stream": "^1.1.1",
     "@types/node": "^22.14.0",
     "@types/express": "^5.0.3",
     "@types/multer": "^1.4.13",
