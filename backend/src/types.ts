@@ -113,6 +113,7 @@ export enum TaskCategory {
   AirFilter = "Air Filter",
   WiperBlades = "Wiper Blades",
   Inspection = "Inspection",
+  Tires = "Tires",
   Other = "Other",
 }
 

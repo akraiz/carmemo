@@ -55,15 +55,24 @@ export function mapCategoryToTaskCategory(baselineCategory: string): TaskCategor
     }
   }
   if (minDist <= 2 && closest) return closest as TaskCategory;
-  // 3. Synonym/substring matching
-  if (normalized.includes('oil')) return TaskCategory.OilChange;
-  if (normalized.includes('tire')) return TaskCategory.TireRotation;
-  if (normalized.includes('brake')) return TaskCategory.BrakeService;
-  if (normalized.includes('filter')) return TaskCategory.AirFilter;
-  if (normalized.includes('battery')) return TaskCategory.BatteryService;
-  if (normalized.includes('fluid')) return TaskCategory.FluidCheck;
-  if (normalized.includes('inspect')) return TaskCategory.Inspection;
-  // 4. Auto-enrich enums and translations if not in production
+  // 3. Strong substring/synonym match (only backend categories)
+  const synonymMap: Record<string, TaskCategory> = {
+    oil: TaskCategory.OilChange,
+    tire: TaskCategory.TireRotation,
+    tires: TaskCategory.Tires,
+    brake: TaskCategory.BrakeService,
+    filter: TaskCategory.AirFilter,
+    battery: TaskCategory.BatteryService,
+    fluid: TaskCategory.FluidCheck,
+    inspect: TaskCategory.Inspection,
+    wiper: TaskCategory.WiperBlades,
+    tune: TaskCategory.EngineTuneUp,
+    other: TaskCategory.Other,
+  };
+  for (const key in synonymMap) {
+    if (normalized.includes(key)) return synonymMap[key];
+  }
+  // 4. Log unmapped category for admin review
   if (process.env.NODE_ENV !== 'production') {
     try {
       const scriptPath = path.join(__dirname, '../../../scripts/auto_add_category.js');
