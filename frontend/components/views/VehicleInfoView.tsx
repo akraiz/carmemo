@@ -145,7 +145,6 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
   const [showAllSpecs, setShowAllSpecs] = useState(false);
   const [showExportDropdown, setShowExportDropdown] = useState(false);
   const exportDropdownRef = useRef<HTMLDivElement>(null);
-  const photoInputRef = useRef<HTMLInputElement>(null);
   const { t, language } = useTranslation();
   const vehicleManager = useVehicleManager();
   const {
@@ -307,17 +306,6 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
     setShowExportDropdown(false);
   };
   
-  const handlePhotoIconClick = () => {
-    photoInputRef.current?.click();
-  };
-
-  const handleVehiclePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      onUpdateVehiclePhoto(vehicle.id, file);
-    }
-  };
-
   const basicSpecs = [
     { labelKey: 'vehicle.vin', value: vehicle.vin, icon: <Icons.Wrench /> },
     { labelKey: 'vehicle.currentMileageLabel', value: `${vehicle.currentMileage?.toLocaleString(language) || t('common.notApplicable')} ${t('common.milesAbbr')}`, icon: <Icons.Fuel /> },
@@ -371,7 +359,6 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
             ) : (
               <BrandIcon size={144} color="#9ca3af" />
             )}
-            <input type="file" ref={photoInputRef} onChange={handleVehiclePhotoChange} accept="image/*" className="hidden" aria-label={t('vehicle.uploadPhotoAria')} />
           </div>
           <div className="flex-grow text-center sm:text-start">
             <h2 id="vehicle-header" className="font-bold text-[28px] tracking-[0.5px] text-[#FFD700] font-heading">
@@ -403,17 +390,6 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
                 >
                   {t('vehicle.editDetails')}
                 </Button>
-                 <Button
-                   onClick={handlePhotoIconClick}
-                   variant="outlined"
-                   color="primary"
-                   size="small"
-                   startIcon={<Icons.Camera className="w-3.5 h-3.5" />}
-                   aria-label={t('vehicle.changePhotoAria')}
-                   sx={{ fontWeight: 'bold' }}
-                 >
-                   {t('vehicle.changePhoto', { defaultValue: 'Change photo' })}
-                 </Button>
             </div>
           </div>
         </div>
