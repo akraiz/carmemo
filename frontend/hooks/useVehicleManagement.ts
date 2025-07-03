@@ -367,6 +367,8 @@ const useVehicleManagement = () => {
           if (vehicleIndex !== -1) {
             vehiclesCopy[vehicleIndex] = {
               ...response.data,
+              id: response.data.id || response.data._id,
+              _id: response.data._id || response.data.id,
               maintenanceSchedule: [...(response.data.maintenanceSchedule || [])]
             };
           }
@@ -547,10 +549,9 @@ const useVehicleManagement = () => {
       if (vehicleIndex === -1) return prev;
 
       const vehicle = { ...vehiclesCopy[vehicleIndex] };
-      const taskIndex = vehicle.maintenanceSchedule.findIndex(t => t.id === taskId);
-      if (taskIndex !== -1) {
-        vehicle.maintenanceSchedule[taskIndex] = updatedTask;
-      }
+      vehicle.maintenanceSchedule = vehicle.maintenanceSchedule.map(t =>
+        t.id === taskId ? updatedTask : t
+      );
       vehiclesCopy[vehicleIndex] = vehicle;
       return { ...prev, vehicles: vehiclesCopy };
     });
