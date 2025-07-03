@@ -28,7 +28,6 @@ import { useToast } from './contexts/ToastContext';
 import Confetti from 'react-confetti';
 import OcrStepModal from './components/shared/OcrStepModal';
 import NotificationCenter from './components/shared/NotificationCenter';
-import FloatingCardMenu from './components/shared/FloatingCardMenu';
 import Material3BottomNav from './components/shared/Material3BottomNav'; // Import the new component
 import { TaskProvider } from './contexts/TaskContext';
 import { ThemeProvider, CssBaseline } from '@mui/material';
@@ -40,6 +39,7 @@ import {
   Build as BuildIcon
 } from '@mui/icons-material';
 import darkTheme from './theme';
+import AddIcon from '@mui/icons-material/Add';
 
 // Import Language type
 type Language = 'en' | 'ar';
@@ -62,7 +62,7 @@ const App: React.FC = () => {
   
   console.log(`[HOOK ORDER] #${hookIndex++}: useVehicleManagement`);
   const { vehicles, selectedVehicleId, error, ...rest } = useVehicleManagement();
-  const selectedVehicle = vehicles.find(v => v.id === selectedVehicleId || v._id === selectedVehicleId);
+  const selectedVehicle: Vehicle | null = vehicles.find(v => v.id === selectedVehicleId || v._id === selectedVehicleId) || null;
   console.log('vehicles:', vehicles);
   console.log('selectedVehicleId:', selectedVehicleId);
   console.log('selectedVehicle:', selectedVehicle);
@@ -92,12 +92,6 @@ const App: React.FC = () => {
   const [activeView, setActiveView] = useState<'vehicles' | 'timeline' | 'analytics' | 'settings' | 'test'>('vehicles');
 
   // Responsive FAB menu state
-  console.log(`[HOOK ORDER] #${hookIndex++}: useState fabMenuOpen`);
-  const [fabMenuOpen, setFabMenuOpen] = useState(false);
-  
-  console.log(`[HOOK ORDER] #${hookIndex++}: useRef fabRef`);
-  const fabRef = useRef<HTMLButtonElement>(null);
-  
   console.log(`[HOOK ORDER] #${hookIndex++}: useIsMobile`);
   const isMobile = useIsMobile();
 
@@ -306,12 +300,8 @@ const App: React.FC = () => {
     if (selectedVehicle) rest.handleOpenViewRecallsModal();
   };
 
-  // FAB handlers
-  const handleFabClick = () => setFabMenuOpen(true);
-  const handleFabClose = () => setFabMenuOpen(false);
-  const handleFabScan = () => { setFabMenuOpen(false); setShowOCRModal(true); };
-  const handleFabAdd = () => { setFabMenuOpen(false); setAddTaskMode('manual'); };
-  const handleFabLogPast = () => { setFabMenuOpen(false); setAddTaskMode('past'); };
+  // FAB handler: open AddTaskModal directly
+  const handleFabClick = () => setAddTaskMode('manual');
 
   const tabItems = [
     { key: 'vehicles', label: t('tabs.vehicles'), icon: <CarIcon /> },
@@ -336,8 +326,6 @@ const App: React.FC = () => {
             onEditTask={handleOpenEditTask}
             onDeleteTask={rest.handleDeleteTask}
             onToggleTaskStatus={rest.handleToggleTaskStatus}
-            onFileUpload={rest.handleFileUpload}
-            onOCRReceipt={rest.handleOCRReceipt}
             onAddTask={handleOpenAddTaskForSelected}
             onEditVehicle={rest.handleOpenEditVehicleModal}
             onViewRecalls={handleViewSelectedVehicleRecalls}
@@ -447,42 +435,11 @@ const App: React.FC = () => {
                 </div>
 
               {/* FAB and Menu */}
-              <AnimatePresence>
-                {selectedVehicle && 
-                  (activeView === 'timeline') && 
-                  !rest.showAddVehicleModal && 
-                  !rest.showEditVehicleModal && 
-                  !rest.showAddTaskModal && 
-                  !rest.showViewRecallsModal && 
-                  !rest.showOCRModal && 
-                  !addTaskMode && 
-                  !isFilterSheetOpen && (
-                  <>
-                    <FabButton
-                      ref={fabRef}
-                      onClick={handleFabClick}
-                      icon={<Icons.Plus className="w-5 h-5" />}
-                      ariaLabel="Add new task"
-                      active={fabMenuOpen}
-                      position={{
-                        right: 16,
-                        bottom: isMobile ? bottomNavHeight + 16 : 16,
-                        zIndex: 30,
-                      }}
-                    />
-                    {fabMenuOpen && (
-                      <FloatingCardMenu
-                        anchorRef={fabRef}
-                        open={fabMenuOpen}
-                        onClose={handleFabClose}
-                        onScan={handleFabScan}
-                        onAdd={handleFabAdd}
-                        onLogPast={handleFabLogPast}
-                      />
-                    )}
-                  </>
-                )}
-              </AnimatePresence>
+              <FabButton
+                onClick={handleFabClick}
+                icon={<AddIcon />}
+                ariaLabel={t('addTask')}
+              />
             </main>
           </div>
           

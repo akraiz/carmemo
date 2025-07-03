@@ -76,8 +76,6 @@ export interface VehicleInfoViewProps {
   onEditTask: (task: MaintenanceTask) => void;
   onDeleteTask: (taskId: string) => void;
   onToggleTaskStatus: (taskId: string, newStatus?: TaskStatus, skipEdit?: boolean) => void;
-  onFileUpload: (file: File, taskId: string, type: 'photo' | 'receipt') => Promise<FileAttachment | null>;
-  onOCRReceipt: (file: File, taskId: string) => Promise<ExtractedReceiptInfo | null>;
   onAddTask: () => void;
   onEditVehicle: (vehicle: Vehicle) => void;
   onViewRecalls: () => void; 
@@ -139,7 +137,7 @@ const getVehicleImageUrl = (vehicle: Vehicle) => {
 // VehicleInfoView Component (moved from App.tsx)
 const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({ 
     vehicle, onEditTask, onDeleteTask, onToggleTaskStatus, 
-    onFileUpload, onOCRReceipt, onAddTask, onEditVehicle, onViewRecalls, mainScrollRef,
+    onAddTask, onEditVehicle, onViewRecalls, mainScrollRef,
     onUpdateVehiclePhoto
 }) => {
   const [showAllSpecs, setShowAllSpecs] = useState(false);
