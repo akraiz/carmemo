@@ -5,6 +5,7 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { Toaster } from 'react-hot-toast';
 
 // Add global error logging
 window.addEventListener('error', (event) => {
@@ -52,6 +53,16 @@ root.render(
         <NotificationProvider userId="demo-user">
           <ToastProvider>
             <App />
+            <Toaster position="top-center" toastOptions={{
+              style: {
+                marginTop: 'env(safe-area-inset-top, 0px)',
+                maxWidth: '90vw',
+                width: 'auto',
+                fontSize: '1rem',
+                borderRadius: '12px',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.25)',
+              },
+            }} />
           </ToastProvider>
         </NotificationProvider>
       </LanguageProvider>

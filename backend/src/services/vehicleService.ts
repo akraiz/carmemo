@@ -108,7 +108,7 @@ export class VehicleService {
     let recalls: RecallInfo[] = [];
     if (vehicleData.vin && vehicleData.vin.trim() !== '') {
       try {
-        const fetchedRecalls = await getRecallsByVinWithGemini(vehicleData.vin, vehicleData.make, vehicleData.model);
+        const fetchedRecalls = await getRecallsByVinWithGemini(vehicleData.vin || '', vehicleData.make || '', vehicleData.model || '');
         recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls : [];
       } catch (err) {
         console.warn('Failed to fetch recalls for vehicle:', err);
@@ -143,7 +143,7 @@ export class VehicleService {
     let enrichedData = {};
     if (!vehicle.get('trim') || !vehicle.get('driveType') || !vehicle.get('primaryFuelType')) {
       try {
-        const vinData = await decodeVinMerged(vehicle.vin);
+        const vinData = await decodeVinMerged(vehicle.vin || '');
         if (vinData?.merged) {
           enrichedData = {
             ...vinData.merged,
@@ -426,7 +426,7 @@ export class VehicleService {
       // Always refetch recalls for the latest data
       let recalls: RecallInfo[] = [];
       try {
-        const fetchedRecalls = await getRecallsByVinWithGemini(vin, make, model);
+        const fetchedRecalls = await getRecallsByVinWithGemini(vin || '', make || '', model || '');
         recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls : [];
       } catch (err) {
         console.warn('Failed to fetch recalls for vehicle update:', err);
