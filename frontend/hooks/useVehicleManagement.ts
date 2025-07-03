@@ -25,6 +25,8 @@ interface VehicleManagerState {
   // Backend integration state
   useBackend: boolean;
   backendConnected: boolean;
+  showCompleteTaskModal: boolean;
+  completingTask: MaintenanceTask | null;
 }
 
 const initialState: VehicleManagerState = {
@@ -42,6 +44,8 @@ const initialState: VehicleManagerState = {
   enrichingVehicles: new Set(),
   useBackend: true, // Default to using backend
   backendConnected: false,
+  showCompleteTaskModal: false,
+  completingTask: null,
 };
 
 const useVehicleManagement = () => {
@@ -361,7 +365,10 @@ const useVehicleManagement = () => {
           const vehiclesCopy = [...prev.vehicles];
           const vehicleIndex = vehiclesCopy.findIndex(v => v.id === vehicleId);
           if (vehicleIndex !== -1) {
-            vehiclesCopy[vehicleIndex] = response.data;
+            vehiclesCopy[vehicleIndex] = {
+              ...response.data,
+              maintenanceSchedule: [...(response.data.maintenanceSchedule || [])]
+            };
           }
           return { ...prev, vehicles: vehiclesCopy };
         });
@@ -752,6 +759,45 @@ const useVehicleManagement = () => {
     await vehicleService.uploadVehicleImage(vehicleId, file);
   };
 
+  const handleOpenCompleteTaskModal = (task: MaintenanceTask) => {
+    setState(prev => ({ ...prev, showCompleteTaskModal: true, completingTask: task }));
+  };
+
+  const handleCloseCompleteTaskModal = () => {
+    setState(prev => ({ ...prev, showCompleteTaskModal: false, completingTask: null }));
+  };
+
+  const handleCompleteTask = async (taskUpdate: Partial<MaintenanceTask>) => {
+    if (!state.selectedVehicleId || !taskUpdate.id) return;
+    try {
+      if (state.useBackend && state.backendConnected) {
+        await vehicleService.updateTask(state.selectedVehicleId, taskUpdate.id, taskUpdate);
+        await refreshVehicleData(state.selectedVehicleId);
+      } else {
+        // Local update
+        setState(prev => {
+          const vehiclesCopy = [...prev.vehicles];
+          const vehicleIndex = vehiclesCopy.findIndex(v => v.id === prev.selectedVehicleId);
+          if (vehicleIndex === -1) return prev;
+          const vehicle = { ...vehiclesCopy[vehicleIndex] };
+          const taskIndex = vehicle.maintenanceSchedule.findIndex(t => t.id === taskUpdate.id);
+          if (taskIndex !== -1) {
+            vehicle.maintenanceSchedule[taskIndex] = {
+              ...vehicle.maintenanceSchedule[taskIndex],
+              ...taskUpdate,
+            };
+          }
+          vehiclesCopy[vehicleIndex] = vehicle;
+          return { ...prev, vehicles: vehiclesCopy };
+        });
+      }
+      toast.showGenericSuccess('Task completed!');
+      handleCloseCompleteTaskModal();
+    } catch (error) {
+      toast.showGenericError('Failed to complete task');
+    }
+  };
+
   return {
     ...state,
     setState,
@@ -780,6 +826,9 @@ const useVehicleManagement = () => {
     handleCloseAddVehicleModal: () => setState(prev => ({ ...prev, showAddVehicleModal: false })),
     handleCloseEditVehicleModal: () => setState(prev => ({ ...prev, showEditVehicleModal: false, editingVehicle: null })),
     handleCloseAddTaskModal: () => setState(prev => ({ ...prev, showAddTaskModal: false, editingTask: null })),
+    handleOpenCompleteTaskModal,
+    handleCloseCompleteTaskModal,
+    handleCompleteTask,
   };
 };
 

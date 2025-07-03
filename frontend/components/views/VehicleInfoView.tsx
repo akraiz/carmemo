@@ -10,6 +10,7 @@ import { Vehicle, MaintenanceTask, TaskCategory, TaskStatus, TaskImportance, Ext
 import { TASK_STATUS_COLORS, TASK_IMPORTANCE_COLORS, DEFAULT_VEHICLE_IMAGE_URL } from '../../constants';
 import { formatDate, getISODateString, isDateOverdue, daysUntil, timeAgo } from '../../utils/dateUtils';
 import { Button, IconButton, TextField, Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
+import CompleteTaskModal from '../modals/CompleteTaskModal';
 
 // Animation Variants (moved from App.tsx)
 const sectionVariants = {
@@ -100,6 +101,20 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
   const exportDropdownRef = useRef<HTMLDivElement>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
   const { t, language } = useTranslation();
+  const vehicleManager = useVehicleManager();
+  const {
+    showCompleteTaskModal,
+    completingTask,
+    handleOpenCompleteTaskModal,
+    handleCloseCompleteTaskModal,
+    handleCompleteTask,
+  } = vehicleManager as ReturnType<typeof useVehicleManager> & {
+    showCompleteTaskModal: boolean;
+    completingTask: MaintenanceTask | null;
+    handleOpenCompleteTaskModal: (task: MaintenanceTask) => void;
+    handleCloseCompleteTaskModal: () => void;
+    handleCompleteTask: (taskUpdate: Partial<MaintenanceTask>) => void;
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -437,14 +452,9 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
                     {task.completedDate && <p className="text-xs text-green-400">{t('task.completedDateLabel')} {formatDate(task.completedDate, language)}</p>}
                     {task.notes && <p className="text-xs text-[#707070] mt-2 line-clamp-2" title={task.notes}>{task.notes}</p>}
                     <div className="mt-3 pt-3 border-t border-[#333333]/50 flex items-center justify-end space-x-2 rtl:space-x-reverse">
-                        <Button onClick={() => onToggleTaskStatus(task.id)} variant="contained" color={task.status === TaskStatus.Completed ? 'warning' : 'success'} size="small" sx={{ fontWeight: 'bold' }}>
+                        <Button onClick={() => handleOpenCompleteTaskModal(task)} variant="contained" color={task.status === TaskStatus.Completed ? 'warning' : 'success'} size="small" sx={{ fontWeight: 'bold' }}>
                             {task.status === TaskStatus.Completed ? t('task.markPending') : t('task.markDone')}
                         </Button>
-                        {task.status !== TaskStatus.Completed && (
-                          <Button onClick={() => onToggleTaskStatus(task.id, TaskStatus.Completed, true)} variant="text" color="success" size="small" sx={{ fontWeight: 'bold' }}>
-                            {t('task.skipAndComplete', { defaultValue: 'Skip & Complete' })}
-                          </Button>
-                        )}
                         <Button onClick={() => onEditTask(task)} variant="outlined" color="primary" size="small" startIcon={<Icons.Pencil className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
                             {t('common.edit')}
                         </Button>
@@ -458,6 +468,12 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
           </AnimatePresence>
         )}
       </motion.section>
+      <CompleteTaskModal
+        isOpen={showCompleteTaskModal}
+        onClose={handleCloseCompleteTaskModal}
+        onComplete={handleCompleteTask}
+        task={completingTask || { id: '', title: '', category: TaskCategory.Other, status: TaskStatus.Upcoming, creationDate: '' }}
+      />
     </motion.div>
   );
 };
