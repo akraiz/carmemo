@@ -74,19 +74,21 @@ export class VehicleService {
    */
   static async createVehicleSync(vehicleData: CreateVehicleRequest): Promise<VehicleResponse> {
     // 1. Validate input
-    if (!vehicleData.make || !vehicleData.model || !vehicleData.year || !vehicleData.vin) {
+    if (!vehicleData.make || !vehicleData.model || !vehicleData.year) {
       return {
         success: false,
-        error: 'Missing required fields: make, model, year, and vin are required'
+        error: 'Missing required fields: make, model, and year are required'
       };
     }
-    // 2. Check for duplicate VIN
-    const existingVehicle = await Vehicle.findOne({ vin: vehicleData.vin });
-    if (existingVehicle) {
-      return {
-        success: false,
-        error: 'Vehicle with this VIN already exists'
-      };
+    // 2. Check for duplicate VIN only if VIN is provided and non-empty
+    if (vehicleData.vin && vehicleData.vin.trim() !== '') {
+      const existingVehicle = await Vehicle.findOne({ vin: vehicleData.vin });
+      if (existingVehicle) {
+        return {
+          success: false,
+          error: 'Vehicle with this VIN already exists'
+        };
+      }
     }
     // 3. Validate year and mileage
     const currentYear = new Date().getFullYear();
@@ -102,14 +104,16 @@ export class VehicleService {
         error: 'Current mileage cannot be negative'
       };
     }
-    // 4. Fetch recalls for this vehicle (always fetch from recall service)
+    // 4. Fetch recalls only if VIN is provided and non-empty
     let recalls: RecallInfo[] = [];
-    try {
-      const fetchedRecalls = await getRecallsByVinWithGemini(vehicleData.vin, vehicleData.make, vehicleData.model);
-      recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls : [];
-    } catch (err) {
-      console.warn('Failed to fetch recalls for vehicle:', err);
-      recalls = [];
+    if (vehicleData.vin && vehicleData.vin.trim() !== '') {
+      try {
+        const fetchedRecalls = await getRecallsByVinWithGemini(vehicleData.vin, vehicleData.make, vehicleData.model);
+        recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls : [];
+      } catch (err) {
+        console.warn('Failed to fetch recalls for vehicle:', err);
+        recalls = [];
+      }
     }
     // 5. Create a new Vehicle document with fetched recalls
     const vehicle = new Vehicle({
@@ -413,6 +417,12 @@ export class VehicleService {
       const make = updateFields.make || vehicleBeforeUpdate.make;
       const model = updateFields.model || vehicleBeforeUpdate.model;
 
+      // Check if enrichment is needed
+      const makeChanged = updateFields.make && updateFields.make !== vehicleBeforeUpdate.make;
+      const modelChanged = updateFields.model && updateFields.model !== vehicleBeforeUpdate.model;
+      const yearChanged = updateFields.year && updateFields.year !== vehicleBeforeUpdate.year;
+      const shouldEnrich = makeChanged || modelChanged || yearChanged;
+
       // Always refetch recalls for the latest data
       let recalls: RecallInfo[] = [];
       try {
@@ -439,6 +449,11 @@ export class VehicleService {
           success: false,
           error: 'Vehicle not found'
         };
+      }
+
+      // Only enrich if make, model, or year changed
+      if (shouldEnrich) {
+        this.enrichAndScheduleVehicleAsync(id);
       }
 
       return {

@@ -135,20 +135,26 @@ export const getRecallsByVinWithGemini = async (vin: string, make?: string, mode
     if (saudiRecalls.length > 0) {
       console.log(`Found ${saudiRecalls.length} real Saudi recalls for VIN: ${vin}`);
       // Map all fields from the API response
-      const convertedRecalls: RecallInfo[] = saudiRecalls.map(recall => ({
-        id: (recall.reference || recall.id || '').toString(),
-        reference: (recall.reference || recall.id || '').toString(),
-        date: recall.date || '',
-        brand: recall.brand || '',
-        model: recall.model || '',
-        status: recall.status || '',
-        detailUrl: recall.detailUrl || '',
-        // Compatibility/legacy fields
-        component: recall.description || 'Unknown Component',
-        summary: recall.description || 'No summary available',
-        reportReceivedDate: recall.date ? (recall.date.split('/').reverse().join('-')) : '',
-        nhtsaCampaignNumber: (recall.reference || recall.id || '').toString()
-      }));
+      const convertedRecalls: RecallInfo[] = saudiRecalls.map(recall => {
+        const obj: any = {
+          id: (recall.reference || recall.id || '').toString(),
+          reference: (recall.reference || recall.id || '').toString(),
+          date: recall.date || '',
+          brand: recall.brand || '',
+          model: recall.model || '',
+          status: recall.status || '',
+          detailUrl: recall.detailUrl || '',
+          reportReceivedDate: recall.date ? (recall.date.split('/').reverse().join('-')) : '',
+          nhtsaCampaignNumber: (recall.reference || recall.id || '').toString()
+        };
+        // Only add component if not 'Unknown Component'
+        const component = recall.description || 'Unknown Component';
+        if (component && component !== 'Unknown Component') obj.component = component;
+        // Only add summary if not 'No summary available'
+        const summary = recall.description || 'No summary available';
+        if (summary && summary !== 'No summary available') obj.summary = summary;
+        return obj;
+      });
       return convertedRecalls;
     } else {
       console.log('No real Saudi recalls found for VIN:', vin);
