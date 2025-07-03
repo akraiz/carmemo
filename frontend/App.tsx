@@ -439,6 +439,7 @@ const App: React.FC = () => {
                 onClick={handleFabClick}
                 icon={<AddIcon />}
                 ariaLabel={t('addTask')}
+                position={{ bottom: isMobile ? bottomNavHeight + 16 : 32, right: 32, zIndex: 1200 }}
               />
             </main>
           </div>
