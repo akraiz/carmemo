@@ -307,6 +307,20 @@ export const ocrImageFieldsWithGemini = async (file: Express.Multer.File): Promi
     return null;
   }
   try {
+    // Check if file path exists
+    if (!file.path) {
+      console.error("File path is not available for OCR processing");
+      return null;
+    }
+
+    // Check if file exists on disk
+    try {
+      await fs.promises.access(file.path, fs.constants.F_OK);
+    } catch (accessError) {
+      console.error(`File not accessible at path: ${file.path}`, accessError);
+      return null;
+    }
+
     const buffer = await readFileAsync(file.path);
     const base64Image = buffer.toString('base64');
     const imagePart = {

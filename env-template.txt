@@ -11,6 +11,7 @@ API_NINJAS_KEY="J0ILtcCNU4NKK6G1iziXsg==BQc00V9vrocJ6Le4"
 GEMINI_API_KEY="AIzaSyCsKQy3zhLHhT52kyXQfKU30Ie_wqhGWsI"
 MONGODB_URI="mongodb+srv://akraiz:aScmA3OvOUnQ2jtA@testnumoor.2zlsf0h.mongodb.net/?retryWrites=true&w=majority&appName=TestNumoor"
 CORS_ORIGIN=https://your-app-name.vercel.app
+BACKEND_BASE_URL=https://your-backend-name.up.railway.app
 
 # ========================================
 # FRONTEND ENVIRONMENT VARIABLES (Vercel)

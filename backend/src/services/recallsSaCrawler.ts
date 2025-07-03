@@ -20,6 +20,7 @@ export interface RecallsSaRecall {
 export class RecallsSaCrawler {
   private static readonly BASE_URL = 'https://recalls.sa';
   private static readonly SEARCH_URL = 'https://recalls.sa/Recall/FindRecallsBySerial/';
+  private static readonly BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || 'http://localhost:3001';
 
   /**
    * Fetch recalls using the new backend endpoint that returns structured JSON
@@ -27,7 +28,7 @@ export class RecallsSaCrawler {
   static async fetchRecallsByVIN(vin: string): Promise<SaudiRecallInfo[]> {
     try {
       console.log(`🔍 Fetching recalls from local proxy for VIN: ${vin}`);
-      const url = `/api/recall/${encodeURIComponent(vin)}`;
+      const url = `${this.BACKEND_BASE_URL}/api/recall/${encodeURIComponent(vin)}`;
       const response = await fetch(url, {
         method: 'GET',
         headers: {

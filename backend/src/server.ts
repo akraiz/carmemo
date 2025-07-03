@@ -1,6 +1,11 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+// Fix TLS certificate verification issues for development
+if (process.env.NODE_ENV !== 'production') {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
+
 import mongoose from 'mongoose';
 import type { Request } from 'express';
 import { Vehicle } from './models/Vehicle.js';
@@ -19,6 +24,7 @@ import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 import { MongoClient, ObjectId, GridFSBucket } from 'mongodb';
 import { GridFsStorage } from 'multer-gridfs-storage';
+import fs from 'fs';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/carmemo';
 mongoose.connect(MONGODB_URI)
@@ -404,8 +410,28 @@ app.post('/api/tasks/:vehicleId/upload-receipt', uploadGridFS.single('file'), as
 
     // Run OCR on the uploaded image
     const imagePath = file.path;
-    const ocrResult = await Tesseract.recognize(imagePath, 'eng');
-    const extractedText = ocrResult.data.text;
+    let extractedText = '';
+    try {
+      // Check if file path exists and is accessible
+      if (!imagePath) {
+        console.error("File path is not available for Tesseract OCR");
+        throw new Error("File path not available");
+      }
+      
+      // Check if file exists on disk
+      try {
+        await fs.promises.access(imagePath, fs.constants.F_OK);
+      } catch (accessError) {
+        console.error(`File not accessible at path: ${imagePath}`, accessError);
+        throw new Error(`File not accessible: ${imagePath}`);
+      }
+      
+      const ocrResult = await Tesseract.recognize(imagePath, 'eng');
+      extractedText = ocrResult.data.text;
+    } catch (ocrError) {
+      console.error('Tesseract OCR failed:', ocrError);
+      extractedText = 'OCR processing failed';
+    }
 
     res.json({
       taskId,
@@ -435,9 +461,30 @@ app.post('/api/tasks/:vehicleId/ocr-complete', uploadGridFS.single('file'), asyn
     let tesseractText = '';
     // 2. If Gemini Vision fails, fallback to Tesseract+Gemini
     if (!geminiVisionFields) {
-      const ocrResult = await Tesseract.recognize(file.path, 'eng');
-      tesseractText = ocrResult.data.text;
-      geminiTextFields = await ocrTextFieldsWithGemini(tesseractText);
+      try {
+        // Check if file path exists and is accessible
+        if (!file.path) {
+          console.error("File path is not available for Tesseract OCR");
+          throw new Error("File path not available");
+        }
+        
+        // Check if file exists on disk
+        try {
+          await fs.promises.access(file.path, fs.constants.F_OK);
+        } catch (accessError) {
+          console.error(`File not accessible at path: ${file.path}`, accessError);
+          throw new Error(`File not accessible: ${file.path}`);
+        }
+        
+        const ocrResult = await Tesseract.recognize(file.path, 'eng');
+        tesseractText = ocrResult.data.text;
+        geminiTextFields = await ocrTextFieldsWithGemini(tesseractText);
+      } catch (tesseractError) {
+        console.error('Tesseract OCR failed:', tesseractError);
+        // Continue without Tesseract text
+        tesseractText = '';
+        geminiTextFields = null;
+      }
     }
     // 3. Use the best available fields for matching
     const fields = geminiVisionFields || geminiTextFields;
