@@ -347,7 +347,7 @@ const ModernTaskForm = ({ task, onSave, onClose, currentMileage }: { task: Maint
     setIsSaving(true);
     try {
       const finalTask: MaintenanceTask = {
-        id: task?.id || self.crypto.randomUUID(),
+        ...(task?.id ? { id: task.id } : {}),
         creationDate: task?.creationDate || getISODateString(),
         ...taskData,
         title: taskData.title,

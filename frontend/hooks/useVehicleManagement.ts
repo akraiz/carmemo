@@ -510,7 +510,7 @@ const useVehicleManagement = () => {
     }
   };
 
-  const handleToggleTaskStatus = async (taskId: string, newStatus?: TaskStatus) => {
+  const handleToggleTaskStatus = async (taskId: string, newStatus?: TaskStatus, skipEdit?: boolean) => {
     if (!state.selectedVehicleId) return;
 
     const currentVehicle = state.vehicles.find(v => v.id === state.selectedVehicleId);
@@ -526,6 +526,12 @@ const useVehicleManagement = () => {
     };
 
     const isCompleting = updatedTask.status === TaskStatus.Completed;
+
+    if (isCompleting && !skipEdit) {
+      // Open edit modal for completion, let user edit optional fields
+      setState(prev => ({ ...prev, showAddTaskModal: true, editingTask: updatedTask }));
+      return;
+    }
 
     // Optimistic update
     setState(prev => {
@@ -557,10 +563,8 @@ const useVehicleManagement = () => {
       toast.showGenericSuccess(isCompleting ? 'Task completed successfully!' : 'Task status updated!');
     } catch (error) {
       console.error("Error toggling task status:", error);
-      
       // Show error toast
       toast.showGenericError('Failed to update task status');
-      
       // Revert optimistic update on error
       setState(prev => {
         const vehiclesCopy = [...prev.vehicles];

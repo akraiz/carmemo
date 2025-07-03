@@ -1,7 +1,7 @@
 import { Vehicle } from '../models/Vehicle.js';
 import { Vehicle as VehicleType } from '../types.js';
 import { decodeVinMerged } from './vinLookupService.js';
-import { getOrCreateMaintenanceSchedule } from './maintenanceScheduleService.js';
+import { getOrCreateMaintenanceSchedule, mapCategoryToTaskCategory, estimateDueDate, enrichTask } from './maintenanceScheduleService.js';
 import { getRecallsByVinWithGemini } from './aiService.js';
 import crypto from 'crypto';
 
@@ -157,15 +157,15 @@ export class VehicleService {
         // Coerce nulls to undefined for currentMileage
         if (vehicle.currentMileage === null) vehicle.currentMileage = undefined;
         vehicle.maintenanceSchedule = (maintenanceSchedule.schedule.map((item: any) => {
-          // Always assign a unique id
-          return {
+          const dueMileage = (vehicle.currentMileage !== null && vehicle.currentMileage !== undefined && item.interval_km !== null && item.interval_km !== undefined)
+            ? (Number(vehicle.currentMileage) + Number(item.interval_km)) : undefined;
+          const tempTask = {
             id: crypto.randomUUID(),
             title: item.item,
-            category: item.category || 'Other',
+            category: mapCategoryToTaskCategory(item.category || item.item || 'Other'),
             status: 'Upcoming',
-            dueMileage: (vehicle.currentMileage !== null && vehicle.currentMileage !== undefined && item.interval_km !== null && item.interval_km !== undefined)
-              ? (Number(vehicle.currentMileage) + Number(item.interval_km)) : undefined,
-            dueDate: item.dueDate,
+            dueMileage,
+            dueDate: undefined as string | undefined, // will be set below
             importance: item.urgency === 'High' ? 'Required' : item.urgency === 'Medium' ? 'Recommended' : 'Optional',
             creationDate: new Date().toISOString(),
             isRecurring: true,
@@ -174,6 +174,9 @@ export class VehicleService {
             interval_km: typeof item.interval_km === 'number' ? item.interval_km : undefined,
             interval_months: typeof item.interval_months === 'number' ? item.interval_months : undefined,
           };
+          tempTask.dueDate = estimateDueDate(vehicle, tempTask);
+          // Use enrichTask to ensure all fields
+          return enrichTask(tempTask, vehicle);
         }) as any);
         await vehicle.save();
       }

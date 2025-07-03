@@ -336,7 +336,12 @@ const TimelineView: React.FC<TimelineViewProps> = ({
     if (activeCategory) {
       filtered = filtered.filter((t) => t.category === activeCategory);
     }
-    return filtered.sort((a, b) => new Date(a.dueDate || 0).getTime() - new Date(b.dueDate || 0).getTime());
+    return filtered.sort((a, b) => {
+      if (!a.dueDate && !b.dueDate) return 0;
+      if (!a.dueDate) return 1; // a goes after b
+      if (!b.dueDate) return -1; // b goes after a
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+    });
   }, [tasks, isUpcomingOverdueFiltered, activeCategory]);
   const completed = useMemo(() => {
     let filtered = tasks.filter((t) => t.status === TaskStatus.Completed);

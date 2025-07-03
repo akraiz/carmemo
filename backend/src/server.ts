@@ -12,7 +12,7 @@ import { Vehicle } from './models/Vehicle.js';
 import Tesseract from 'tesseract.js';
 import Fuse from 'fuse.js';
 import { ocrImageFieldsWithGemini, ocrTextFieldsWithGemini } from './services/aiService.js';
-import { getOrCreateMaintenanceSchedule, generateForecastSchedule } from './services/maintenanceScheduleService.js';
+import { getOrCreateMaintenanceSchedule, generateForecastSchedule, mapCategoryToTaskCategory, estimateDueDate, enrichTask } from './services/maintenanceScheduleService.js';
 import { decodeVinWithApiNinjas } from './services/vinLookupService.js';
 import { initializeAIService } from './services/aiService.js';
 import { decodeVinWithGemini } from './services/aiService.js';
@@ -612,18 +612,10 @@ app.post('/api/tasks/:vehicleId', async (req, res) => {
       res.status(404).json({ error: 'Vehicle not found' });
       return;
     }
-    
-    // Ensure task has an id field for frontend compatibility
-    const taskWithId = {
-      ...task,
-      id: task.id || crypto.randomUUID(),
-      creationDate: task.creationDate || new Date().toISOString()
-    };
-    
-    vehicle.maintenanceSchedule.push(taskWithId);
+    // Enrich all fields
+    const enrichedTask = enrichTask(task, vehicle);
+    vehicle.maintenanceSchedule.push(enrichedTask);
     await vehicle.save();
-    
-    // Return the saved task with both id and _id
     const savedTask = vehicle.maintenanceSchedule[vehicle.maintenanceSchedule.length - 1];
     res.status(201).json({ 
       success: true,
@@ -646,30 +638,18 @@ app.put('/api/tasks/:vehicleId/:taskId', async (req, res) => {
       res.status(404).json({ error: 'Vehicle not found' });
       return;
     }
-    
-    // Find task by either id or _id
     const idx = vehicle.maintenanceSchedule.findIndex((t: any) => 
       t.id === taskId || t._id?.toString() === taskId
     );
-    
     if (idx === -1) {
       res.status(404).json({ error: 'Task not found' });
       return;
     }
-    
-    // Preserve existing _id and ensure id field exists
     const existingTask = vehicle.maintenanceSchedule[idx];
-    const mergedTask = {
-      ...existingTask.toObject(),
-      ...updatedTask,
-      id: updatedTask.id || existingTask.id || crypto.randomUUID(),
-      _id: existingTask._id // Preserve MongoDB _id
-    };
-    
+    // Merge and enrich
+    const mergedTask = enrichTask({ ...existingTask.toObject(), ...updatedTask }, vehicle);
     vehicle.maintenanceSchedule[idx] = mergedTask;
     await vehicle.save();
-    
-    // Push notification: if task is now overdue or due soon
     const task = vehicle.maintenanceSchedule[idx];
     if (task.status === 'Overdue') {
       await sendPushToAll({
@@ -684,7 +664,6 @@ app.put('/api/tasks/:vehicleId/:taskId', async (req, res) => {
         url: '/'
       });
     }
-    
     res.json({ 
       success: true,
       task: vehicle.maintenanceSchedule[idx],

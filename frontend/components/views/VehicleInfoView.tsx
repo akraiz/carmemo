@@ -72,7 +72,7 @@ export interface VehicleInfoViewProps {
   vehicle: Vehicle;
   onEditTask: (task: MaintenanceTask) => void;
   onDeleteTask: (taskId: string) => void;
-  onToggleTaskStatus: (taskId: string, newStatus?: TaskStatus) => void;
+  onToggleTaskStatus: (taskId: string, newStatus?: TaskStatus, skipEdit?: boolean) => void;
   onFileUpload: (file: File, taskId: string, type: 'photo' | 'receipt') => Promise<FileAttachment | null>;
   onOCRReceipt: (file: File, taskId: string) => Promise<ExtractedReceiptInfo | null>;
   onAddTask: () => void;
@@ -420,7 +420,11 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
                         <h4 className={`font-semibold ${TASK_STATUS_COLORS[task.status]?.text || 'text-white'}`}>{t(task.title)}</h4>
                         <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${TASK_STATUS_COLORS[task.status]?.pillBg || 'bg-[#404040]'} ${TASK_STATUS_COLORS[task.status]?.pillText || 'text-[#cfcfcf]'}`}>{t(`taskStatuses.${task.status || ''}` as any, { defaultValue: task.status })}</span>
                     </div>
-                    <p className="font-normal text-[14px] text-[#B0B0B0] leading-[1.5] mb-1">{t(`taskCategories.${task.category || ''}` as any, { defaultValue: task.category })}</p>
+                    <p className="font-normal text-[14px] text-[#B0B0B0] leading-[1.5] mb-1">
+                      {t(`taskCategories.${task.category || ''}` as any) !== `taskCategories.${task.category || ''}`
+                        ? t(`taskCategories.${task.category || ''}` as any)
+                        : (task.category || 'Other')}
+                    </p>
                     {task.dueDate && (
                         <p className="text-xs text-[#a0a0a0]">
                             {t('task.dueDateLabel')}{' '}
@@ -436,6 +440,11 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
                         <Button onClick={() => onToggleTaskStatus(task.id)} variant="contained" color={task.status === TaskStatus.Completed ? 'warning' : 'success'} size="small" sx={{ fontWeight: 'bold' }}>
                             {task.status === TaskStatus.Completed ? t('task.markPending') : t('task.markDone')}
                         </Button>
+                        {task.status !== TaskStatus.Completed && (
+                          <Button onClick={() => onToggleTaskStatus(task.id, TaskStatus.Completed, true)} variant="text" color="success" size="small" sx={{ fontWeight: 'bold' }}>
+                            {t('task.skipAndComplete', { defaultValue: 'Skip & Complete' })}
+                          </Button>
+                        )}
                         <Button onClick={() => onEditTask(task)} variant="outlined" color="primary" size="small" startIcon={<Icons.Pencil className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
                             {t('common.edit')}
                         </Button>

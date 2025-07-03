@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 const BASELINE_PATH = path.join(__dirname, '../baselineMaintenance.json');
 
 // Category mapping function to convert baseline categories to TaskCategory enum values
-function mapCategoryToTaskCategory(baselineCategory: string): string {
+export function mapCategoryToTaskCategory(baselineCategory: string): string {
   const categoryMap: Record<string, string> = {
     // Direct mappings
     'Engine': 'Engine',
@@ -222,4 +222,49 @@ export function generateForecastSchedule(vehicle: any, completedTasks: any[], ba
     ...forecasted.filter(f => !completedKeys.has(`${f.title}|${f.dueMileage}|${f.dueDate}`)),
   ];
   return merged;
+}
+
+// Utility: Estimate due date based on mileage
+export function estimateDueDate(vehicle: any, task: any): string | undefined {
+  if (!task.dueMileage || task.dueDate) return task.dueDate;
+  const currentMileage = vehicle.currentMileage;
+  const dueMileage = task.dueMileage;
+  const updatedAt = vehicle.updatedAt || vehicle.createdAt || new Date();
+  // Estimate average daily mileage (default 40km/day)
+  const avgDailyMileage = 40;
+  const kmToGo = dueMileage - currentMileage;
+  if (kmToGo <= 0) return new Date().toISOString().split('T')[0];
+  const daysToGo = Math.ceil(kmToGo / avgDailyMileage);
+  const dueDate = new Date(new Date(updatedAt).getTime() + daysToGo * 24 * 60 * 60 * 1000);
+  return dueDate.toISOString().split('T')[0];
+}
+
+// Universal enrichment utility for tasks
+export function enrichTask(task: any, vehicle: any): any {
+  const now = new Date().toISOString();
+  return {
+    id: task.id || crypto.randomUUID(),
+    title: task.title || '',
+    category: mapCategoryToTaskCategory(task.category || task.title || 'Other'),
+    status: task.status || 'Upcoming',
+    dueMileage: task.dueMileage,
+    dueDate: estimateDueDate(vehicle, task),
+    creationDate: task.creationDate || now,
+    importance: task.importance || 'Recommended',
+    isRecurring: task.isRecurring ?? false,
+    recurrenceInterval: task.recurrenceInterval,
+    urgencyBaseline: task.urgencyBaseline,
+    interval_km: task.interval_km,
+    interval_months: task.interval_months,
+    completedDate: (task.status === 'Completed' && !task.completedDate) ? now.split('T')[0] : task.completedDate,
+    cost: task.cost,
+    notes: task.notes,
+    parts: task.parts,
+    photos: task.photos,
+    receipts: task.receipts,
+    isForecast: task.isForecast,
+    urgency: task.urgency,
+    archived: task.archived,
+    // ...any other fields
+  };
 } 
