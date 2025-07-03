@@ -1,5 +1,5 @@
 import { Vehicle } from '../models/Vehicle.js';
-import { Vehicle as VehicleType } from '../types.js';
+import { Vehicle as VehicleType, RecallInfo } from '../types.js';
 import { decodeVinMerged } from './vinLookupService.js';
 import { getOrCreateMaintenanceSchedule, mapCategoryToTaskCategory, estimateDueDate, enrichTask } from './maintenanceScheduleService.js';
 import { getRecallsByVinWithGemini } from './aiService.js';
@@ -102,17 +102,26 @@ export class VehicleService {
         error: 'Current mileage cannot be negative'
       };
     }
-    // 4. Create a new Vehicle document (do not enrich yet)
+    // 4. Fetch recalls for this vehicle (always fetch from recall service)
+    let recalls: RecallInfo[] = [];
+    try {
+      const fetchedRecalls = await getRecallsByVinWithGemini(vehicleData.vin, vehicleData.make, vehicleData.model);
+      recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls : [];
+    } catch (err) {
+      console.warn('Failed to fetch recalls for vehicle:', err);
+      recalls = [];
+    }
+    // 5. Create a new Vehicle document with fetched recalls
     const vehicle = new Vehicle({
       ...vehicleData,
       maintenanceSchedule: [],
-      recalls: vehicleData.recalls || [],
+      recalls: recalls,
       createdAt: new Date(),
       updatedAt: new Date()
     });
-    // 5. Save the Vehicle to MongoDB
+    // 6. Save the Vehicle to MongoDB
     await vehicle.save();
-    // 6. Return a success response
+    // 7. Return a success response
     return {
       success: true,
       data: vehicle,
@@ -390,11 +399,36 @@ export class VehicleService {
         };
       }
 
-      // Update the vehicle
+      // Fetch the latest vehicle data (before update) to determine VIN/make/model
+      const vehicleBeforeUpdate = await Vehicle.findById(id);
+      if (!vehicleBeforeUpdate) {
+        return {
+          success: false,
+          error: 'Vehicle not found'
+        };
+      }
+
+      // Determine the latest VIN, make, and model (from updateFields or existing)
+      const vin = updateFields.vin || vehicleBeforeUpdate.vin;
+      const make = updateFields.make || vehicleBeforeUpdate.make;
+      const model = updateFields.model || vehicleBeforeUpdate.model;
+
+      // Always refetch recalls for the latest data
+      let recalls: RecallInfo[] = [];
+      try {
+        const fetchedRecalls = await getRecallsByVinWithGemini(vin, make, model);
+        recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls : [];
+      } catch (err) {
+        console.warn('Failed to fetch recalls for vehicle update:', err);
+        recalls = [];
+      }
+
+      // Update the vehicle, including the refreshed recalls
       const updatedVehicle = await Vehicle.findByIdAndUpdate(
         id,
         {
           ...updateFields,
+          recalls: recalls,
           updatedAt: new Date()
         },
         { new: true, runValidators: true }
@@ -412,7 +446,6 @@ export class VehicleService {
         data: updatedVehicle,
         message: 'Vehicle updated successfully'
       };
-
     } catch (error) {
       console.error('Error updating vehicle:', error);
       return {
