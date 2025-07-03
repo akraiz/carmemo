@@ -147,11 +147,11 @@ export const getRecallsByVinWithGemini = async (vin: string, make?: string, mode
           reportReceivedDate: recall.date ? (recall.date.split('/').reverse().join('-')) : '',
           nhtsaCampaignNumber: (recall.reference || recall.id || '').toString()
         };
-        // Only add component if not 'Unknown Component'
-        const component = recall.description || 'Unknown Component';
+        // Only add component if present and not 'Unknown Component'
+        const component = (recall as any).component || recall.description;
         if (component && component !== 'Unknown Component') obj.component = component;
-        // Only add summary if not 'No summary available'
-        const summary = recall.description || 'No summary available';
+        // Only add summary if present and not 'No summary available'
+        const summary = (recall as any).summary || recall.description;
         if (summary && summary !== 'No summary available') obj.summary = summary;
         return obj;
       });
