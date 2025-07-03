@@ -374,6 +374,13 @@ const App: React.FC = () => {
     return latestVehicle?.id;
   };
 
+  useEffect(() => {
+    if (error) {
+      toast.showGenericError(t(error));
+      handleErrorClose();
+    }
+  }, [error]);
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -536,8 +543,6 @@ const App: React.FC = () => {
               currentMileage={selectedVehicle?.currentMileage}
             />
           )}
-
-          {error && <ErrorMessage message={t(error)} onClose={handleErrorClose} />}
 
           <NotificationCenter open={showNotifications} onClose={() => setShowNotifications(false)} notifications={notifications} onMarkRead={markAsRead} />
 

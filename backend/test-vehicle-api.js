@@ -7,7 +7,7 @@
  * Run with: node test-vehicle-api.js
  */
 
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 const BASE_URL = 'http://localhost:3001/api';
 const TEST_VIN = '1HGBH41JXMN109186'; // Test VIN
@@ -323,22 +323,9 @@ async function main() {
 }
 
 // Handle script execution
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(error => {
     console.error('❌ Test runner failed:', error);
     process.exit(1);
   });
-}
-
-module.exports = {
-  makeRequest,
-  testCreateVehicle,
-  testGetAllVehicles,
-  testGetVehicleById,
-  testGetVehicleByVin,
-  testUpdateVehicle,
-  testSearchVehicles,
-  testGetVehicleStats,
-  testDeleteVehicle,
-  testErrorHandling
-}; 
+} 

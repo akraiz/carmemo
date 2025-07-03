@@ -9,7 +9,7 @@ export interface CreateVehicleRequest {
   make: string;
   model: string;
   year: number;
-  vin: string;
+  vin: string | null;
   nickname?: string;
   currentMileage?: number;
   purchaseDate?: string;
@@ -80,8 +80,19 @@ export class VehicleService {
         error: 'Missing required fields: make, model, and year are required'
       };
     }
+    // 1.5. Normalize VIN: set to null if missing or empty string
+    if (!vehicleData.vin || vehicleData.vin.trim() === '') {
+      vehicleData.vin = null;
+    }
+    // 1.6. Validate VIN format/length if provided
+    if (vehicleData.vin && vehicleData.vin.length !== 17) {
+      return {
+        success: false,
+        error: 'Invalid VIN: must be exactly 17 characters long'
+      };
+    }
     // 2. Check for duplicate VIN only if VIN is provided and non-empty
-    if (vehicleData.vin && vehicleData.vin.trim() !== '') {
+    if (vehicleData.vin) {
       const existingVehicle = await Vehicle.findOne({ vin: vehicleData.vin });
       if (existingVehicle) {
         return {
@@ -360,6 +371,11 @@ export class VehicleService {
           success: false,
           error: 'Vehicle ID is required'
         };
+      }
+
+      // Normalize VIN: set to null if missing or empty string
+      if (updateFields.vin === undefined || updateFields.vin === null || updateFields.vin === '') {
+        updateFields.vin = null;
       }
 
       // Validate VIN if being updated

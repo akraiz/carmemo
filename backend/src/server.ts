@@ -819,6 +819,71 @@ async function sendPushToAll(payload: any) {
 // ============================================================================
 
 /**
+ * Search vehicles
+ * GET /api/vehicles/search
+ */
+app.get('/api/vehicles/search', async (req, res) => {
+  try {
+    const { make, model, year, vin, nickname } = req.query;
+    const result = await VehicleService.searchVehicles({
+      make: make as string,
+      model: model as string,
+      year: year ? parseInt(year as string, 10) : undefined,
+      vin: vin as string,
+      nickname: nickname as string
+    });
+    
+    if (result.success) {
+      res.json({
+        success: true,
+        data: result.data,
+        message: result.message
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        error: result.error
+      });
+    }
+  } catch (error) {
+    console.error('Error in search vehicles endpoint:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    });
+  }
+});
+
+/**
+ * Get vehicle statistics
+ * GET /api/vehicles/stats
+ */
+app.get('/api/vehicles/stats', async (req, res) => {
+  try {
+    const result = await VehicleService.getVehicleStats();
+    
+    if (result.success) {
+      res.json({
+        success: true,
+        data: result.data,
+        message: result.message
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        error: result.error
+      });
+    }
+  } catch (error) {
+    console.error('Error in vehicle stats endpoint:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    });
+  }
+});
+
+/**
  * Create a new vehicle
  * POST /api/vehicles
  */
@@ -995,71 +1060,6 @@ app.delete('/api/vehicles/:id', async (req, res) => {
     }
   } catch (error) {
     console.error('Error in delete vehicle endpoint:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal server error'
-    });
-  }
-});
-
-/**
- * Search vehicles
- * GET /api/vehicles/search
- */
-app.get('/api/vehicles/search', async (req, res) => {
-  try {
-    const { make, model, year, vin, nickname } = req.query;
-    const result = await VehicleService.searchVehicles({
-      make: make as string,
-      model: model as string,
-      year: year ? parseInt(year as string, 10) : undefined,
-      vin: vin as string,
-      nickname: nickname as string
-    });
-    
-    if (result.success) {
-      res.json({
-        success: true,
-        data: result.data,
-        message: result.message
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        error: result.error
-      });
-    }
-  } catch (error) {
-    console.error('Error in search vehicles endpoint:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal server error'
-    });
-  }
-});
-
-/**
- * Get vehicle statistics
- * GET /api/vehicles/stats
- */
-app.get('/api/vehicles/stats', async (req, res) => {
-  try {
-    const result = await VehicleService.getVehicleStats();
-    
-    if (result.success) {
-      res.json({
-        success: true,
-        data: result.data,
-        message: result.message
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        error: result.error
-      });
-    }
-  } catch (error) {
-    console.error('Error in vehicle stats endpoint:', error);
     res.status(500).json({
       success: false,
       error: 'Internal server error'

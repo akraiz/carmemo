@@ -313,7 +313,11 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
       manufacturerName: wizardData.manufacturerName,
     };
     
-    const vehicleId = await onAddVehicle(finalVehicleData);
+    // Clean the payload to remove empty string fields
+    const cleanedVehicleData = Object.fromEntries(
+      Object.entries(finalVehicleData).filter(([_, v]) => v !== "")
+    );
+    const vehicleId = await onAddVehicle(cleanedVehicleData as Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { initialMaintenanceTasks?: MaintenanceTask[], recalls?: RecallInfo[] });
     onClose();
   };
 
