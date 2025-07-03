@@ -242,11 +242,25 @@ const OutlookStyleTaskCard: React.FC<{
               {task.title.startsWith('task.') ? t(task.title) : task.title}
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 400, color: 'primary.main' }}>
-              {task.status !== TaskStatus.Completed ? getPredictiveDueText(task.dueDate) : `Completed ${formatDate(task.completedDate)}`}
+              {task.status !== TaskStatus.Completed
+                ? getPredictiveDueText(task.dueDate)
+                : task.completedDate
+                  ? `Completed on ${formatDate(task.completedDate)}`
+                  : 'Completed'}
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 400, color: '#A0A0A0' }}>
               {t(`taskCategories.${(task.category || '').replace(/\s+/g, '')}` as any) || task.category || 'Other'}
             </Typography>
+            {task.status === TaskStatus.Completed && task.cost !== undefined && (
+              <Typography variant="body2" sx={{ fontWeight: 400, color: '#bbbbbb' }}>
+                Cost: ${task.cost.toFixed(2)}
+              </Typography>
+            )}
+            {task.status === TaskStatus.Completed && task.notes && (
+              <Typography variant="body2" sx={{ fontWeight: 400, color: '#bbbbbb' }}>
+                Note: {task.notes}
+              </Typography>
+            )}
           </Box>
 
           {/* Timestamp */}
