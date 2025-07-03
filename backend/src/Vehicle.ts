@@ -45,8 +45,6 @@ const VehicleSchema = new Schema({
   maintenanceSchedule: [TaskSchema],
   recalls: [{
     id: String,
-    component: String,
-    summary: String,
     consequence: String,
     remedy: String,
     reportReceivedDate: String,

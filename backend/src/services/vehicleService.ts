@@ -109,7 +109,7 @@ export class VehicleService {
     if (vehicleData.vin && vehicleData.vin.trim() !== '') {
       try {
         const fetchedRecalls = await getRecallsByVinWithGemini(vehicleData.vin || '', vehicleData.make || '', vehicleData.model || '');
-        recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls : [];
+        recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls.map(({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber}) => ({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber})) : [];
       } catch (err) {
         console.warn('Failed to fetch recalls for vehicle:', err);
         recalls = [];
@@ -427,7 +427,7 @@ export class VehicleService {
       let recalls: RecallInfo[] = [];
       try {
         const fetchedRecalls = await getRecallsByVinWithGemini(vin || '', make || '', model || '');
-        recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls : [];
+        recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls.map(({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber}) => ({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber})) : [];
       } catch (err) {
         console.warn('Failed to fetch recalls for vehicle update:', err);
         recalls = [];
@@ -438,7 +438,7 @@ export class VehicleService {
         id,
         {
           ...updateFields,
-          recalls: recalls,
+          recalls: recalls.map(({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber}) => ({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber})),
           updatedAt: new Date()
         },
         { new: true, runValidators: true }

@@ -6,8 +6,6 @@ export interface RecallInfo {
   model: string;
   status: string;
   detailUrl: string;
-  component?: string;
-  summary?: string;
   reportReceivedDate?: string;
   nhtsaCampaignNumber?: string;
 }

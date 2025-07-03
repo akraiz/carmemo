@@ -136,7 +136,7 @@ export const getRecallsByVinWithGemini = async (vin: string, make?: string, mode
       console.log(`Found ${saudiRecalls.length} real Saudi recalls for VIN: ${vin}`);
       // Map all fields from the API response
       const convertedRecalls: RecallInfo[] = saudiRecalls.map(recall => {
-        const obj: any = {
+        return {
           id: (recall.reference || recall.id || '').toString(),
           reference: (recall.reference || recall.id || '').toString(),
           date: recall.date || '',
@@ -147,13 +147,6 @@ export const getRecallsByVinWithGemini = async (vin: string, make?: string, mode
           reportReceivedDate: recall.date ? (recall.date.split('/').reverse().join('-')) : '',
           nhtsaCampaignNumber: (recall.reference || recall.id || '').toString()
         };
-        // Only add component if present and not 'Unknown Component'
-        const component = (recall as any).component || recall.description;
-        if (component && component !== 'Unknown Component') obj.component = component;
-        // Only add summary if present and not 'No summary available'
-        const summary = (recall as any).summary || recall.description;
-        if (summary && summary !== 'No summary available') obj.summary = summary;
-        return obj;
       });
       return convertedRecalls;
     } else {

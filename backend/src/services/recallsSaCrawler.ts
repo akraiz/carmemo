@@ -41,7 +41,6 @@ export class RecallsSaCrawler {
       const recalls = await response.json();
       // Map to SaudiRecallInfo structure, preserving all fields
       return recalls.map((recall: any) => ({
-        ...recall, // preserve all fields from backend (reference, date, brand, model, status, detailUrl)
         id: recall.reference || recall.id,
         vin: vin,
         manufacturer: recall.brand || recall.manufacturer,
@@ -118,7 +117,7 @@ export class RecallsSaCrawler {
           year: recall.year || new Date().getFullYear().toString(),
           recallDate: this.normalizeSaudiDate(recall.date) || new Date().toISOString().split('T')[0],
           reportReceivedDate: this.normalizeSaudiDate(recall.date) || new Date().toISOString().split('T')[0],
-          description: recall.description || recall.summary || recall.reason || 'استدعاء أمان للمركبة',
+          description: recall.description || recall.reason || 'استدعاء أمان للمركبة',
           severity: recall.severity || 'متوسط',
           status: recall.status || 'نشط',
           source: 'recalls.sa'

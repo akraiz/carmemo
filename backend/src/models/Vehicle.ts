@@ -41,8 +41,6 @@ const RecallSchema = new Schema({
   model: String,
   status: String,
   detailUrl: String,
-  component: String,
-  summary: String,
   reportReceivedDate: String,
   nhtsaCampaignNumber: String
 }, { _id: false });
