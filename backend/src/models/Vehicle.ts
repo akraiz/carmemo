@@ -33,6 +33,20 @@ const MaintenanceTaskSchema = new Schema({
   recurrenceInterval: { type: String },
 }, { _id: false });
 
+const RecallSchema = new Schema({
+  id: String,
+  reference: String,
+  date: String,
+  brand: String,
+  model: String,
+  status: String,
+  detailUrl: String,
+  component: String,
+  summary: String,
+  reportReceivedDate: String,
+  nhtsaCampaignNumber: String
+}, { _id: false });
+
 const VehicleSchema = new Schema({
   make: { type: String, required: true },
   model: { type: String, required: true },
@@ -43,8 +57,19 @@ const VehicleSchema = new Schema({
   currentMileage: { type: Number },
   purchaseDate: { type: String },
   imageUrl: { type: String },
+  // DETAILED VEHICLE FIELDS
+  trim: { type: String },
+  driveType: { type: String },
+  engineDisplacementL: { type: String },
+  cylinders: { type: Number },
+  engineBrakeHP: { type: Number },
+  transmissionStyle: { type: String },
+  primaryFuelType: { type: String },
+  bodyClass: { type: String },
+  doors: { type: Number },
+  manufacturerName: { type: String },
   maintenanceSchedule: [MaintenanceTaskSchema],
-  recalls: { type: Schema.Types.Mixed },
+  recalls: [RecallSchema],
   imageId: { type: Schema.Types.ObjectId, ref: 'fs.files' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
