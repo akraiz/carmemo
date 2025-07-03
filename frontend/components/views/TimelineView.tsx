@@ -203,6 +203,15 @@ const OutlookStyleTaskCard: React.FC<{
   const { t } = useTranslation();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const isOverdue = task.status !== TaskStatus.Completed && task.dueDate ? isDateOverdue(task.dueDate) : false;
+  const [showFullNote, setShowFullNote] = useState(false);
+  const noteRef = useRef<HTMLDivElement>(null);
+  const [noteClamped, setNoteClamped] = useState(false);
+
+  useEffect(() => {
+    if (noteRef.current) {
+      setNoteClamped(noteRef.current.scrollHeight > noteRef.current.clientHeight + 2);
+    }
+  }, [task.notes, showFullNote]);
   
   const TaskIcon = IconMap[task.category] || DefaultTaskIcon;
 
@@ -244,9 +253,9 @@ const OutlookStyleTaskCard: React.FC<{
             <Typography variant="body2" sx={{ fontWeight: 400, color: 'primary.main' }}>
               {task.status !== TaskStatus.Completed
                 ? getPredictiveDueText(task.dueDate)
-                : task.completedDate
-                  ? `Completed on ${formatDate(task.completedDate)}`
-                  : 'Completed'}
+                : (task.completedDate
+                    ? `Completed on ${formatDate(task.completedDate)}`
+                    : 'Completed')}
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 400, color: '#A0A0A0' }}>
               {t(`taskCategories.${(task.category || '').replace(/\s+/g, '')}` as any) || task.category || 'Other'}
@@ -257,9 +266,25 @@ const OutlookStyleTaskCard: React.FC<{
               </Typography>
             )}
             {task.status === TaskStatus.Completed && task.notes && (
-              <Typography variant="body2" sx={{ fontWeight: 400, color: '#bbbbbb' }}>
+              <div
+                ref={noteRef}
+                style={{
+                  fontWeight: 400,
+                  color: '#bbbbbb',
+                  wordBreak: 'break-word',
+                  whiteSpace: 'pre-line',
+                  display: '-webkit-box',
+                  WebkitLineClamp: showFullNote ? 'unset' : 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: showFullNote ? 'visible' : 'hidden',
+                  textOverflow: showFullNote ? 'unset' : 'ellipsis',
+                  cursor: noteClamped ? 'pointer' : 'default',
+                  fontSize: '1rem',
+                  marginBottom: 0
+                }}
+              >
                 Note: {task.notes}
-              </Typography>
+              </div>
             )}
           </Box>
 
