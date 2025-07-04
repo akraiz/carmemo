@@ -435,9 +435,11 @@ const TimelineView: React.FC<TimelineViewProps> = ({
     setIsUpcomingOverdueFiltered(prev => !prev);
   };
 
+  // Replace handleToggleTask to only trigger the completion modal, not update status or show toast
   const handleToggleTask = (taskId: string) => {
+    // Instead of updating status and showing toast, call onCompleteTask with the taskId only if you want to open the modal
     onCompleteTask?.(taskId);
-    toast.showGenericSuccess('Task status updated!');
+    // REMOVE: toast.showGenericSuccess('Task status updated!');
   };
 
   const renderContent = () => {
