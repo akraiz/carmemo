@@ -46,14 +46,12 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
       setTimeout(() => {
         upsertTask({ ...task, status: TaskStatus.Completed });
         smartMatchAndArchive({ ...task, status: TaskStatus.Completed });
-        toast.showGenericSuccess('Task completed! 👍');
         setSwipeAction('none');
       }, 200);
     } else if (info.offset.x < -80) {
       setSwipeAction('delete');
       setTimeout(() => {
         deleteTask(task.id);
-        toast.showGenericSuccess('Task deleted successfully');
         setSwipeAction('none');
       }, 200);
     } else {
@@ -142,7 +140,6 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
                 upsertTask({ ...task, status: newStatus });
                 if (newStatus === TaskStatus.Completed) {
                   smartMatchAndArchive({ ...task, status: TaskStatus.Completed });
-                  toast.showGenericSuccess('Nice work! Task completed. 👍');
                 }
               }}
               variant="contained"
@@ -207,7 +204,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
                 variant="text"
                 color="error"
                 size="small"
-                onClick={() => { setShowMenu(false); deleteTask(task.id); toast.showGenericSuccess('Task deleted successfully'); }}
+                onClick={() => { setShowMenu(false); deleteTask(task.id); }}
                 sx={{ justifyContent: 'flex-start', textAlign: 'left', px: 2, py: 1, fontSize: '0.875rem' }}
               >
                 {t('common.delete')}
