@@ -270,10 +270,14 @@ const App: React.FC = () => {
 
   const handleFabClick = () => setAddTaskMode('manual');
 
-  // Add this handler to open the complete modal for a task
+  // Strongly guarantee: only open the complete modal, never update status or show toast
   const handleOpenCompleteTaskModal = (taskId: string) => {
-    const task = selectedVehicle?.maintenanceSchedule.find(t => t.id === taskId);
-    if (task) rest.handleOpenCompleteTaskModal(task);
+    if (!selectedVehicle) return;
+    const task = selectedVehicle.maintenanceSchedule.find(t => t.id === taskId);
+    if (task) {
+      // Only open the modal, do not update status or call any status-changing function
+      rest.handleOpenCompleteTaskModal(task);
+    }
   };
 
   const tabItems = [
