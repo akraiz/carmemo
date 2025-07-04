@@ -10,6 +10,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import useVehicleManager, { mergeBaselineSchedule } from '../../hooks/useVehicleManager';
 import { Button, TextField, Box } from '@mui/material';
 import { buildApiUrl } from '../../config/api';
+import { SessionService } from '../../services/sessionService';
 
 interface AddVehicleModalProps {
   isOpen: boolean;
@@ -127,6 +128,20 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
       if (!validateVin(wizardData.vin.trim())) {
         setVinError(t('addVehicleModal.vinError.invalidVinFormat') || 'Invalid VIN format. VIN must be exactly 17 characters and contain only letters and numbers (excluding I, O, Q).');
         return;
+      }
+      // Duplicate VIN check before VIN lookup
+      try {
+        const sessionId = SessionService.getSessionId();
+        const checkDuplicate = await fetch(buildApiUrl(`/vehicles/vin/${wizardData.vin.trim()}?sessionId=${encodeURIComponent(sessionId)}`));
+        if (checkDuplicate.ok) {
+          const data = await checkDuplicate.json();
+          if (data && data.data) {
+            setVinError('A vehicle with this VIN already exists in your garage.');
+            return;
+          }
+        }
+      } catch (err) {
+        // Optionally log or ignore
       }
       try {
         setIsDecodingVin(true);
