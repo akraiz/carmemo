@@ -270,6 +270,12 @@ const App: React.FC = () => {
 
   const handleFabClick = () => setAddTaskMode('manual');
 
+  // Add this handler to open the complete modal for a task
+  const handleOpenCompleteTaskModal = (taskId: string) => {
+    const task = selectedVehicle?.maintenanceSchedule.find(t => t.id === taskId);
+    if (task) rest.handleOpenCompleteTaskModal(task);
+  };
+
   const tabItems = [
     { key: 'vehicles', label: t('tabs.vehicles'), icon: <CarIcon /> },
     { key: 'timeline', label: t('tabs.timeline'), icon: <TimelineIcon /> },
@@ -303,12 +309,13 @@ const App: React.FC = () => {
       case 'timeline':
         return <TimelineView 
           vehicle={selectedVehicle} 
-          onCompleteTask={rest.handleToggleTaskStatus}
+          onCompleteTask={handleOpenCompleteTaskModal}
           onEditTask={handleOpenEditTask}
           onDeleteTask={rest.handleDeleteTask}
           isFilterMenuOpen={isFilterMenuOpen}
           onOpenFilterMenu={() => setIsFilterMenuOpen(true)}
           onCloseFilterMenu={() => setIsFilterMenuOpen(false)}
+          refreshVehicleData={() => selectedVehicleId && rest.refreshVehicleData(selectedVehicleId)}
         />;
       case 'analytics':
         return <AnalyticsView />;
