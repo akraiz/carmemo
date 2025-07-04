@@ -1,10 +1,12 @@
 import { Vehicle } from '../types';
+import { SessionService } from './sessionService';
 
 const VEHICLES_KEY = 'autoLogVehicles';
 const SELECTED_VEHICLE_ID_KEY = 'autoLogSelectedVehicleId';
 
 export const loadVehiclesFromStorage = (): Vehicle[] => {
-  const storedVehicles = localStorage.getItem(VEHICLES_KEY);
+  const sessionKey = SessionService.getSessionKey(VEHICLES_KEY);
+  const storedVehicles = localStorage.getItem(sessionKey);
   if (storedVehicles) {
     try {
       const parsedVehicles = JSON.parse(storedVehicles) as Vehicle[];
@@ -17,28 +19,31 @@ export const loadVehiclesFromStorage = (): Vehicle[] => {
           return hasValidId ? task : { ...task, id: (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2)) };
         })
       }));
-    } catch (e) {
-      console.error("Failed to parse vehicles from localStorage", e);
-      localStorage.removeItem(VEHICLES_KEY); // Clear corrupted data
-      return [];
-    }
+          } catch (e) {
+        console.error("Failed to parse vehicles from localStorage", e);
+        localStorage.removeItem(sessionKey); // Clear corrupted data
+        return [];
+      }
   }
   return [];
 };
 
 export const saveVehiclesToStorage = (vehicles: Vehicle[]): void => {
-  localStorage.setItem(VEHICLES_KEY, JSON.stringify(vehicles));
+  const sessionKey = SessionService.getSessionKey(VEHICLES_KEY);
+  localStorage.setItem(sessionKey, JSON.stringify(vehicles));
 };
 
 export const loadSelectedVehicleIdFromStorage = (): string | null => {
-  return localStorage.getItem(SELECTED_VEHICLE_ID_KEY);
+  const sessionKey = SessionService.getSessionKey(SELECTED_VEHICLE_ID_KEY);
+  return localStorage.getItem(sessionKey);
 };
 
 export const saveSelectedVehicleIdToStorage = (vehicleId: string | null): void => {
+  const sessionKey = SessionService.getSessionKey(SELECTED_VEHICLE_ID_KEY);
   if (vehicleId) {
-    localStorage.setItem(SELECTED_VEHICLE_ID_KEY, vehicleId);
+    localStorage.setItem(sessionKey, vehicleId);
   } else {
-    localStorage.removeItem(SELECTED_VEHICLE_ID_KEY);
+    localStorage.removeItem(sessionKey);
   }
 };
 

@@ -824,13 +824,15 @@ async function sendPushToAll(payload: any) {
  */
 app.get('/api/vehicles/search', async (req, res) => {
   try {
+    const sessionId = req.headers['x-session-id'] as string;
     const { make, model, year, vin, nickname } = req.query;
     const result = await VehicleService.searchVehicles({
       make: make as string,
       model: model as string,
       year: year ? parseInt(year as string, 10) : undefined,
       vin: vin as string,
-      nickname: nickname as string
+      nickname: nickname as string,
+      sessionId: sessionId
     });
     
     if (result.success) {
@@ -860,7 +862,8 @@ app.get('/api/vehicles/search', async (req, res) => {
  */
 app.get('/api/vehicles/stats', async (req, res) => {
   try {
-    const result = await VehicleService.getVehicleStats();
+    const sessionId = req.headers['x-session-id'] as string;
+    const result = await VehicleService.getVehicleStats(sessionId);
     
     if (result.success) {
       res.json({
@@ -892,7 +895,13 @@ app.post('/api/vehicles', async (req, res) => {
   // Uncomment the next line to test immediate response:
   // return res.json({ test: true });
   try {
-    const result = await VehicleService.createVehicle(req.body);
+    const sessionId = req.headers['x-session-id'] as string;
+    const vehicleData = {
+      ...req.body,
+      sessionId: sessionId || 'anonymous'
+    };
+    
+    const result = await VehicleService.createVehicle(vehicleData);
     console.log('POST /api/vehicles result:', result);
     if (result.success) {
       res.status(201).json({
@@ -921,7 +930,8 @@ app.post('/api/vehicles', async (req, res) => {
  */
 app.get('/api/vehicles', async (req, res) => {
   try {
-    const result = await VehicleService.getAllVehicles();
+    const sessionId = req.headers['x-session-id'] as string;
+    const result = await VehicleService.getAllVehicles(sessionId);
     
     if (result.success) {
       res.json({

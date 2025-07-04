@@ -1,5 +1,6 @@
 import { Vehicle, MaintenanceTask } from '../types';
 import { API_CONFIG, buildApiUrl, logApiCall, logApiResponse, logApiError } from '../config/api';
+import { SessionService } from './sessionService';
 
 // API Response interfaces
 export interface VehicleResponse {
@@ -59,9 +60,11 @@ export interface VehicleStats {
 class VehicleService {
   private async makeRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = buildApiUrl(endpoint);
+    const sessionId = SessionService.getSessionId();
     const defaultOptions: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
+        'X-Session-ID': sessionId,
         ...options.headers,
       },
     };

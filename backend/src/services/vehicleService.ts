@@ -34,6 +34,7 @@ export interface CreateVehicleRequest {
   plantState?: string;
   plantCity?: string;
   recalls?: string[];
+  sessionId?: string; // Session ID for user differentiation
 }
 
 export interface UpdateVehicleRequest extends Partial<CreateVehicleRequest> {
@@ -129,6 +130,7 @@ export class VehicleService {
     // 5. Create a new Vehicle document with fetched recalls
     const vehicle = new Vehicle({
       ...vehicleData,
+      owner: vehicleData.sessionId || 'anonymous', // Use sessionId as owner
       maintenanceSchedule: [],
       recalls: recalls,
       createdAt: new Date(),
@@ -269,11 +271,16 @@ export class VehicleService {
   }
 
   /**
-   * Get all vehicles
+   * Get all vehicles for a specific session
    */
-  static async getAllVehicles(): Promise<VehicleResponse> {
+  static async getAllVehicles(sessionId?: string): Promise<VehicleResponse> {
     try {
-      const vehicles = await Vehicle.find().sort({ createdAt: -1 });
+      let query = {};
+      if (sessionId) {
+        query = { owner: sessionId };
+      }
+      
+      const vehicles = await Vehicle.find(query).sort({ createdAt: -1 });
       for (const vehicle of vehicles) {
         if (cleanAndEnsureTaskIds(vehicle)) await vehicle.save();
       }
@@ -530,9 +537,15 @@ export class VehicleService {
     year?: number;
     vin?: string;
     nickname?: string;
+    sessionId?: string;
   }): Promise<VehicleResponse> {
     try {
       const query: any = {};
+
+      // Filter by session ID if provided
+      if (criteria.sessionId) {
+        query.owner = criteria.sessionId;
+      }
 
       if (criteria.make) {
         query.make = { $regex: criteria.make, $options: 'i' };
@@ -570,14 +583,21 @@ export class VehicleService {
   /**
    * Get vehicle statistics
    */
-  static async getVehicleStats(): Promise<VehicleResponse> {
+  static async getVehicleStats(sessionId?: string): Promise<VehicleResponse> {
     try {
-      const totalVehicles = await Vehicle.countDocuments();
+      let matchStage = {};
+      if (sessionId) {
+        matchStage = { owner: sessionId };
+      }
+
+      const totalVehicles = await Vehicle.countDocuments(matchStage);
       const vehiclesByMake = await Vehicle.aggregate([
+        { $match: matchStage },
         { $group: { _id: '$make', count: { $sum: 1 } } },
         { $sort: { count: -1 } }
       ]);
       const vehiclesByYear = await Vehicle.aggregate([
+        { $match: matchStage },
         { $group: { _id: '$year', count: { $sum: 1 } } },
         { $sort: { _id: -1 } }
       ]);

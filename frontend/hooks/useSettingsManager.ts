@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { AppSettings, NotificationPermission } from '../types';
+import { SessionService } from '../services/sessionService';
 
 const SETTINGS_KEY = 'appSettings';
 
@@ -18,9 +19,24 @@ export function useSettingsManager() {
   hook('useState settings');
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
 
+  // Load settings from session-specific storage on mount
+  useEffect(() => {
+    const sessionKey = SessionService.getSessionKey(SETTINGS_KEY);
+    const storedSettings = localStorage.getItem(sessionKey);
+    if (storedSettings) {
+      try {
+        const parsedSettings = JSON.parse(storedSettings) as AppSettings;
+        setSettings(parsedSettings);
+      } catch (error) {
+        console.error('Failed to parse settings from localStorage:', error);
+      }
+    }
+  }, []);
+
   // Persist settings to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    const sessionKey = SessionService.getSessionKey(SETTINGS_KEY);
+    localStorage.setItem(sessionKey, JSON.stringify(settings));
   }, [settings]);
 
   // Update notificationPermissionStatus based on actual browser permission

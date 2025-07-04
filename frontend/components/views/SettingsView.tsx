@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Icons } from '../Icon'; 
 import { useTranslation } from '../../hooks/useTranslation';
-import useSettingsManager from '../../hooks/useSettingsManager'; 
+import useSettingsManager from '../../hooks/useSettingsManager';
+import { SessionInfo } from '../SessionInfo'; 
 
 const SettingsView: React.FC = () => {
   const { t, setLanguage, language } = useTranslation();
@@ -108,6 +109,17 @@ const SettingsView: React.FC = () => {
               <Icons.Languages className="w-5 h-5" /> AR
             </button>
           </div>
+        </div>
+
+        {/* Session Information Section */}
+        <div className="bg-[#2a2a2a]/50 p-4 md:p-6 rounded-lg shadow mt-6">
+          <h3 className="text-lg font-semibold text-[#F7C843] mb-3 font-heading">
+            Session Information
+          </h3>
+          <p className="text-sm text-[#cfcfcf] mb-4">
+            Your session ID is used to keep your vehicle data separate from other users.
+          </p>
+          <SessionInfo />
         </div>
       </div>
     </motion.div>
