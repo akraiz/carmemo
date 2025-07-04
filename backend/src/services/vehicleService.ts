@@ -137,7 +137,17 @@ export class VehicleService {
       updatedAt: new Date()
     });
     // 6. Save the Vehicle to MongoDB
-    await vehicle.save();
+    try {
+      await vehicle.save();
+    } catch (err: any) {
+      if (err.code === 11000) {
+        return {
+          success: false,
+          error: 'Vehicle with this VIN already exists'
+        };
+      }
+      throw err;
+    }
     // 7. Return a success response
     return {
       success: true,
