@@ -470,10 +470,18 @@ export default function useVehicleManagement() {
         await refreshVehicleData(selectedVehicleId);
 
         // Show success toast
-        toast.showGenericSuccess(isNewTask ? 'Task added successfully!' : 'Task updated successfully!');
+        if (taskData.status === TaskStatus.Completed) {
+          toast.showGenericSuccess('Task completed successfully!');
+        } else {
+          toast.showGenericSuccess(isNewTask ? 'Task added successfully!' : 'Task updated successfully!');
+        }
       } else {
         // Show success toast for local-only operations
-        toast.showGenericSuccess(isNewTask ? 'Task added successfully!' : 'Task updated successfully!');
+        if (taskData.status === TaskStatus.Completed) {
+          toast.showGenericSuccess('Task completed successfully!');
+        } else {
+          toast.showGenericSuccess(isNewTask ? 'Task added successfully!' : 'Task updated successfully!');
+        }
       }
     } catch (error) {
       console.error("Error upserting task:", error);
