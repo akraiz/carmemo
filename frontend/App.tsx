@@ -212,6 +212,13 @@ const App: React.FC = () => {
     }
   }, [selectedVehicle, toast]);
 
+  console.log(`[HOOK ORDER] #${hookIndex++}: useEffect refresh vehicle data on timeline tab`);
+  useEffect(() => {
+    if (activeView === 'timeline' && selectedVehicleId) {
+      rest.refreshVehicleData(selectedVehicleId);
+    }
+  }, [activeView, selectedVehicleId]);
+
   console.log(`[HOOK ORDER] #${hookIndex++}: EARLY RETURN CHECK - appRendered: ${appRendered}`);
   if (!appRendered) {
     console.log('[HOOK ORDER] Early return triggered - app not rendered yet');
