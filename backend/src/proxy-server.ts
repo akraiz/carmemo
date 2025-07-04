@@ -674,13 +674,14 @@ async function sendPushToAll(payload: any) {
  * POST /api/vehicles
  */
 app.post('/api/vehicles', async (req, res) => {
-  console.log('POST /api/vehicles hit. Payload:', req.body);
+  const sessionId = req.query.sessionId as string;
+  console.log('POST /api/vehicles hit. sessionId from query:', sessionId);
+  const vehicleData = {
+    ...req.body,
+    sessionId: sessionId || 'anonymous'
+  };
+  console.log('POST /api/vehicles vehicleData.sessionId:', vehicleData.sessionId);
   try {
-    const sessionId = req.query.sessionId as string;
-    const vehicleData = {
-      ...req.body,
-      sessionId: sessionId || 'anonymous'
-    };
     const result = await VehicleService.createVehicle(vehicleData);
     console.log('POST /api/vehicles result:', result);
     if (result.success) {
