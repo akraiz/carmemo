@@ -73,4 +73,6 @@ const VehicleSchema = new Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
+VehicleSchema.index({ vin: 1, owner: 1 }, { unique: true });
+
 export const Vehicle = mongoose.model('Vehicle', VehicleSchema); 
