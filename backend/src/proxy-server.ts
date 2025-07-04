@@ -707,8 +707,8 @@ app.post('/api/vehicles', async (req, res) => {
  */
 app.get('/api/vehicles', async (req, res) => {
   try {
-    const result = await VehicleService.getAllVehicles();
-    
+    const sessionId = req.query.sessionId as string;
+    const result = await VehicleService.getAllVehicles(sessionId);
     if (result.success) {
       res.json({
         success: true,
