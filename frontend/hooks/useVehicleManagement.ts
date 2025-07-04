@@ -123,13 +123,16 @@ export default function useVehicleManagement() {
         // Load from backend
         const response: VehicleResponse = await vehicleService.getAllVehicles();
         if (response.success && response.data) {
-          const normalizeVehicle = (v: any) => ({
-            ...v,
-            id: v.id || v._id,
-            _id: v._id || v.id,
-          });
+          const normalizeVehicle = (v: any) => {
+            const id = v.id || v._id;
+            return {
+              ...v,
+              id,
+              _id: v._id || id,
+            };
+          };
           const vehicles = response.data.map(normalizeVehicle);
-          
+          console.log('Loaded vehicles after normalization:', vehicles);
           setVehicles(vehicles);
           setSelectedVehicleId(vehicles.length > 0 ? vehicles[0].id : null);
           setIsLoading(false);
@@ -362,13 +365,11 @@ export default function useVehicleManagement() {
 
       setVehicles(prev => {
         const updatedVehicles = prev.filter(v => v.id !== vehicleId);
-        let newSelectedId = selectedVehicleId;
         if (selectedVehicleId === vehicleId) {
-          newSelectedId = updatedVehicles.length > 0 ? updatedVehicles[0].id : null;
+          setSelectedVehicleId(updatedVehicles.length > 0 ? updatedVehicles[0].id : null);
         }
         return updatedVehicles;
       });
-      setSelectedVehicleId(newSelectedId);
     } catch (error) {
       console.error("Error deleting vehicle:", error);
       setError("errors.deleteVehicleFailed");
