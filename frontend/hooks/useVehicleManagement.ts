@@ -831,7 +831,7 @@ export default function useVehicleManagement() {
           return vehiclesCopy;
         });
       }
-      toast.showGenericSuccess('Task completed!');
+      toast.showGenericSuccess('Task completed successfully!');
       handleCloseCompleteTaskModal();
     } catch (error) {
       toast.showGenericError('Failed to complete task');
