@@ -52,26 +52,12 @@ const allowedOrigins = [
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'X-Requested-With',
-    'x-session-id' // <-- Added for CORS custom header support
-  ]
 }));
 
-// Catch-all middleware for all OPTIONS requests to guarantee CORS headers (for Railway/production)
-app.use((req: any, res: any, next: any) => {
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, x-session-id');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    return res.sendStatus(200);
-  }
-  next();
-});
+// Remove all manual OPTIONS/CORS handlers
+// In all endpoints, use req.query.sessionId for session ID
+// Example:
+// const sessionId = req.query.sessionId as string;
 
 // Define agent for fetch calls
 const agent = new https.Agent({ rejectUnauthorized: false });
@@ -839,7 +825,7 @@ async function sendPushToAll(payload: any) {
  */
 app.get('/api/vehicles/search', async (req, res) => {
   try {
-    const sessionId = req.headers['x-session-id'] as string;
+    const sessionId = req.query.sessionId as string;
     const { make, model, year, vin, nickname } = req.query;
     const result = await VehicleService.searchVehicles({
       make: make as string,
@@ -877,7 +863,7 @@ app.get('/api/vehicles/search', async (req, res) => {
  */
 app.get('/api/vehicles/stats', async (req, res) => {
   try {
-    const sessionId = req.headers['x-session-id'] as string;
+    const sessionId = req.query.sessionId as string;
     const result = await VehicleService.getVehicleStats(sessionId);
     
     if (result.success) {
@@ -910,7 +896,7 @@ app.post('/api/vehicles', async (req, res) => {
   // Uncomment the next line to test immediate response:
   // return res.json({ test: true });
   try {
-    const sessionId = req.headers['x-session-id'] as string;
+    const sessionId = req.query.sessionId as string;
     const vehicleData = {
       ...req.body,
       sessionId: sessionId || 'anonymous'
@@ -945,7 +931,7 @@ app.post('/api/vehicles', async (req, res) => {
  */
 app.get('/api/vehicles', async (req, res) => {
   try {
-    const sessionId = req.headers['x-session-id'] as string;
+    const sessionId = req.query.sessionId as string;
     const result = await VehicleService.getAllVehicles(sessionId);
     
     if (result.success) {

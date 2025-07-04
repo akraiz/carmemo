@@ -114,7 +114,8 @@ class VehicleService {
    * Create a new vehicle
    */
   async createVehicle(vehicleData: CreateVehicleRequest): Promise<VehicleResponse> {
-    return this.makeRequest<VehicleResponse>('/vehicles', {
+    const sessionId = SessionService.getSessionId();
+    return this.makeRequest<VehicleResponse>(`/vehicles?sessionId=${encodeURIComponent(sessionId)}`, {
       method: 'POST',
       body: JSON.stringify(vehicleData),
     });
@@ -124,7 +125,8 @@ class VehicleService {
    * Get all vehicles
    */
   async getAllVehicles(): Promise<VehicleResponse> {
-    return this.makeRequest<VehicleResponse>('/vehicles');
+    const sessionId = SessionService.getSessionId();
+    return this.makeRequest<VehicleResponse>(`/vehicles?sessionId=${encodeURIComponent(sessionId)}`);
   }
 
   /**
@@ -145,7 +147,8 @@ class VehicleService {
    * Update vehicle
    */
   async updateVehicle(id: string, updateData: Partial<Vehicle>): Promise<VehicleResponse> {
-    return this.makeRequest<VehicleResponse>(`/vehicles/${id}`, {
+    const sessionId = SessionService.getSessionId();
+    return this.makeRequest<VehicleResponse>(`/vehicles/${id}?sessionId=${encodeURIComponent(sessionId)}`, {
       method: 'PUT',
       body: JSON.stringify(updateData),
     });
@@ -155,7 +158,8 @@ class VehicleService {
    * Delete vehicle
    */
   async deleteVehicle(id: string): Promise<VehicleResponse> {
-    return this.makeRequest<VehicleResponse>(`/vehicles/${id}`, {
+    const sessionId = SessionService.getSessionId();
+    return this.makeRequest<VehicleResponse>(`/vehicles/${id}?sessionId=${encodeURIComponent(sessionId)}`, {
       method: 'DELETE',
     });
   }
