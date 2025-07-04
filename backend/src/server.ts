@@ -75,6 +75,15 @@ app.options('*', cors({
   optionsSuccessStatus: 200
 }));
 
+// Manual CORS preflight handler to guarantee CORS headers (for Railway/production)
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, x-session-id');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200);
+});
+
 // Define agent for fetch calls
 const agent = new https.Agent({ rejectUnauthorized: false });
 
