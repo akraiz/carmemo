@@ -613,9 +613,6 @@ export default function useVehicleManagement() {
       }
 
       // Only show toast if not a completion (i.e., status toggled without modal)
-      if (!isCompleting) {
-        toast.showGenericSuccess('Task status updated!');
-      }
     } catch (error) {
       console.error("Error toggling task status:", error);
       // Show error toast
