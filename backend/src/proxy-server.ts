@@ -770,7 +770,8 @@ app.get('/api/vehicles/:id', async (req, res) => {
 app.get('/api/vehicles/vin/:vin', async (req, res) => {
   try {
     const { vin } = req.params;
-    const result = await VehicleService.getVehicleByVin(vin);
+    const sessionId = req.query.sessionId as string;
+    const result = await VehicleService.getVehicleByVin(vin, sessionId);
     
     if (result.success) {
       res.json({

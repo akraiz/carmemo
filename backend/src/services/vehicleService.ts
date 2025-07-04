@@ -335,7 +335,7 @@ export class VehicleService {
   /**
    * Get vehicle by VIN
    */
-  static async getVehicleByVin(vin: string): Promise<VehicleResponse> {
+  static async getVehicleByVin(vin: string, sessionId?: string): Promise<VehicleResponse> {
     try {
       if (!vin) {
         return {
@@ -343,8 +343,12 @@ export class VehicleService {
           error: 'VIN is required'
         };
       }
-
-      const vehicle = await Vehicle.findOne({ vin });
+      // Filter by VIN and owner/sessionId if provided
+      const query: any = { vin };
+      if (sessionId) {
+        query.owner = sessionId;
+      }
+      const vehicle = await Vehicle.findOne(query);
       if (!vehicle) {
         return {
           success: false,
