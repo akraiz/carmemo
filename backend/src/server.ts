@@ -61,27 +61,16 @@ app.use(cors({
   ]
 }));
 
-// Explicitly handle preflight (OPTIONS) requests for CORS
-app.options('*', cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'X-Requested-With',
-    'x-session-id'
-  ],
-  optionsSuccessStatus: 200
-}));
-
-// Manual CORS preflight handler to guarantee CORS headers (for Railway/production)
-app.options('*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, x-session-id');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.sendStatus(200);
+// Catch-all middleware for all OPTIONS requests to guarantee CORS headers (for Railway/production)
+app.use((req: any, res: any, next: any) => {
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, x-session-id');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    return res.sendStatus(200);
+  }
+  next();
 });
 
 // Define agent for fetch calls
