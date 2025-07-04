@@ -61,6 +61,20 @@ app.use(cors({
   ]
 }));
 
+// Explicitly handle preflight (OPTIONS) requests for CORS
+app.options('*', cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'x-session-id'
+  ],
+  optionsSuccessStatus: 200
+}));
+
 // Define agent for fetch calls
 const agent = new https.Agent({ rejectUnauthorized: false });
 
