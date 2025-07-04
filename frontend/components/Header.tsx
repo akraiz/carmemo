@@ -41,8 +41,8 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar, currentLanguage, onCha
         </div>
       </div>
       <div className="flex items-center space-x-3 rtl:space-x-reverse">
-        <Icons.UserCircle className="w-6 h-6 md:w-7 md:h-7 text-[#a0a0a0] hover:text-[#F7C843] transition-colors cursor-pointer" strokeWidth={1.5}/>
-        {children}
+        {/* <Icons.UserCircle className="w-6 h-6 md:w-7 md:h-7 text-[#a0a0a0] hover:text-[#F7C843] transition-colors cursor-pointer" strokeWidth={1.5}/> */}
+        {/* {children} */}
       </div>
     </header>
   );
