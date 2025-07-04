@@ -576,7 +576,7 @@ export default function useVehicleManagement() {
       // Open edit modal for completion, let user edit optional fields
       setShowAddTaskModal(true);
       setEditingTask(updatedTask);
-      return;
+      return; // Do NOT update status or show toast here
     }
 
     // Optimistic update
@@ -604,8 +604,10 @@ export default function useVehicleManagement() {
         await refreshVehicleData(selectedVehicleId);
       }
 
-      // Show success toast
-      toast.showGenericSuccess(isCompleting ? 'Task completed successfully!' : 'Task status updated!');
+      // Only show toast if not a completion (i.e., status toggled without modal)
+      if (!isCompleting) {
+        toast.showGenericSuccess('Task status updated!');
+      }
     } catch (error) {
       console.error("Error toggling task status:", error);
       // Show error toast
