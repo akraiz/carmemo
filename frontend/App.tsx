@@ -199,11 +199,7 @@ const App: React.FC = () => {
     if (selectedVehicle) {
       const overdue = selectedVehicle.maintenanceSchedule.filter(t => t.status === TaskStatus.Overdue);
       const completed = selectedVehicle.maintenanceSchedule.filter(t => t.status === TaskStatus.Completed);
-      if (completed.length === 10) {
-        toast.showGenericSuccess('10 tasks logged! 🚗');
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 2000);
-      }
+      // (No toast or confetti for 10 tasks logged)
     }
   }, [selectedVehicle, toast]);
 
@@ -270,14 +266,10 @@ const App: React.FC = () => {
 
   const handleFabClick = () => setAddTaskMode('manual');
 
-  // Strongly guarantee: only open the complete modal, never update status or show toast
+  // Add this handler to open the complete modal for a task
   const handleOpenCompleteTaskModal = (taskId: string) => {
-    if (!selectedVehicle) return;
-    const task = selectedVehicle.maintenanceSchedule.find(t => t.id === taskId);
-    if (task) {
-      // Only open the modal, do not update status or call any status-changing function
-      rest.handleOpenCompleteTaskModal(task);
-    }
+    const task = selectedVehicle?.maintenanceSchedule.find(t => t.id === taskId);
+    if (task) rest.handleOpenCompleteTaskModal(task);
   };
 
   const tabItems = [
