@@ -143,8 +143,6 @@
   "viewRecallsModal.title": "الاستدعاءات النشطة لـ {nickname}",
   "viewRecallsModal.noRecalls": "لا توجد استدعاءات نشطة لهذه المركبة.",
   "viewRecallsModal.recallID": "معرف الاستدعاء",
-  "viewRecallsModal.component": "المكون",
-  "viewRecallsModal.summary": "الملخص",
   "viewRecallsModal.consequence": "العواقب",
   "viewRecallsModal.remedy": "الإصلاح",
   "viewRecallsModal.reportedDate": "تاريخ الإبلاغ",

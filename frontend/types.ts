@@ -1,7 +1,5 @@
 export interface RecallInfo {
   id: string; // NHTSACampaignNumber or other unique identifier
-  component: string;
-  summary: string;
   consequence?: string;
   remedy?: string;
   reportReceivedDate?: string;

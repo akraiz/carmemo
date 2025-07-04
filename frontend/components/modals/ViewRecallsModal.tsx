@@ -129,8 +129,6 @@ const ViewRecallsModal: React.FC<ViewRecallsModalProps> = ({ isOpen, onClose, re
                   <RecallDetailItem labelKey="viewRecallsModal.recallID" value={(recall as any).reference || recall.nhtsaCampaignNumber || recall.id} />
                   <RecallDetailItem labelKey="viewRecallsModal.brand" value={(recall as any).brand || (recall as any).manufacturer} />
                   <RecallDetailItem labelKey="viewRecallsModal.model" value={(recall as any).model} />
-                  <RecallDetailItem labelKey="viewRecallsModal.component" value={recall.component} />
-                  <RecallDetailItem labelKey="viewRecallsModal.summary" value={recall.summary} />
                   <RecallDetailItem labelKey="viewRecallsModal.consequence" value={recall.consequence} />
                   <RecallDetailItem labelKey="viewRecallsModal.remedy" value={recall.remedy} />
                   <RecallDetailItem labelKey="viewRecallsModal.reportedDate" value={normalizeAndFormatDate((recall as any).date || recall.reportReceivedDate, language)} />

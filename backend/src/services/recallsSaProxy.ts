@@ -102,23 +102,9 @@ export class RecallsSaProxyService {
       console.log(`Fetching ${limit} recent recalls from recalls.sa`);
       
       // This would scrape the recent recalls page
-      // For now, return simulated data
-      const recentRecalls: RecallsSaScrapedData[] = [];
-      
-      for (let i = 0; i < limit; i++) {
-        recentRecalls.push({
-          title: `Recent Recall ${i + 1}`,
-          description: `This is a simulated recent recall for testing purposes`,
-          manufacturer: 'Various',
-          model: 'Various',
-          category: ['STEERING', 'AIRBAG', 'ENGINE', 'TRANSMISSION'][i % 4],
-          riskLevel: ['HIGH', 'MEDIUM', 'LOW'][i % 3],
-          datePublished: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-          status: 'ACTIVE'
-        });
-      }
-      
-      return recentRecalls;
+      // For critical safety information, only return real data or empty array
+      console.log('No real Saudi recall data available - returning empty array');
+      return [];
       
     } catch (error) {
       console.error('Error fetching recent recalls:', error);

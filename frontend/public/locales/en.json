@@ -147,8 +147,6 @@
   "viewRecallsModal.title": "Active Recalls for {nickname}",
   "viewRecallsModal.noRecalls": "No active recalls found for this vehicle.",
   "viewRecallsModal.recallID": "Recall ID",
-  "viewRecallsModal.component": "Component",
-  "viewRecallsModal.summary": "Summary",
   "viewRecallsModal.consequence": "Consequence",
   "viewRecallsModal.remedy": "Remedy",
   "viewRecallsModal.reportedDate": "Reported Date",

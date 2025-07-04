@@ -12,7 +12,6 @@ export interface RecallsSaRecall {
   manufacturer: string;
   title?: string;
   description?: string;
-  component?: string;
   risk?: string;
   remedy?: string;
 }

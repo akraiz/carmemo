@@ -52,8 +52,6 @@ export class SaudiRecallService {
       if (apiRecalls && apiRecalls.length > 0) {
         return apiRecalls.map(r => ({
           id: r.id,
-          component: r.manufacturer,
-          summary: r.description,
           consequence: undefined,
           remedy: undefined,
           reportReceivedDate: r.reportReceivedDate,
@@ -66,8 +64,6 @@ export class SaudiRecallService {
       if (scrapedRecalls && scrapedRecalls.length > 0) {
         return scrapedRecalls.map(r => ({
           id: r.id,
-          component: r.manufacturer,
-          summary: r.description,
           consequence: undefined,
           remedy: undefined,
           reportReceivedDate: r.reportReceivedDate,
@@ -160,13 +156,13 @@ export class SaudiRecallService {
         }
       }
       
-      // Fallback to simulated data if crawler is not available
-      console.log('Crawler service not available, using simulated data...');
-      return this.simulateScrapedRecalls(vin, make, model);
+      // No real data found - return empty array for critical safety information
+      console.log('No real Saudi recall data found - returning empty array');
+      return [];
 
     } catch (error) {
       console.error('Error scraping recalls.sa:', error);
-      return null;
+      return []; // Return empty array on error - no simulated data
     }
   }
 
@@ -176,47 +172,6 @@ export class SaudiRecallService {
   private static convertScrapedDataToSaudiRecallInfo(scrapedData: SaudiRecallInfo[]): SaudiRecallInfo[] {
     // The data is already in SaudiRecallInfo format from the crawler
     return scrapedData;
-  }
-
-  /**
-   * Simulate scraped recall data (for development/testing)
-   */
-  private static simulateScrapedRecalls(vin: string, make?: string, model?: string): SaudiRecallInfo[] {
-    // This simulates what we would get from scraping recalls.sa
-    const simulatedRecalls: SaudiRecallInfo[] = [];
-
-    // Simulate finding recalls based on VIN or make/model
-    if (vin && (vin.includes('1') || vin.includes('2'))) {
-      simulatedRecalls.push({
-        id: `SA-RECALL-${Date.now()}-1`,
-        vin: vin,
-        manufacturer: make || 'غير محدد',
-        model: model || 'غير محدد',
-        year: new Date().getFullYear().toString(),
-        recallDate: '2024-01-15',
-        description: 'مشكلة محتملة في نظام التوجيه قد تؤثر على التحكم في المركبة',
-        severity: 'عالية',
-        status: 'نشط',
-        source: 'recalls.sa'
-      });
-    }
-
-    if (make && model) {
-      simulatedRecalls.push({
-        id: `SA-RECALL-${Date.now()}-2`,
-        vin: vin,
-        manufacturer: make,
-        model: model,
-        year: new Date().getFullYear().toString(),
-        recallDate: '2024-02-20',
-        description: 'مشكلة في تفعيل الوسادة الهوائية في بعض موديلات المركبات',
-        severity: 'متوسط',
-        status: 'نشط',
-        source: 'recalls.sa'
-      });
-    }
-
-    return simulatedRecalls;
   }
 
   /**

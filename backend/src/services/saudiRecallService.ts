@@ -7,7 +7,6 @@ export interface SASORecallData {
   manufacturer: string;
   model: string;
   year: string;
-  component: string;
   description: string;
   risk: string;
   remedy: string;

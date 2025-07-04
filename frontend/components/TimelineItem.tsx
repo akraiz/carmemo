@@ -234,10 +234,8 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
             <Icons.AlertTriangle className="w-2 h-2 md:w-2.5 md:h-2.5 text-red-100" strokeWidth={3}/>
         </div>
         <div className="bg-red-700/30 p-3.5 md:p-4 rounded-lg shadow-lg border border-red-600/50">
-          {recall.component && <h4 className="text-base md:text-lg font-semibold text-red-200 mb-1.5">{t('viewRecallsModal.component')}: {recall.component}</h4>}
           {recall.nhtsaCampaignNumber || recall.id ? <p className="text-xs text-red-300 mb-0.5">{t('viewRecallsModal.recallID')}: {recall.nhtsaCampaignNumber || recall.id}</p> : null}
           {recall.reportReceivedDate && <p className="text-xs text-red-300 mb-2">{t('viewRecallsModal.reportedDate')}: {formatDate(recall.reportReceivedDate, language)} ({timeAgo(recall.reportReceivedDate, language)})</p>}
-          {recall.summary && <div className="mb-2"><p className="text-xs font-semibold text-red-400 uppercase tracking-wider">{t('viewRecallsModal.summary')}</p><p className="text-sm text-red-200 whitespace-pre-wrap">{recall.summary}</p></div>}
           {recall.consequence && <div className="mb-2"><p className="text-xs font-semibold text-red-400 uppercase tracking-wider">{t('viewRecallsModal.consequence')}</p><p className="text-sm text-red-200 whitespace-pre-wrap">{recall.consequence}</p></div>}
           {recall.remedy && <div><p className="text-xs font-semibold text-red-400 uppercase tracking-wider">{t('viewRecallsModal.remedy')}</p><p className="text-sm text-red-200 whitespace-pre-wrap">{recall.remedy}</p></div>}
         </div>

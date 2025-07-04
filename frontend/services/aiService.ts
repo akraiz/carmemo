@@ -90,9 +90,9 @@ export const decodeVinWithGemini = async (vinToDecode: string): Promise<Partial<
 };
 
 export const getRecallsByVinWithGemini = async (vin: string, make?: string, model?: string): Promise<RecallInfo[] | null> => {
-  // First, try to get real Saudi recall data
+  // ONLY fetch real Saudi recall data - no fallback to AI simulation for critical safety information
   try {
-    console.log('Attempting to fetch real Saudi recall data...');
+    console.log('Fetching real Saudi recall data from recalls.sa...');
     const saudiRecalls = await SaudiRecallManager.getAllSaudiRecalls(vin, make, model);
     
     if (saudiRecalls.length > 0) {
@@ -100,75 +100,19 @@ export const getRecallsByVinWithGemini = async (vin: string, make?: string, mode
       // Convert SaudiRecallInfo to RecallInfo
       const convertedRecalls: RecallInfo[] = saudiRecalls.map(saudiRecall => ({
         id: saudiRecall.id,
-        component: saudiRecall.description || 'Unknown Component',
-        summary: saudiRecall.description || 'No summary available',
         consequence: saudiRecall.severity ? `Severity: ${saudiRecall.severity}` : undefined,
         remedy: saudiRecall.status ? `Status: ${saudiRecall.status}` : undefined,
         reportReceivedDate: saudiRecall.reportReceivedDate || saudiRecall.recallDate,
         nhtsaCampaignNumber: saudiRecall.reference,
       }));
       return convertedRecalls;
-    }
-  } catch (error) {
-    console.warn('Saudi recall service unavailable, falling back to AI simulation:', error);
-  }
-
-  // Fallback to AI simulation if real data is not available
-  if (!ai) {
-    console.warn("Gemini AI service not initialized. Recall fetching with AI unavailable.");
-    return null;
-  }
-  if (!vin) return null;
-
-  try {
-    console.log('Using AI simulation for recall data...');
-    const prompt = `Fetch vehicle recall information for VIN: ${vin}. 
-    Provide the response as a JSON array of objects. Each object should represent a recall and have the following fields: 
-    "id" (use the NHTSACampaignNumber or a unique ID if not available), 
-    "component" (string), 
-    "summary" (string), 
-    "consequence" (string, optional), 
-    "remedy" (string, optional), 
-    "reportReceivedDate" (string, YYYY-MM-DD format, optional),
-    "nhtsaCampaignNumber" (string, optional, the specific NHTSA campaign number).
-    If no recalls are found, return an empty array.
-    Example for one recall: [{"id": "23V040000", "component": "STEERING", "summary": "Summary of the recall...", "consequence": "Potential consequence...", "remedy": "Remedy provided...", "reportReceivedDate": "2023-01-20", "nhtsaCampaignNumber": "23V040000"}]
-    Example for no recalls: []`;
-
-    const response: GenerateContentResponse = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-preview-04-17',
-      contents: prompt,
-      config: { responseMimeType: "application/json" }
-    });
-
-    let jsonStr = response.text?.trim() || '';
-    const fenceRegex = /^```(\w*)?\s*\n?(.*?)\n?\s*```$/s;
-    const match = jsonStr.match(fenceRegex);
-    if (match && match[2]) {
-      jsonStr = match[2].trim();
-    }
-
-    const parsedData = JSON.parse(jsonStr);
-
-    if (Array.isArray(parsedData)) {
-      // Basic validation for each recall object
-      const recalls: RecallInfo[] = parsedData.map((item: any) => ({
-        id: item.id || item.nhtsaCampaignNumber || self.crypto.randomUUID(),
-        component: item.component || 'N/A',
-        summary: item.summary || 'N/A',
-        consequence: item.consequence,
-        remedy: item.remedy,
-        reportReceivedDate: item.reportReceivedDate,
-        nhtsaCampaignNumber: item.nhtsaCampaignNumber || item.id,
-      })).filter(r => r.summary !== 'N/A'); // Ensure basic data like summary exists
-      return recalls;
     } else {
-      console.warn("Gemini recall fetching: Response was not a JSON array.", parsedData);
-      return []; // Return empty array if unexpected format but valid JSON
+      console.log('No real Saudi recalls found for VIN:', vin);
+      return []; // Return empty array - no recalls found
     }
   } catch (error) {
-    console.error(`Error fetching recalls for VIN ${vin} with Gemini:`, error);
-    return null;
+    console.error('Error fetching Saudi recall data:', error);
+    return []; // Return empty array on error - no simulated data
   }
 };
 

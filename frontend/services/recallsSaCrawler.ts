@@ -12,7 +12,6 @@ export interface RecallsSaRecall {
   manufacturer: string;
   title?: string;
   description?: string;
-  component?: string;
   risk?: string;
   remedy?: string;
 }
@@ -117,7 +116,7 @@ export class RecallsSaCrawler {
           year: recall.year || new Date().getFullYear().toString(),
           recallDate: this.normalizeSaudiDate(recall.date) || new Date().toISOString().split('T')[0],
           reportReceivedDate: this.normalizeSaudiDate(recall.date) || new Date().toISOString().split('T')[0],
-          description: recall.description || recall.summary || recall.reason || 'استدعاء أمان للمركبة',
+          description: recall.description || recall.reason || 'استدعاء أمان للمركبة',
           severity: recall.severity || 'متوسط',
           status: recall.status || 'نشط',
           source: 'recalls.sa'
