@@ -48,8 +48,46 @@ const initialState: VehicleManagerState = {
   completingTask: null,
 };
 
-const useVehicleManagement = () => {
-  const [state, setState] = useState<VehicleManagerState>(initialState);
+export default function useVehicleManagement() {
+  let hookIndex = 1;
+  const hook = (desc: string) => {
+    // eslint-disable-next-line no-console
+    console.log(`[useVehicleManagement] ${hookIndex++}. ${desc}`);
+  };
+  hook('useState vehicles');
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  hook('useState selectedVehicleId');
+  const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);
+  hook('useState isLoading');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  hook('useState error');
+  const [error, setError] = useState<string | null>(null);
+  hook('useState showAddVehicleModal');
+  const [showAddVehicleModal, setShowAddVehicleModal] = useState<boolean>(false);
+  hook('useState showAddTaskModal');
+  const [showAddTaskModal, setShowAddTaskModal] = useState<boolean>(false);
+  hook('useState editingTask');
+  const [editingTask, setEditingTask] = useState<MaintenanceTask | null>(null);
+  hook('useState showEditVehicleModal');
+  const [showEditVehicleModal, setShowEditVehicleModal] = useState<boolean>(false);
+  hook('useState editingVehicle');
+  const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
+  hook('useState showViewRecallsModal');
+  const [showViewRecallsModal, setShowViewRecallsModal] = useState<boolean>(false);
+  hook('useState viewingRecallsVehicle');
+  const [viewingRecallsVehicle, setViewingRecallsVehicle] = useState<Vehicle | null>(null);
+  hook('useState enrichingVehicles');
+  const [enrichingVehicles, setEnrichingVehicles] = useState<Set<string>>(new Set());
+  // Backend integration state
+  hook('useState useBackend');
+  const [useBackend, setUseBackend] = useState<boolean>(true);
+  hook('useState backendConnected');
+  const [backendConnected, setBackendConnected] = useState<boolean>(false);
+  hook('useState showCompleteTaskModal');
+  const [showCompleteTaskModal, setShowCompleteTaskModal] = useState<boolean>(false);
+  hook('useState completingTask');
+  const [completingTask, setCompletingTask] = useState<MaintenanceTask | null>(null);
+
   const { t } = useTranslation();
   const toast = useToast();
 
@@ -63,23 +101,25 @@ const useVehicleManagement = () => {
       console.log('[BACKEND] Checking backend connection...');
       const response = await vehicleService.healthCheck();
       console.log('[BACKEND] Health check successful:', response);
-      setState(prev => ({ ...prev, backendConnected: true }));
+      setBackendConnected(true);
     } catch (error) {
       console.warn('[BACKEND] Backend not available, falling back to localStorage:', error);
-      setState(prev => ({ ...prev, backendConnected: false, useBackend: false }));
+      setBackendConnected(false);
+      setUseBackend(false);
     }
   };
 
   // Load vehicles from backend or localStorage
   useEffect(() => {
     loadVehicles();
-  }, [state.useBackend, state.backendConnected]);
+  }, [useBackend, backendConnected]);
 
   const loadVehicles = async () => {
-    setState(prev => ({ ...prev, isLoading: true, error: null }));
+    setIsLoading(true);
+    setError(null);
 
     try {
-      if (state.useBackend && state.backendConnected) {
+      if (useBackend && backendConnected) {
         // Load from backend
         const response: VehicleResponse = await vehicleService.getAllVehicles();
         if (response.success && response.data) {
@@ -90,12 +130,9 @@ const useVehicleManagement = () => {
           });
           const vehicles = response.data.map(normalizeVehicle);
           
-          setState(prev => ({ 
-            ...prev, 
-            vehicles,
-            selectedVehicleId: vehicles.length > 0 ? vehicles[0].id : null,
-            isLoading: false 
-          }));
+          setVehicles(vehicles);
+          setSelectedVehicleId(vehicles.length > 0 ? vehicles[0].id : null);
+          setIsLoading(false);
         } else {
           throw new Error(response.error || 'Failed to load vehicles from backend');
         }
@@ -105,34 +142,28 @@ const useVehicleManagement = () => {
         const loadedSelectedVehicleId = loadSelectedVehicleIdFromStorage();
         
         if (loadedVehicles.length > 0) {
-          setState(prev => ({ 
-            ...prev, 
-            vehicles: loadedVehicles,
-            selectedVehicleId: loadedSelectedVehicleId || loadedVehicles[0].id,
-            isLoading: false 
-          }));
+          setVehicles(loadedVehicles);
+          setSelectedVehicleId(loadedSelectedVehicleId || loadedVehicles[0].id);
+          setIsLoading(false);
         } else {
-          setState(prev => ({ ...prev, isLoading: false }));
+          setIsLoading(false);
         }
       }
     } catch (error) {
       console.error('Error loading vehicles:', error);
-      setState(prev => ({ 
-        ...prev, 
-        isLoading: false, 
-        error: 'errors.loadVehiclesFailed',
-        useBackend: false // Fallback to localStorage
-      }));
+      setIsLoading(false);
+      setError('errors.loadVehiclesFailed');
+      setUseBackend(false); // Fallback to localStorage
     }
   };
 
   // Save vehicles to localStorage when they change (for offline support)
   useEffect(() => {
-    if (!state.useBackend) {
-      saveVehiclesToStorage(state.vehicles);
-      saveSelectedVehicleIdToStorage(state.selectedVehicleId);
+    if (!useBackend) {
+      saveVehiclesToStorage(vehicles);
+      saveSelectedVehicleIdToStorage(selectedVehicleId);
     }
-  }, [state.vehicles, state.selectedVehicleId, state.useBackend]);
+  }, [vehicles, selectedVehicleId, useBackend]);
 
   const _generateInitialSchedule = useCallback((vehicle: Pick<Vehicle, 'year' | 'make' | 'model' | 'currentMileage' | 'purchaseDate'>): MaintenanceTask[] => {
     const baseScheduleKey = `${vehicle.make.toUpperCase()}_${vehicle.model.toUpperCase()}_${vehicle.year}`.replace(/\s+/g, '_');
@@ -200,14 +231,15 @@ const useVehicleManagement = () => {
   }, []);
   
   const handleAddVehicle = async (vehicleData: Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { initialMaintenanceTasks?: MaintenanceTask[], recalls?: RecallInfo[] }) => {
-    setState(prev => ({ ...prev, isLoading: true, error: null }));
+    setIsLoading(true);
+    setError(null);
     
     try {
       const { initialMaintenanceTasks, recalls, ...baseVehicleData } = vehicleData;
       
-      console.log('[ADD VEHICLE] State:', { useBackend: state.useBackend, backendConnected: state.backendConnected });
+      console.log('[ADD VEHICLE] State:', { useBackend, backendConnected });
       
-      if (state.useBackend && state.backendConnected) {
+      if (useBackend && backendConnected) {
         console.log('[ADD VEHICLE] Using backend mode');
         // Create vehicle via backend
         const createRequest: CreateVehicleRequest = {
@@ -253,13 +285,10 @@ const useVehicleManagement = () => {
             recalls: recalls || [],
           };
 
-          setState(prev => ({
-            ...prev,
-            vehicles: [...prev.vehicles, backendVehicle],
-            selectedVehicleId: backendVehicle.id,
-            isLoading: false,
-            showAddVehicleModal: false,
-          }));
+          setVehicles(prev => [...prev, backendVehicle]);
+          setSelectedVehicleId(backendVehicle.id);
+          setIsLoading(false);
+          setShowAddVehicleModal(false);
           return backendVehicle.id;
         } else {
           throw new Error(response.error || 'Failed to create vehicle');
@@ -285,7 +314,7 @@ const useVehicleManagement = () => {
         // Fetch baseline schedule from backend if available
         let baselineSchedule: BaselineTask[] = [];
         try {
-          if (state.backendConnected) {
+          if (backendConnected) {
             const baselineResponse = await vehicleService.enrichBaselineSchedule(newVehicle.make, newVehicle.model, newVehicle.year);
             baselineSchedule = baselineResponse.data?.schedule || [];
           }
@@ -297,7 +326,7 @@ const useVehicleManagement = () => {
         // Fetch forecasted schedule from backend if available
         let forecastedSchedule: MaintenanceTask[] = [];
         try {
-          if (state.backendConnected) {
+          if (backendConnected) {
             const forecastResponse = await vehicleService.generateForecastSchedule(newVehicle, completedInitialTasks, baselineSchedule);
             forecastedSchedule = forecastResponse.data?.schedule || [];
           }
@@ -308,61 +337,63 @@ const useVehicleManagement = () => {
 
         newVehicle.maintenanceSchedule = forecastedSchedule;
 
-        setState(prev => ({
-          ...prev,
-          vehicles: [...prev.vehicles, newVehicle],
-          selectedVehicleId: newVehicle.id,
-          isLoading: false,
-          showAddVehicleModal: false,
-        }));
+        setVehicles(prev => [...prev, newVehicle]);
+        setSelectedVehicleId(newVehicle.id);
+        setIsLoading(false);
+        setShowAddVehicleModal(false);
         return newVehicle.id;
       }
     } catch (error) {
       console.error("Error adding vehicle:", error);
-      setState(prev => ({ ...prev, isLoading: false, error: "errors.addVehicleFailed" }));
+      setIsLoading(false);
+      setError("errors.addVehicleFailed");
       return undefined;
     }
   };
 
   const handleDeleteVehicle = async (vehicleId: string) => {
     try {
-      if (state.useBackend && state.backendConnected) {
+      if (useBackend && backendConnected) {
         const response: VehicleResponse = await vehicleService.deleteVehicle(vehicleId);
         if (!response.success) {
           throw new Error(response.error || 'Failed to delete vehicle');
         }
       }
 
-      setState(prev => {
-        const updatedVehicles = prev.vehicles.filter(v => v.id !== vehicleId);
-        let newSelectedId = prev.selectedVehicleId;
-        if (prev.selectedVehicleId === vehicleId) {
+      setVehicles(prev => {
+        const updatedVehicles = prev.filter(v => v.id !== vehicleId);
+        let newSelectedId = selectedVehicleId;
+        if (selectedVehicleId === vehicleId) {
           newSelectedId = updatedVehicles.length > 0 ? updatedVehicles[0].id : null;
         }
-        return { ...prev, vehicles: updatedVehicles, selectedVehicleId: newSelectedId };
+        return updatedVehicles;
       });
+      setSelectedVehicleId(newSelectedId);
     } catch (error) {
       console.error("Error deleting vehicle:", error);
-      setState(prev => ({ ...prev, error: "errors.deleteVehicleFailed" }));
+      setError("errors.deleteVehicleFailed");
     }
   };
   
   const handleSelectVehicle = (vehicleId: string) => {
-    setState(prev => ({ ...prev, selectedVehicleId: vehicleId, error: null }));
+    setSelectedVehicleId(vehicleId);
+    setError(null);
   };
 
   const handleOpenAddTaskModal = (task?: MaintenanceTask) => {
-    setState(prev => ({ ...prev, showAddTaskModal: true, editingTask: task || null, error: null }));
+    setShowAddTaskModal(true);
+    setEditingTask(task || null);
+    setError(null);
   };
 
   const refreshVehicleData = async (vehicleId: string) => {
-    if (!state.useBackend || !state.backendConnected) return;
+    if (!useBackend || !backendConnected) return;
 
     try {
       const response = await vehicleService.getVehicleById(vehicleId);
       if (response.success && response.data) {
-        setState(prev => {
-          const vehiclesCopy = [...prev.vehicles];
+        setVehicles(prev => {
+          const vehiclesCopy = [...prev];
           const vehicleIndex = vehiclesCopy.findIndex(v => v.id === vehicleId);
           if (vehicleIndex !== -1) {
             vehiclesCopy[vehicleIndex] = {
@@ -373,8 +404,9 @@ const useVehicleManagement = () => {
             };
           }
           // Ensure selectedVehicleId is set to the refreshed vehicle
-          return { ...prev, vehicles: vehiclesCopy, selectedVehicleId: vehicleId };
+          return vehiclesCopy;
         });
+        setSelectedVehicleId(vehicleId);
       }
     } catch (error) {
       console.error('Error refreshing vehicle data:', error);
@@ -382,15 +414,15 @@ const useVehicleManagement = () => {
   };
 
   const handleUpsertTask = async (taskData: MaintenanceTask) => {
-    if (!state.selectedVehicleId) return;
+    if (!selectedVehicleId) return;
 
-    const isNewTask = !taskData.id || !state.vehicles.some(v => v.maintenanceSchedule.some(t => t.id === taskData.id));
+    const isNewTask = !taskData.id || !vehicles.some(v => v.maintenanceSchedule.some(t => t.id === taskData.id));
 
     // Optimistic update
     const optimisticUpdate = () => {
-      setState(prev => {
-        const vehiclesCopy = [...prev.vehicles];
-        const vehicleIndex = vehiclesCopy.findIndex(v => v.id === prev.selectedVehicleId);
+      setVehicles(prev => {
+        const vehiclesCopy = [...prev];
+        const vehicleIndex = vehiclesCopy.findIndex(v => v.id === selectedVehicleId);
         if (vehicleIndex === -1) return prev;
 
         const vehicle = { ...vehiclesCopy[vehicleIndex] };
@@ -408,23 +440,25 @@ const useVehicleManagement = () => {
         }
         
         vehiclesCopy[vehicleIndex] = vehicle;
-        return { ...prev, vehicles: vehiclesCopy, showAddTaskModal: false, editingTask: null };
+        return vehiclesCopy;
       });
+      setShowAddTaskModal(false);
+      setEditingTask(null);
     };
 
     // Apply optimistic update immediately
     optimisticUpdate();
 
     try {
-      if (state.useBackend && state.backendConnected) {
+      if (useBackend && backendConnected) {
         let response: VehicleResponse;
         
-        if (taskData.id && state.vehicles.some(v => v.maintenanceSchedule.some(t => t.id === taskData.id))) {
+        if (taskData.id && vehicles.some(v => v.maintenanceSchedule.some(t => t.id === taskData.id))) {
           // Update existing task
-          response = await vehicleService.updateTask(state.selectedVehicleId, taskData.id, taskData);
+          response = await vehicleService.updateTask(selectedVehicleId, taskData.id, taskData);
         } else {
           // Add new task
-          response = await vehicleService.addTask(state.selectedVehicleId, taskData);
+          response = await vehicleService.addTask(selectedVehicleId, taskData);
         }
         
         if (!response.success) {
@@ -432,7 +466,7 @@ const useVehicleManagement = () => {
         }
 
         // Refresh vehicle data to ensure consistency
-        await refreshVehicleData(state.selectedVehicleId);
+        await refreshVehicleData(selectedVehicleId);
 
         // Show success toast
         toast.showGenericSuccess(isNewTask ? 'Task added successfully!' : 'Task updated successfully!');
@@ -447,53 +481,53 @@ const useVehicleManagement = () => {
       toast.showGenericError(isNewTask ? 'Failed to add task' : 'Failed to update task');
       
       // Revert optimistic update on error
-      setState(prev => {
-        const vehiclesCopy = [...prev.vehicles];
-        const vehicleIndex = vehiclesCopy.findIndex(v => v.id === prev.selectedVehicleId);
+      setVehicles(prev => {
+        const vehiclesCopy = [...prev];
+        const vehicleIndex = vehiclesCopy.findIndex(v => v.id === selectedVehicleId);
         if (vehicleIndex === -1) return prev;
 
         const vehicle = { ...vehiclesCopy[vehicleIndex] };
         
         // Remove the task if it was newly added, or revert to previous state
-        if (!taskData.id || !state.vehicles.some(v => v.maintenanceSchedule.some(t => t.id === taskData.id))) {
+        if (!taskData.id || !vehicles.some(v => v.maintenanceSchedule.some(t => t.id === taskData.id))) {
           vehicle.maintenanceSchedule = vehicle.maintenanceSchedule.filter(t => t.id !== taskData.id);
         }
         
         vehiclesCopy[vehicleIndex] = vehicle;
-        return { ...prev, vehicles: vehiclesCopy, error: "errors.upsertTaskFailed" };
+        return vehiclesCopy;
       });
     }
   };
 
   const handleDeleteTask = async (taskId: string) => {
-    if (!state.selectedVehicleId) return;
+    if (!selectedVehicleId) return;
 
     // Store the task for potential undo
-    const taskToDelete = state.vehicles
-      .find(v => v.id === state.selectedVehicleId)
+    const taskToDelete = vehicles
+      .find(v => v.id === selectedVehicleId)
       ?.maintenanceSchedule.find(t => t.id === taskId);
 
     // Optimistic update
-    setState(prev => {
-      const vehiclesCopy = [...prev.vehicles];
-      const vehicleIndex = vehiclesCopy.findIndex(v => v.id === prev.selectedVehicleId);
+    setVehicles(prev => {
+      const vehiclesCopy = [...prev];
+      const vehicleIndex = vehiclesCopy.findIndex(v => v.id === selectedVehicleId);
       if (vehicleIndex === -1) return prev;
 
       const vehicle = { ...vehiclesCopy[vehicleIndex] };
       vehicle.maintenanceSchedule = vehicle.maintenanceSchedule.filter(t => t.id !== taskId);
       vehiclesCopy[vehicleIndex] = vehicle;
-      return { ...prev, vehicles: vehiclesCopy };
+      return vehiclesCopy;
     });
 
     try {
-      if (state.useBackend && state.backendConnected) {
-        const response: VehicleResponse = await vehicleService.deleteTask(state.selectedVehicleId, taskId);
+      if (useBackend && backendConnected) {
+        const response: VehicleResponse = await vehicleService.deleteTask(selectedVehicleId, taskId);
         if (!response.success) {
           throw new Error(response.error || 'Failed to delete task');
         }
 
         // Refresh vehicle data to ensure consistency
-        await refreshVehicleData(state.selectedVehicleId);
+        await refreshVehicleData(selectedVehicleId);
       }
 
       // Show success toast
@@ -506,24 +540,24 @@ const useVehicleManagement = () => {
       
       // Revert optimistic update on error
       if (taskToDelete) {
-        setState(prev => {
-          const vehiclesCopy = [...prev.vehicles];
-          const vehicleIndex = vehiclesCopy.findIndex(v => v.id === prev.selectedVehicleId);
+        setVehicles(prev => {
+          const vehiclesCopy = [...prev];
+          const vehicleIndex = vehiclesCopy.findIndex(v => v.id === selectedVehicleId);
           if (vehicleIndex === -1) return prev;
 
           const vehicle = { ...vehiclesCopy[vehicleIndex] };
           vehicle.maintenanceSchedule.push(taskToDelete);
           vehiclesCopy[vehicleIndex] = vehicle;
-          return { ...prev, vehicles: vehiclesCopy, error: "errors.deleteTaskFailed" };
+          return vehiclesCopy;
         });
       }
     }
   };
 
   const handleToggleTaskStatus = async (taskId: string, newStatus?: TaskStatus, skipEdit?: boolean) => {
-    if (!state.selectedVehicleId) return;
+    if (!selectedVehicleId) return;
 
-    const currentVehicle = state.vehicles.find(v => v.id === state.selectedVehicleId);
+    const currentVehicle = vehicles.find(v => v.id === selectedVehicleId);
     if (!currentVehicle) return;
 
     const currentTask = currentVehicle.maintenanceSchedule.find(t => t.id === taskId);
@@ -539,14 +573,15 @@ const useVehicleManagement = () => {
 
     if (isCompleting && !skipEdit) {
       // Open edit modal for completion, let user edit optional fields
-      setState(prev => ({ ...prev, showAddTaskModal: true, editingTask: updatedTask }));
+      setShowAddTaskModal(true);
+      setEditingTask(updatedTask);
       return;
     }
 
     // Optimistic update
-    setState(prev => {
-      const vehiclesCopy = [...prev.vehicles];
-      const vehicleIndex = vehiclesCopy.findIndex(v => v.id === prev.selectedVehicleId);
+    setVehicles(prev => {
+      const vehiclesCopy = [...prev];
+      const vehicleIndex = vehiclesCopy.findIndex(v => v.id === selectedVehicleId);
       if (vehicleIndex === -1) return prev;
 
       const vehicle = { ...vehiclesCopy[vehicleIndex] };
@@ -554,18 +589,18 @@ const useVehicleManagement = () => {
         t.id === taskId ? updatedTask : t
       );
       vehiclesCopy[vehicleIndex] = vehicle;
-      return { ...prev, vehicles: vehiclesCopy };
+      return vehiclesCopy;
     });
 
     try {
-      if (state.useBackend && state.backendConnected) {
-        const response: VehicleResponse = await vehicleService.updateTask(state.selectedVehicleId, taskId, updatedTask);
+      if (useBackend && backendConnected) {
+        const response: VehicleResponse = await vehicleService.updateTask(selectedVehicleId, taskId, updatedTask);
         if (!response.success) {
           throw new Error(response.error || 'Failed to update task status');
         }
 
         // Refresh vehicle data to ensure consistency
-        await refreshVehicleData(state.selectedVehicleId);
+        await refreshVehicleData(selectedVehicleId);
       }
 
       // Show success toast
@@ -575,9 +610,9 @@ const useVehicleManagement = () => {
       // Show error toast
       toast.showGenericError('Failed to update task status');
       // Revert optimistic update on error
-      setState(prev => {
-        const vehiclesCopy = [...prev.vehicles];
-        const vehicleIndex = vehiclesCopy.findIndex(v => v.id === prev.selectedVehicleId);
+      setVehicles(prev => {
+        const vehiclesCopy = [...prev];
+        const vehicleIndex = vehiclesCopy.findIndex(v => v.id === selectedVehicleId);
         if (vehicleIndex === -1) return prev;
 
         const vehicle = { ...vehiclesCopy[vehicleIndex] };
@@ -586,17 +621,17 @@ const useVehicleManagement = () => {
           vehicle.maintenanceSchedule[taskIndex] = currentTask;
         }
         vehiclesCopy[vehicleIndex] = vehicle;
-        return { ...prev, vehicles: vehiclesCopy, error: "errors.toggleTaskStatusFailed" };
+        return vehiclesCopy;
       });
     }
   };
 
   const handleFileUpload = async (file: File, taskId: string, type: 'photo' | 'receipt'): Promise<FileAttachment | null> => {
-    if (!state.selectedVehicleId) return null;
+    if (!selectedVehicleId) return null;
 
     try {
-      if (state.useBackend && state.backendConnected) {
-        const response: VehicleResponse = await vehicleService.uploadTaskReceipt(state.selectedVehicleId, taskId, file);
+      if (useBackend && backendConnected) {
+        const response: VehicleResponse = await vehicleService.uploadTaskReceipt(selectedVehicleId, taskId, file);
         if (response.success && response.data) {
           return {
             id: response.data.id || self.crypto.randomUUID(),
@@ -617,9 +652,9 @@ const useVehicleManagement = () => {
         uploadedDate: getISODateString(),
       };
 
-      setState(prev => {
-        const vehiclesCopy = [...prev.vehicles];
-        const vehicleIndex = vehiclesCopy.findIndex(v => v.id === prev.selectedVehicleId);
+      setVehicles(prev => {
+        const vehiclesCopy = [...prev];
+        const vehicleIndex = vehiclesCopy.findIndex(v => v.id === selectedVehicleId);
         if (vehicleIndex === -1) return prev;
 
         const vehicle = { ...vehiclesCopy[vehicleIndex] };
@@ -634,7 +669,7 @@ const useVehicleManagement = () => {
           vehicle.maintenanceSchedule[taskIndex] = task;
         }
         vehiclesCopy[vehicleIndex] = vehicle;
-        return { ...prev, vehicles: vehiclesCopy };
+        return vehiclesCopy;
       });
 
       return fileAttachment;
@@ -645,11 +680,11 @@ const useVehicleManagement = () => {
   };
 
   const handleOCRReceipt = async (file: File, taskId: string): Promise<ExtractedReceiptInfo | null> => {
-    if (!state.selectedVehicleId) return null;
+    if (!selectedVehicleId) return null;
 
     try {
-      if (state.useBackend && state.backendConnected) {
-        const response: VehicleResponse = await vehicleService.completeTaskViaOCR(state.selectedVehicleId, file);
+      if (useBackend && backendConnected) {
+        const response: VehicleResponse = await vehicleService.completeTaskViaOCR(selectedVehicleId, file);
         if (response.success && response.data) {
           return {
             taskName: response.data.taskName,
@@ -670,35 +705,39 @@ const useVehicleManagement = () => {
   };
 
   const handleOpenEditVehicleModal = (vehicle: Vehicle) => {
-    setState(prev => ({ ...prev, showEditVehicleModal: true, editingVehicle: vehicle, error: null }));
+    setShowEditVehicleModal(true);
+    setEditingVehicle(vehicle);
+    setError(null);
   };
 
   const handleUpdateVehicle = async (updatedVehicleData: Partial<Vehicle> & { id: string }) => {
     try {
-      if (state.useBackend && state.backendConnected) {
+      if (useBackend && backendConnected) {
         const response: VehicleResponse = await vehicleService.updateVehicle(updatedVehicleData.id, updatedVehicleData);
         if (!response.success) {
           throw new Error(response.error || 'Failed to update vehicle');
         }
       }
 
-      setState(prev => {
-        const vehiclesCopy = [...prev.vehicles];
+      setVehicles(prev => {
+        const vehiclesCopy = [...prev];
         const vehicleIndex = vehiclesCopy.findIndex(v => v.id === updatedVehicleData.id);
         if (vehicleIndex !== -1) {
           vehiclesCopy[vehicleIndex] = { ...vehiclesCopy[vehicleIndex], ...updatedVehicleData };
         }
-        return { ...prev, vehicles: vehiclesCopy, showEditVehicleModal: false, editingVehicle: null };
+        return vehiclesCopy;
       });
+      setShowEditVehicleModal(false);
+      setEditingVehicle(null);
     } catch (error) {
       console.error("Error updating vehicle:", error);
-      setState(prev => ({ ...prev, error: "errors.updateVehicleFailed" }));
+      setError("errors.updateVehicleFailed");
     }
   };
 
   const handleUpdateVehiclePhoto = async (vehicleId: string, file: File) => {
     try {
-      if (state.useBackend && state.backendConnected) {
+      if (useBackend && backendConnected) {
         const response: VehicleResponse = await vehicleService.uploadVehicleImage(vehicleId, file);
         if (response.success && response.data) {
           const imageId = response.data.imageId;
@@ -711,46 +750,42 @@ const useVehicleManagement = () => {
       }
     } catch (error) {
       console.error("Error updating vehicle photo:", error);
-      setState(prev => ({ ...prev, error: "errors.updateVehiclePhotoFailed" }));
+      setError("errors.updateVehiclePhotoFailed");
     }
   };
 
   const handleOpenViewRecallsModal = () => {
-    const selectedVehicle = state.vehicles.find(v => v.id === state.selectedVehicleId);
+    const selectedVehicle = vehicles.find(v => v.id === selectedVehicleId);
     if (selectedVehicle) {
-      setState(prev => ({ ...prev, showViewRecallsModal: true, viewingRecallsVehicle: selectedVehicle }));
+      setShowViewRecallsModal(true);
+      setViewingRecallsVehicle(selectedVehicle);
     }
   };
 
   const handleCloseViewRecallsModal = () => {
-    setState(prev => ({ ...prev, showViewRecallsModal: false, viewingRecallsVehicle: null }));
+    setShowViewRecallsModal(false);
+    setViewingRecallsVehicle(null);
   };
 
   const startEnrichment = (vehicleId: string) => {
-    setState(prev => ({
-      ...prev,
-      enrichingVehicles: new Set([...prev.enrichingVehicles, vehicleId])
-    }));
+    setEnrichingVehicles(prev => new Set([...prev, vehicleId]));
   };
 
   const stopEnrichment = (vehicleId: string) => {
-    setState(prev => {
-      const newEnrichingVehicles = new Set(prev.enrichingVehicles);
+    setEnrichingVehicles(prev => {
+      const newEnrichingVehicles = new Set(prev);
       newEnrichingVehicles.delete(vehicleId);
-      return { ...prev, enrichingVehicles: newEnrichingVehicles };
+      return newEnrichingVehicles;
     });
   };
 
   const isEnriching = (vehicleId: string) => {
-    return state.enrichingVehicles.has(vehicleId);
+    return enrichingVehicles.has(vehicleId);
   };
 
   const toggleBackendMode = () => {
-    setState(prev => ({ 
-      ...prev, 
-      useBackend: !prev.useBackend,
-      error: null 
-    }));
+    setUseBackend(prev => !prev);
+    setError(null);
   };
 
   const refreshVehicles = () => {
@@ -762,24 +797,26 @@ const useVehicleManagement = () => {
   };
 
   const handleOpenCompleteTaskModal = (task: MaintenanceTask) => {
-    setState(prev => ({ ...prev, showCompleteTaskModal: true, completingTask: task }));
+    setShowCompleteTaskModal(true);
+    setCompletingTask(task);
   };
 
   const handleCloseCompleteTaskModal = () => {
-    setState(prev => ({ ...prev, showCompleteTaskModal: false, completingTask: null }));
+    setShowCompleteTaskModal(false);
+    setCompletingTask(null);
   };
 
   const handleCompleteTask = async (taskUpdate: Partial<MaintenanceTask>) => {
-    if (!state.selectedVehicleId || !taskUpdate.id) return;
+    if (!selectedVehicleId || !taskUpdate.id) return;
     try {
-      if (state.useBackend && state.backendConnected) {
-        await vehicleService.updateTask(state.selectedVehicleId, taskUpdate.id, taskUpdate);
-        await refreshVehicleData(state.selectedVehicleId);
+      if (useBackend && backendConnected) {
+        await vehicleService.updateTask(selectedVehicleId, taskUpdate.id, taskUpdate);
+        await refreshVehicleData(selectedVehicleId);
       } else {
         // Local update
-        setState(prev => {
-          const vehiclesCopy = [...prev.vehicles];
-          const vehicleIndex = vehiclesCopy.findIndex(v => v.id === prev.selectedVehicleId);
+        setVehicles(prev => {
+          const vehiclesCopy = [...prev];
+          const vehicleIndex = vehiclesCopy.findIndex(v => v.id === selectedVehicleId);
           if (vehicleIndex === -1) return prev;
           const vehicle = { ...vehiclesCopy[vehicleIndex] };
           const taskIndex = vehicle.maintenanceSchedule.findIndex(t => t.id === taskUpdate.id);
@@ -790,7 +827,7 @@ const useVehicleManagement = () => {
             };
           }
           vehiclesCopy[vehicleIndex] = vehicle;
-          return { ...prev, vehicles: vehiclesCopy };
+          return vehiclesCopy;
         });
       }
       toast.showGenericSuccess('Task completed!');
@@ -801,8 +838,38 @@ const useVehicleManagement = () => {
   };
 
   return {
-    ...state,
-    setState,
+    vehicles,
+    selectedVehicleId,
+    isLoading,
+    error,
+    showAddVehicleModal,
+    showAddTaskModal,
+    editingTask,
+    showEditVehicleModal,
+    editingVehicle,
+    showViewRecallsModal,
+    viewingRecallsVehicle,
+    enrichingVehicles,
+    useBackend,
+    backendConnected,
+    showCompleteTaskModal,
+    completingTask,
+    setVehicles,
+    setSelectedVehicleId,
+    setIsLoading,
+    setError,
+    setShowAddVehicleModal,
+    setShowAddTaskModal,
+    setEditingTask,
+    setShowEditVehicleModal,
+    setEditingVehicle,
+    setShowViewRecallsModal,
+    setViewingRecallsVehicle,
+    setEnrichingVehicles,
+    setUseBackend,
+    setBackendConnected,
+    setShowCompleteTaskModal,
+    setCompletingTask,
     handleAddVehicle,
     handleUpdateVehicle,
     handleDeleteVehicle,
@@ -822,16 +889,14 @@ const useVehicleManagement = () => {
     refreshVehicles,
     handleUploadVehicleImage,
     refreshVehicleData,
-    clearError: () => setState(prev => ({ ...prev, error: null })),
+    clearError: () => setError(null),
     // Modal handlers added for compatibility
-    handleOpenAddVehicleModal: () => setState(prev => ({ ...prev, showAddVehicleModal: true, error: null })),
-    handleCloseAddVehicleModal: () => setState(prev => ({ ...prev, showAddVehicleModal: false })),
-    handleCloseEditVehicleModal: () => setState(prev => ({ ...prev, showEditVehicleModal: false, editingVehicle: null })),
-    handleCloseAddTaskModal: () => setState(prev => ({ ...prev, showAddTaskModal: false, editingTask: null })),
+    handleOpenAddVehicleModal: () => setShowAddVehicleModal(true),
+    handleCloseAddVehicleModal: () => setShowAddVehicleModal(false),
+    handleCloseEditVehicleModal: () => setShowEditVehicleModal(false),
+    handleCloseAddTaskModal: () => setShowAddTaskModal(false),
     handleOpenCompleteTaskModal,
     handleCloseCompleteTaskModal,
     handleCompleteTask,
   };
-};
-
-export default useVehicleManagement; 
+}; 

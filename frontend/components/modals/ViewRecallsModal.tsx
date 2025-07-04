@@ -61,6 +61,7 @@ const RecallDetailItem: React.FC<{ labelKey: string, value?: string }> = ({ labe
 const ViewRecallsModal: React.FC<ViewRecallsModalProps> = ({ isOpen, onClose, recalls, vehicleNickname }) => {
   const { t, language } = useTranslation();
 
+  // Always call hooks before any return
   React.useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -72,6 +73,7 @@ const ViewRecallsModal: React.FC<ViewRecallsModalProps> = ({ isOpen, onClose, re
     };
   }, [isOpen]);
 
+  // Early return after all hooks
   if (!isOpen) return null;
 
   return (

@@ -580,7 +580,7 @@ const ModernTaskEditModal: React.FC<AddTaskModalProps> = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { isOpen, onClose, task, onSaveTask, currentMileage } = props;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {

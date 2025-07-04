@@ -80,6 +80,7 @@ const backdropVariants = {
 };
 
 const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAddVehicle, onUploadVehicleImage }) => {
+  // Move all hooks to the top level
   const { t, language } = useTranslation();
   const [wizardStep, setWizardStep] = useState(0);
   const [wizardData, setWizardData] = useState<WizardData>(initialWizardData);

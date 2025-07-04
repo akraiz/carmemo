@@ -26,20 +26,16 @@ interface ToastContextType {
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
-export const useToast = () => {
+export function useToast() {
+  let hookIndex = 1;
+  const hook = (desc: string) => {
+    // eslint-disable-next-line no-console
+    console.log(`[useToast] ${hookIndex++}. ${desc}`);
+  };
+  hook('useContext ToastContext');
   const context = useContext(ToastContext);
   if (!context) {
-    console.warn('useToast must be used within ToastProvider');
-    return {
-      showSuccess: () => {},
-      showError: () => {},
-      showInfo: () => {},
-      showWarning: () => {},
-      showGenericSuccess: () => {},
-      showGenericError: () => {},
-      showGenericInfo: () => {},
-      showGenericWarning: () => {},
-    };
+    throw new Error('useToast must be used within ToastProvider');
   }
   return context;
 };

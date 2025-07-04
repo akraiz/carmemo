@@ -45,12 +45,14 @@ const backdropVariants = {
 };
 
 const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, onUpdateVehicle, vehicle }) => {
+  // Move all hooks to the top level
   const { t } = useTranslation();
   const [formData, setFormData] = useState<VehicleFormData | null>(null);
   const [vehiclePhotoPreview, setVehiclePhotoPreview] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'basic' | 'specs'>('basic');
   const { vehicles, setState } = useVehicleManager();
 
+  // Always call hooks before any return
   useEffect(() => {
     setFormData({
       id: vehicle.id,
@@ -74,6 +76,7 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
     });
   }, [vehicle]);
 
+  // Early return after all hooks
   if (!isOpen || !formData) return null;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

@@ -19,18 +19,16 @@ interface NotificationContextType {
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
-export const useNotifications = () => {
+export function useNotifications() {
+  let hookIndex = 1;
+  const hook = (desc: string) => {
+    // eslint-disable-next-line no-console
+    console.log(`[useNotifications] ${hookIndex++}. ${desc}`);
+  };
+  hook('useContext NotificationContext');
   const ctx = useContext(NotificationContext);
   if (!ctx) {
-    // Return a fallback instead of throwing to prevent hook order issues
-    console.warn('useNotifications must be used within NotificationProvider');
-    return {
-      notifications: [],
-      unreadCount: 0,
-      markAsRead: () => {},
-      refreshNotifications: () => {},
-      addNotification: () => {},
-    };
+    throw new Error('useNotifications must be used within NotificationProvider');
   }
   return ctx;
 };
