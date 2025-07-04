@@ -385,7 +385,18 @@ const App: React.FC = () => {
                             className="h-full" 
                         >
                              <div className={activeView === 'vehicles' || activeView === 'timeline' ? "p-0" : "p-4 sm:p-4 md:p-6"}>
-                                {renderActiveView()}
+                                {activeView === 'timeline' ? (
+                                  <TimelineView 
+                                    vehicle={selectedVehicle} 
+                                    onCompleteTask={rest.handleToggleTaskStatus}
+                                    onEditTask={handleOpenEditTask}
+                                    onDeleteTask={rest.handleDeleteTask}
+                                    isFilterMenuOpen={isFilterMenuOpen}
+                                    onOpenFilterMenu={() => setIsFilterMenuOpen(true)}
+                                    onCloseFilterMenu={() => setIsFilterMenuOpen(false)}
+                                    refreshVehicleData={() => selectedVehicleId && rest.refreshVehicleData(selectedVehicleId)}
+                                  />
+                                ) : renderActiveView()}
                             </div>
                         </motion.div>
                     </AnimatePresence>

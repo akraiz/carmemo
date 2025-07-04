@@ -47,7 +47,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { isDateOverdue, daysUntil, getPredictiveDueText, getShortRelativeDate, formatDate } from '../../utils/dateUtils';
 import { IconMap, DefaultTaskIcon } from '../Icon';
 import OverdueAlertBanner from '../shared/OverdueAlertBanner';
-import useVehicleManagement from '../../hooks/useVehicleManagement';
+// REMOVE: import useVehicleManagement from '../../hooks/useVehicleManagement';
 
 const FilterIcon = () => <FilterListIcon sx={{ fontSize: 20 }} />;
 
@@ -122,6 +122,7 @@ interface TimelineViewProps {
   isFilterMenuOpen: boolean;
   onOpenFilterMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onCloseFilterMenu: () => void;
+  refreshVehicleData?: () => void; // Add this prop
 }
 
 // Remove bottomSheetVariants and backdropVariants
@@ -351,6 +352,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({
   isFilterMenuOpen,
   onOpenFilterMenu,
   onCloseFilterMenu,
+  refreshVehicleData, // Use this prop
 }) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -514,14 +516,6 @@ const TimelineView: React.FC<TimelineViewProps> = ({
       setHeaderBottom(headerTop - containerTop + headerHeight);
     }
   }, [headerRef.current, containerRef.current]);
-
-  const { selectedVehicleId, refreshVehicleData } = useVehicleManagement();
-
-  useEffect(() => {
-    if (selectedVehicleId) {
-      refreshVehicleData(selectedVehicleId);
-    }
-  }, [selectedVehicleId]);
 
   return (
     <Box ref={containerRef} sx={{ p: 2, pb: isMobile ? '72px' : '80px', backgroundColor: '#121212', minHeight: '100%', position: 'relative' }}>
