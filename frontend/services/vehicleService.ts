@@ -201,6 +201,18 @@ class VehicleService {
     }
     return data;
   }
+
+  /**
+   * Health check for backend connectivity
+   */
+  async healthCheck(): Promise<any> {
+    const url = buildApiUrl('/health');
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Health check failed');
+    }
+    return response.text();
+  }
 }
 
 // Export singleton instance
