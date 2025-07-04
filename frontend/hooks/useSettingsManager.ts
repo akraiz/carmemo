@@ -12,7 +12,7 @@ const defaultSettings: AppSettings = {
 export function useSettingsManager() {
   let hookIndex = 1;
   const hook = (desc: string) => {
-    // eslint-disable-next-line no-console
+     
     console.log(`[useSettingsManager] ${hookIndex++}. ${desc}`);
   };
   hook('useState settings');

@@ -4,7 +4,7 @@ import { LanguageContext } from '../contexts/LanguageContext';
 export function useTranslation() {
   let hookIndex = 1;
   const hook = (desc: string) => {
-    // eslint-disable-next-line no-console
+     
     console.log(`[useTranslation] ${hookIndex++}. ${desc}`);
   };
   hook('useContext LanguageContext');

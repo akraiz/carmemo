@@ -29,7 +29,7 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 export function useToast() {
   let hookIndex = 1;
   const hook = (desc: string) => {
-    // eslint-disable-next-line no-console
+     
     console.log(`[useToast] ${hookIndex++}. ${desc}`);
   };
   hook('useContext ToastContext');

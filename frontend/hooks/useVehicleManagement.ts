@@ -51,7 +51,7 @@ const initialState: VehicleManagerState = {
 export default function useVehicleManagement() {
   let hookIndex = 1;
   const hook = (desc: string) => {
-    // eslint-disable-next-line no-console
+     
     console.log(`[useVehicleManagement] ${hookIndex++}. ${desc}`);
   };
   hook('useState vehicles');

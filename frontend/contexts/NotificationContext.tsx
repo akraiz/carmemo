@@ -22,7 +22,7 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 export function useNotifications() {
   let hookIndex = 1;
   const hook = (desc: string) => {
-    // eslint-disable-next-line no-console
+     
     console.log(`[useNotifications] ${hookIndex++}. ${desc}`);
   };
   hook('useContext NotificationContext');
