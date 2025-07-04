@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AutoLog Pro</title>
+  <title>Car Memo App</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Poppins:wght@400;500;600;700;800&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
@@ -41,13 +41,21 @@
 
     /* Global Form & Button Styles for New Dark Theme */
     .form-label {
-      display: block; text-sm font-medium text-[#a0a0a0] mb-1; /* Darker secondary text for labels */
+      display: block;
+      font-size: 0.875rem; /* text-sm */
+      font-weight: 500;    /* font-medium */
+      color: #a0a0a0;      /* text-[#a0a0a0] */
+      margin-bottom: 0.25rem; /* mb-1 */
     }
     html[dir="rtl"] .form-label {
         text-align: right;
     }
     .form-label-sm {
-       display: block; text-xs font-medium text-[#707070] mb-0.5; /* Even more subtle labels */
+      display: block;
+      font-size: 0.75rem;  /* text-xs */
+      font-weight: 500;    /* font-medium */
+      color: #707070;      /* text-[#707070] */
+      margin-bottom: 0.125rem; /* mb-0.5 */
     }
     .styled-input, .styled-textarea, .styled-select {
       display: block;
