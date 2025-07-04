@@ -675,10 +675,13 @@ async function sendPushToAll(payload: any) {
  */
 app.post('/api/vehicles', async (req, res) => {
   console.log('POST /api/vehicles hit. Payload:', req.body);
-  // Uncomment the next line to test immediate response:
-  // return res.json({ test: true });
   try {
-    const result = await VehicleService.createVehicle(req.body);
+    const sessionId = req.query.sessionId as string;
+    const vehicleData = {
+      ...req.body,
+      sessionId: sessionId || 'anonymous'
+    };
+    const result = await VehicleService.createVehicle(vehicleData);
     console.log('POST /api/vehicles result:', result);
     if (result.success) {
       res.status(201).json({
