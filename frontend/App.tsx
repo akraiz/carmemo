@@ -199,11 +199,6 @@ const App: React.FC = () => {
     if (selectedVehicle) {
       const overdue = selectedVehicle.maintenanceSchedule.filter(t => t.status === TaskStatus.Overdue);
       const completed = selectedVehicle.maintenanceSchedule.filter(t => t.status === TaskStatus.Completed);
-      if (overdue.length === 0 && completed.length > 0) {
-        toast.showGenericSuccess('All overdue tasks completed! 🎉');
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 2000);
-      }
       if (completed.length === 10) {
         toast.showGenericSuccess('10 tasks logged! 🚗');
         setShowConfetti(true);
