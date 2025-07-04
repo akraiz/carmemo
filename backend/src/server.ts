@@ -40,26 +40,24 @@ import * as cheerio from 'cheerio';
 import https from 'https';
 import fetch from 'node-fetch';
 
-// Initialize AI service after dotenv is loaded
-console.log('🚀 Initializing AI service...');
-initializeAIService();
-
-const agent = new https.Agent({ rejectUnauthorized: false });
-
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Enhanced CORS configuration for production
+// --- CORS configuration: allow production and local dev frontends ---
+const allowedOrigins = [
+  'https://carmemo.vercel.app',      // Production frontend
+  'http://localhost:5173',           // Local dev (Vite default)
+  'http://localhost:3000'            // Local dev (React default)
+];
 app.use(cors({
-  origin: [
-    'https://carmemo.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:3000'
-  ],
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
+
+// Define agent for fetch calls
+const agent = new https.Agent({ rejectUnauthorized: false });
 
 app.use(express.json());
 
