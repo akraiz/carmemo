@@ -93,6 +93,18 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Health check endpoint for frontend integration
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    service: 'CarMemo Backend',
+    version: '1.0.0',
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // VIN Lookup endpoint using API Ninjas
 const vinLookupHandler: RequestHandler = async (req, res) => {
   const { vin } = req.body;
