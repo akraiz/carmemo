@@ -94,7 +94,7 @@ export class VehicleService {
     }
     // 2. Check for duplicate VIN only if VIN is provided and non-empty
     if (vehicleData.vin) {
-      const existingVehicle = await Vehicle.findOne({ vin: vehicleData.vin });
+      const existingVehicle = await Vehicle.findOne({ vin: vehicleData.vin, owner: vehicleData.sessionId || 'anonymous' });
       if (existingVehicle) {
         return {
           success: false,
