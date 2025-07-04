@@ -89,8 +89,8 @@ const gridFsStorage = new GridFsStorage({
 });
 const uploadGridFS = multer({ storage: gridFsStorage as unknown as StorageEngine });
 
-// Health check endpoint
-app.get('/health', (req, res) => {
+// Health check endpoint for frontend integration
+app.get('/api/health', (req, res) => {
   res.send('OK');
 });
 
