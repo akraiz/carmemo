@@ -3,7 +3,6 @@ import type { LucideProps } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icons } from '../Icon';
 import { useTranslation } from '../../hooks/useTranslation';
-import { useTasks } from '../../contexts/TaskContext';
 import { useToast } from '../../contexts/ToastContext';
 import useVehicleManager from '../../hooks/useVehicleManager';
 import { Vehicle, MaintenanceTask, TaskCategory, TaskStatus, TaskImportance, ExtractedReceiptInfo, FileAttachment } from '../../types';

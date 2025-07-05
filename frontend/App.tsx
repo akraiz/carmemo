@@ -28,8 +28,6 @@ import { useToast } from './contexts/ToastContext';
 import Confetti from 'react-confetti';
 import NotificationCenter from './components/shared/NotificationCenter';
 import Material3BottomNav from './components/shared/Material3BottomNav'; // Import the new component
-import { TaskProvider } from './contexts/TaskContext';
-import { ThemeProvider, CssBaseline } from '@mui/material';
 import { 
   DirectionsCar as CarIcon,
   Timeline as TimelineIcon,
@@ -39,6 +37,7 @@ import {
 } from '@mui/icons-material';
 import darkTheme from './theme';
 import AddIcon from '@mui/icons-material/Add';
+import { ThemeProvider, CssBaseline } from '@mui/material';
 
 type Language = 'en' | 'ar';
 
@@ -298,7 +297,6 @@ const App: React.FC = () => {
       case 'timeline':
         return <TimelineView 
           vehicle={selectedVehicle} 
-          onCompleteTask={rest.handleCompleteTask}
           onEditTask={handleOpenEditTask}
           onDeleteTask={rest.handleDeleteTask}
           isFilterMenuOpen={isFilterMenuOpen}
@@ -332,7 +330,6 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <TaskProvider initialTasks={initialTasks}>
         <div className="flex flex-col h-screen bg-[#121212] text-[#cfcfcf] overflow-hidden">
           <Header onToggleSidebar={toggleSidebar} currentLanguage={language as Language} onChangeLanguage={setLanguage}>
             <div className="flex items-center gap-2">
@@ -386,7 +383,6 @@ const App: React.FC = () => {
                                 {activeView === 'timeline' ? (
                                   <TimelineView 
                                     vehicle={selectedVehicle} 
-                                    onCompleteTask={rest.handleCompleteTask}
                                     onEditTask={handleOpenEditTask}
                                     onDeleteTask={rest.handleDeleteTask}
                                     isFilterMenuOpen={isFilterMenuOpen}
@@ -504,7 +500,6 @@ const App: React.FC = () => {
           </AnimatePresence>
           {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} numberOfPieces={120} recycle={false} />}
         </div>
-      </TaskProvider>
     </ThemeProvider>
   );
 };

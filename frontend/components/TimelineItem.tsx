@@ -5,7 +5,6 @@ import { useTranslation } from '../hooks/useTranslation';
 import { formatDate, timeAgo, isDateOverdue, daysUntil, getISODateString } from '../utils/dateUtils';
 import { Icons, IconMap, DefaultTaskIcon } from './Icon'; 
 import { TASK_STATUS_COLORS, TASK_IMPORTANCE_COLORS, COMMON_MAINTENANCE_PRESETS } from '../constants';
-import { useTasks } from '../contexts/TaskContext';
 import { useToast } from '../contexts/ToastContext';
 import { Button, IconButton } from '@mui/material';
 
@@ -16,6 +15,9 @@ type TimelineEvent =
 interface TimelineItemProps {
   item: TimelineEvent;
   vehicle?: import('../types').Vehicle | null;
+  onTaskUpdate: (task: MaintenanceTask) => void;
+  onTaskDelete: (taskId: string) => void;
+  onTaskArchive: (task: MaintenanceTask) => void;
 }
 
 const itemVariants = {
@@ -30,11 +32,10 @@ const itemVariants = {
   }
 };
 
-const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
+const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle, onTaskUpdate, onTaskDelete, onTaskArchive }) => {
   const { t, language } = useTranslation();
   const [showMenu, setShowMenu] = useState(false);
   const [swipeAction, setSwipeAction] = useState<'none' | 'done' | 'delete'>('none');
-  const { upsertTask, deleteTask, smartMatchAndArchive } = useTasks();
   const toast = useToast();
 
   const effectiveVehicle = vehicle || { id: '', make: '', model: '', year: 0, vin: '', maintenanceSchedule: [] };
@@ -44,14 +45,14 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
     if (info.offset.x > 80) {
       setSwipeAction('done');
       setTimeout(() => {
-        upsertTask({ ...task, status: TaskStatus.Completed });
-        smartMatchAndArchive({ ...task, status: TaskStatus.Completed });
+        onTaskUpdate({ ...task, status: TaskStatus.Completed });
+        onTaskArchive({ ...task, status: TaskStatus.Completed });
         setSwipeAction('none');
       }, 200);
     } else if (info.offset.x < -80) {
       setSwipeAction('delete');
       setTimeout(() => {
-        deleteTask(task.id);
+        onTaskDelete(task.id);
         setSwipeAction('none');
       }, 200);
     } else {
@@ -137,9 +138,9 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
             <Button
               onClick={() => {
                 const newStatus = task.status === TaskStatus.Completed ? TaskStatus.Upcoming : TaskStatus.Completed;
-                upsertTask({ ...task, status: newStatus });
+                onTaskUpdate({ ...task, status: newStatus });
                 if (newStatus === TaskStatus.Completed) {
-                  smartMatchAndArchive({ ...task, status: TaskStatus.Completed });
+                  onTaskArchive({ ...task, status: TaskStatus.Completed });
                 }
               }}
               variant="contained"
@@ -194,7 +195,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
                 variant="text"
                 color="inherit"
                 size="small"
-                onClick={() => { setShowMenu(false); upsertTask(task); }}
+                onClick={() => { setShowMenu(false); onTaskUpdate(task); }}
                 sx={{ justifyContent: 'flex-start', textAlign: 'left', px: 2, py: 1, fontSize: '0.875rem' }}
               >
                 {t('common.edit')}
@@ -204,7 +205,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle }) => {
                 variant="text"
                 color="error"
                 size="small"
-                onClick={() => { setShowMenu(false); deleteTask(task.id); }}
+                onClick={() => { setShowMenu(false); onTaskDelete(task.id); }}
                 sx={{ justifyContent: 'flex-start', textAlign: 'left', px: 2, py: 1, fontSize: '0.875rem' }}
               >
                 {t('common.delete')}
