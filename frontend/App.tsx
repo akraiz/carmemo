@@ -463,7 +463,7 @@ const App: React.FC = () => {
             <AddTaskModal
               isOpen={true}
               onClose={() => setAddTaskMode(null)}
-              onSaveTask={rest.handleUpsertTask}
+              onSaveTask={rest.handleAddTask}
               vehicleId={selectedVehicleId || ''}
               task={addTaskMode === 'past' ? {
                 id: self.crypto.randomUUID(),

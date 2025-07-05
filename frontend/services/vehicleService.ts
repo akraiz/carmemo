@@ -240,6 +240,20 @@ class VehicleService {
       }
     );
   }
+
+  /**
+   * Add a maintenance task for a vehicle
+   */
+  async addTask(vehicleId: string, taskData: Partial<MaintenanceTask>): Promise<VehicleResponse> {
+    const sessionId = SessionService.getSessionId();
+    return this.makeRequest<VehicleResponse>(
+      `${TASK_ENDPOINTS.ADD(vehicleId)}?sessionId=${encodeURIComponent(sessionId)}`,
+      {
+        method: 'POST',
+        body: JSON.stringify(taskData),
+      }
+    );
+  }
 }
 
 // Export singleton instance

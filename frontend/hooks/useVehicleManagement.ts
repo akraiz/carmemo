@@ -387,6 +387,37 @@ export default function useVehicleManagement() {
     setError(null);
   };
 
+  const handleAddTask = async (taskData: MaintenanceTask) => {
+    if (!selectedVehicleId) return;
+    try {
+      if (useBackend && backendConnected) {
+        const response: VehicleResponse = await vehicleService.addTask(selectedVehicleId, taskData);
+        if (!response.success) {
+          throw new Error(response.error || 'Failed to add task');
+        }
+        await refreshVehicleData(selectedVehicleId);
+        toast.showGenericSuccess('Task added successfully!');
+      } else {
+        // Local-only fallback
+        setVehicles(prev => {
+          const vehiclesCopy = [...prev];
+          const vehicleIndex = vehiclesCopy.findIndex(v => v.id === selectedVehicleId);
+          if (vehicleIndex === -1) return prev;
+          const vehicle = { ...vehiclesCopy[vehicleIndex] };
+          vehicle.maintenanceSchedule = [...(vehicle.maintenanceSchedule || []), taskData];
+          vehiclesCopy[vehicleIndex] = vehicle;
+          return vehiclesCopy;
+        });
+        toast.showGenericSuccess('Task added successfully!');
+      }
+      setShowAddTaskModal(false);
+      setEditingTask(null);
+    } catch (error) {
+      console.error('Error adding task:', error);
+      toast.showGenericError('Failed to add task');
+    }
+  };
+
   const refreshVehicleData = async (vehicleId: string) => {
     if (!useBackend || !backendConnected) return;
 
@@ -876,35 +907,25 @@ export default function useVehicleManagement() {
     setEnrichingVehicles,
     setUseBackend,
     setBackendConnected,
-    setShowCompleteTaskModal,
-    setCompletingTask,
     handleAddVehicle,
     handleUpdateVehicle,
     handleDeleteVehicle,
     handleSelectVehicle,
     handleOpenAddTaskModal,
     handleUpsertTask,
+    handleAddTask,
     handleDeleteTask,
     handleToggleTaskStatus,
-    handleUpdateVehiclePhoto,
+    handleFileUpload,
+    handleOCRReceipt,
+    handleOpenEditVehicleModal,
     handleOpenViewRecallsModal,
     handleCloseViewRecallsModal,
-    handleOpenEditVehicleModal,
-    startEnrichment,
-    stopEnrichment,
-    isEnriching,
-    toggleBackendMode,
-    refreshVehicles,
-    handleUploadVehicleImage,
-    refreshVehicleData,
-    clearError: () => setError(null),
-    // Modal handlers added for compatibility
-    handleOpenAddVehicleModal: () => setShowAddVehicleModal(true),
-    handleCloseAddVehicleModal: () => setShowAddVehicleModal(false),
-    handleCloseEditVehicleModal: () => setShowEditVehicleModal(false),
-    handleCloseAddTaskModal: () => setShowAddTaskModal(false),
+    handleUpdateVehiclePhoto,
     handleOpenCompleteTaskModal,
     handleCloseCompleteTaskModal,
     handleCompleteTask,
+    toggleBackendMode,
+    refreshVehicles
   };
 }; 
