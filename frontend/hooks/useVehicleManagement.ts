@@ -926,6 +926,7 @@ export default function useVehicleManagement() {
     handleCloseCompleteTaskModal,
     handleCompleteTask,
     toggleBackendMode,
-    refreshVehicles
+    refreshVehicles,
+    refreshVehicleData
   };
 }; 
