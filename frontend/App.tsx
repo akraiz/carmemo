@@ -396,7 +396,7 @@ const App: React.FC = () => {
                     </AnimatePresence>
                 </div>
               {/* FAB and Menu */}
-              {!isModalOpen && selectedVehicle && !rest.showAddTaskModal && activeView !== 'vehicles' && (
+              {!isModalOpen && selectedVehicle && !rest.showAddTaskModal && activeView !== 'vehicles' && !(isMobile && isSidebarOpen) && (
                 <FabButton
                   onClick={handleFabClick}
                   icon={<AddIcon />}
