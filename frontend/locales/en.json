@@ -530,6 +530,5 @@
   "timelineView.noVehicleSelected": "Please select a vehicle to view its timeline.",
   "timelineView.noUpcomingTasks": "No upcoming tasks found.",
   "timelineView.noCompletedTasks": "No completed tasks found.",
-  "addTask": "Add Task",
-  "taskCategories.EngineTune-Up": "Engine Tune-Up"
+  "addTask": "Add Task"
 }
