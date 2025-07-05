@@ -121,7 +121,23 @@ export class VehicleService {
     if (vehicleData.vin && vehicleData.vin.trim() !== '') {
       try {
         const fetchedRecalls = await getRecallsByVinWithGemini(vehicleData.vin || '', vehicleData.make || '', vehicleData.model || '');
-        recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls.map(({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber}) => ({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber})) : [];
+        recalls = Array.isArray(fetchedRecalls)
+          ? fetchedRecalls.map((recall) => ({
+              id: recall.id || recall.reference || '',
+              reference: recall.reference || recall.id || '',
+              date: recall.date || '',
+              brand: recall.brand || '',
+              model: recall.model || '',
+              status: recall.status || '',
+              detailUrl: recall.detailUrl || '',
+              reportReceivedDate: recall.reportReceivedDate || recall.date || '',
+              nhtsaCampaignNumber: recall.nhtsaCampaignNumber || recall.reference || recall.id || '',
+              // Add any extra fields from the API response if needed
+              ...(recall.description ? { description: recall.description } : {}),
+              ...(recall.severity ? { severity: recall.severity } : {}),
+              ...(recall.source ? { source: recall.source } : {}),
+            }))
+          : [];
       } catch (err) {
         console.warn('Failed to fetch recalls for vehicle:', err);
         recalls = [];
@@ -477,7 +493,23 @@ export class VehicleService {
       let recalls: RecallInfo[] = [];
       try {
         const fetchedRecalls = await getRecallsByVinWithGemini(vin || '', make || '', model || '');
-        recalls = Array.isArray(fetchedRecalls) ? fetchedRecalls.map(({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber}) => ({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber})) : [];
+        recalls = Array.isArray(fetchedRecalls)
+          ? fetchedRecalls.map((recall) => ({
+              id: recall.id || recall.reference || '',
+              reference: recall.reference || recall.id || '',
+              date: recall.date || '',
+              brand: recall.brand || '',
+              model: recall.model || '',
+              status: recall.status || '',
+              detailUrl: recall.detailUrl || '',
+              reportReceivedDate: recall.reportReceivedDate || recall.date || '',
+              nhtsaCampaignNumber: recall.nhtsaCampaignNumber || recall.reference || recall.id || '',
+              // Add any extra fields from the API response if needed
+              ...(recall.description ? { description: recall.description } : {}),
+              ...(recall.severity ? { severity: recall.severity } : {}),
+              ...(recall.source ? { source: recall.source } : {}),
+            }))
+          : [];
       } catch (err) {
         console.warn('Failed to fetch recalls for vehicle update:', err);
         recalls = [];
@@ -488,7 +520,21 @@ export class VehicleService {
         id,
         {
           ...updateFields,
-          recalls: recalls.map(({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber}) => ({id, reference, date, brand, model, status, detailUrl, reportReceivedDate, nhtsaCampaignNumber})),
+          recalls: recalls.map((recall) => ({
+            id: recall.id || recall.reference || '',
+            reference: recall.reference || recall.id || '',
+            date: recall.date || '',
+            brand: recall.brand || '',
+            model: recall.model || '',
+            status: recall.status || '',
+            detailUrl: recall.detailUrl || '',
+            reportReceivedDate: recall.reportReceivedDate || recall.date || '',
+            nhtsaCampaignNumber: recall.nhtsaCampaignNumber || recall.reference || recall.id || '',
+            // Add any extra fields from the API response if needed
+            ...(recall.description ? { description: recall.description } : {}),
+            ...(recall.severity ? { severity: recall.severity } : {}),
+            ...(recall.source ? { source: recall.source } : {}),
+          })),
           updatedAt: new Date()
         },
         { new: true, runValidators: true }

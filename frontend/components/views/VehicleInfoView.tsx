@@ -77,7 +77,7 @@ export interface VehicleInfoViewProps {
   onDeleteTask: (taskId: string) => void;
   onAddTask: () => void;
   onEditVehicle: (vehicle: Vehicle) => void;
-  onViewRecalls: () => void; 
+  onViewRecalls: (recalls: any[]) => void; 
   mainScrollRef?: React.RefObject<HTMLElement>;
   onUpdateVehiclePhoto: (vehicleId: string, file: File) => void; 
 }
@@ -144,6 +144,32 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
   const exportDropdownRef = useRef<HTMLDivElement>(null);
   const { t, language } = useTranslation();
   const vehicleManager = useVehicleManager();
+  const [liveRecalls, setLiveRecalls] = useState<any[]>([]);
+  const [recallsLoading, setRecallsLoading] = useState(false);
+  const [recallsError, setRecallsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!vehicle.vin) {
+      setLiveRecalls([]);
+      return;
+    }
+    setRecallsLoading(true);
+    setRecallsError(null);
+    fetch(`/api/recall/${vehicle.vin}`)
+      .then(async (res) => {
+        if (!res.ok) throw new Error('Failed to fetch recalls');
+        return res.json();
+      })
+      .then((data) => {
+        setLiveRecalls(Array.isArray(data) ? data : []);
+        setRecallsLoading(false);
+      })
+      .catch((err) => {
+        setRecallsError(err.message || 'Error fetching recalls');
+        setLiveRecalls([]);
+        setRecallsLoading(false);
+      });
+  }, [vehicle.vin]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -349,17 +375,22 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
               {vehicle.nickname || `${vehicle.make} ${vehicle.model}`}
             </h2>
             <p className="font-normal text-[14px] text-[#B0B0B0] leading-[1.5]">{vehicle.year}</p>
-            {vehicle.recalls && vehicle.recalls.length > 0 && (
+            {/* Use liveRecalls for button visibility */}
+            {recallsLoading ? (
+              <span className="text-xs text-[#FFD700] block mt-2">Loading recalls...</span>
+            ) : recallsError ? (
+              <span className="text-xs text-red-400 block mt-2">{recallsError}</span>
+            ) : liveRecalls && liveRecalls.length > 0 && (
                 <Button 
-                    onClick={onViewRecalls}
+                    onClick={(e) => { e.preventDefault(); onViewRecalls(liveRecalls); }}
                     variant="contained"
                     color="error"
                     size="small"
                     startIcon={<Icons.AlertTriangle className="w-3.5 h-3.5" />}
-                    aria-label={t('vehicle.viewRecallsAria', { count: vehicle.recalls.length })}
+                    aria-label={t('vehicle.viewRecallsAria', { count: liveRecalls.length })}
                     sx={{ mt: 2, fontWeight: 'bold' }}
                 >
-                    {t('vehicle.recallAlertBadge', { count: vehicle.recalls.length })}
+                    {t('vehicle.recallAlertBadge', { count: liveRecalls.length })}
                 </Button>
             )}
             <div className="mt-3 md:mt-4 flex flex-wrap justify-center sm:justify-start gap-2">

@@ -8,6 +8,9 @@ export interface RecallInfo {
   detailUrl: string;
   reportReceivedDate?: string;
   nhtsaCampaignNumber?: string;
+  description?: string;
+  severity?: string;
+  source?: string;
 }
 
 export interface SaudiRecallInfo {
