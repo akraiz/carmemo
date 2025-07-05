@@ -480,15 +480,6 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
           </AnimatePresence>
         )}
       </motion.section>
-      {/* Render FAB only if edit modal is not open */}
-      {!showEditTaskModal && (
-        <FabButton
-          onClick={onAddTask}
-          icon={<Icons.Plus className="w-6 h-6" />}
-          ariaLabel={t('addTask')}
-          position={{ bottom: 32, right: 32, zIndex: 1200 }}
-        />
-      )}
       {/* Edit Task Modal (used for both edit and complete) */}
       {showEditTaskModal && editingTask && (
         <AddTaskModal
