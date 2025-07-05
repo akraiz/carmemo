@@ -127,8 +127,13 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
       onClose();
     }, 2000);
 
-    // Trigger baseline enrichment in the background (non-blocking)
-    enrichBaselineInBackground(finalVehicleData.make as string, finalVehicleData.model as string, finalVehicleData.year as number, finalVehicleData.id);
+    // Only trigger baseline enrichment if make, model, or year changed
+    const makeChanged = formData.make !== vehicle.make;
+    const modelChanged = formData.model !== vehicle.model;
+    const yearChanged = parseInt(formData.year, 10) !== vehicle.year;
+    if (makeChanged || modelChanged || yearChanged) {
+      enrichBaselineInBackground(finalVehicleData.make as string, finalVehicleData.model as string, finalVehicleData.year as number, finalVehicleData.id);
+    }
   };
 
   // Fix enrichment logic to only return Vehicle objects
