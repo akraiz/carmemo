@@ -196,7 +196,7 @@ const SegmentedToggle: React.FC<{
 
 const OutlookStyleTaskCard: React.FC<{
   task: MaintenanceTask;
-  onComplete: (taskId: string) => void;
+  onComplete: (task: MaintenanceTask) => void;
   onEdit: (task: MaintenanceTask) => void;
   onDelete: (taskId: string) => void;
   isExpanded: boolean;
@@ -222,7 +222,7 @@ const OutlookStyleTaskCard: React.FC<{
     onToggleExpand();
   };
 
-  const handleComplete = (e: React.MouseEvent) => { e.stopPropagation(); onComplete(task.id); };
+  const handleComplete = (e: React.MouseEvent) => { e.stopPropagation(); onComplete({ ...task, status: TaskStatus.Completed }); };
   const handleEdit = (e: React.MouseEvent) => { e.stopPropagation(); onEdit(task); };
   const handleDeleteClick = (e: React.MouseEvent) => { e.stopPropagation(); setShowDeleteDialog(true); };
   const handleDeleteConfirm = () => { onDelete(task.id); setShowDeleteDialog(false); };
@@ -495,7 +495,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({
           >
             <OutlookStyleTaskCard
               task={task}
-              onComplete={handleToggleTask}
+              onComplete={(task) => onEditTask && onEditTask({ ...task, status: TaskStatus.Completed })}
               onEdit={onEditTask!}
               onDelete={onDeleteTask!}
               isExpanded={expandedTaskId === task.id}

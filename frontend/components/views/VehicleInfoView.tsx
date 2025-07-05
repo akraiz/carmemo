@@ -10,7 +10,7 @@ import { Vehicle, MaintenanceTask, TaskCategory, TaskStatus, TaskImportance, Ext
 import { TASK_STATUS_COLORS, TASK_IMPORTANCE_COLORS, DEFAULT_VEHICLE_IMAGE_URL } from '../../constants';
 import { formatDate, getISODateString, isDateOverdue, daysUntil, timeAgo } from '../../utils/dateUtils';
 import { Button, IconButton, TextField, Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
-import CompleteTaskModal from '../modals/CompleteTaskModal';
+// Remove import CompleteTaskModal from '../modals/CompleteTaskModal';
 import { SiFord, SiToyota, SiHonda, SiBmw, SiMercedes, SiChevrolet, SiHyundai, SiKia, SiNissan, SiVolkswagen, SiAudi, SiMazda, SiJeep, SiSubaru, SiTesla, SiPorsche, SiJaguar, SiLandrover, SiMitsubishi, SiPeugeot, SiRenault, SiSuzuki, SiFiat, SiVolvo, SiCitroen, SiRam, SiMini, SiInfiniti, SiAcura, SiCadillac, SiChrysler, SiGmx, SiAlfaromeo, SiSmart, SiSaturn } from 'react-icons/si';
 import { IconType } from 'react-icons';
 
@@ -144,17 +144,6 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
   const exportDropdownRef = useRef<HTMLDivElement>(null);
   const { t, language } = useTranslation();
   const vehicleManager = useVehicleManager();
-  const {
-    showCompleteTaskModal,
-    completingTask,
-    handleCloseCompleteTaskModal,
-    handleCompleteTask,
-  } = vehicleManager as ReturnType<typeof useVehicleManager> & {
-    showCompleteTaskModal: boolean;
-    completingTask: MaintenanceTask | null;
-    handleCloseCompleteTaskModal: () => void;
-    handleCompleteTask: (taskUpdate: Partial<MaintenanceTask>) => void;
-  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -486,12 +475,6 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
           </AnimatePresence>
         )}
       </motion.section>
-      <CompleteTaskModal
-        isOpen={showCompleteTaskModal}
-        onClose={handleCloseCompleteTaskModal}
-        onComplete={handleCompleteTask}
-        task={completingTask || { id: '', title: '', category: TaskCategory.Other, status: TaskStatus.Upcoming, creationDate: '' }}
-      />
     </motion.div>
   );
 };
