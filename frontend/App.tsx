@@ -393,7 +393,7 @@ const App: React.FC = () => {
                                 {activeView === 'timeline' ? (
                                   <TimelineView 
                                     vehicle={selectedVehicle} 
-                                    onCompleteTask={rest.handleToggleTaskStatus}
+                                    onCompleteTask={(taskId: string) => rest.handleToggleTaskStatus(taskId)}
                                     onEditTask={handleOpenEditTask}
                                     onDeleteTask={rest.handleDeleteTask}
                                     isFilterMenuOpen={isFilterMenuOpen}
