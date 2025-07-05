@@ -1,5 +1,5 @@
 import { Vehicle, MaintenanceTask } from '../types';
-import { API_CONFIG, buildApiUrl, logApiCall, logApiResponse, logApiError } from '../config/api';
+import { API_CONFIG, buildApiUrl, logApiCall, logApiResponse, logApiError, TASK_ENDPOINTS } from '../config/api';
 import { SessionService } from './sessionService';
 
 // API Response interfaces
@@ -212,6 +212,20 @@ class VehicleService {
       throw new Error('Health check failed');
     }
     return response.text();
+  }
+
+  /**
+   * Update a maintenance task for a vehicle
+   */
+  async updateTask(vehicleId: string, taskId: string, updateData: Partial<MaintenanceTask>): Promise<VehicleResponse> {
+    const sessionId = SessionService.getSessionId();
+    return this.makeRequest<VehicleResponse>(
+      `${TASK_ENDPOINTS.UPDATE(vehicleId, taskId)}?sessionId=${encodeURIComponent(sessionId)}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(updateData),
+      }
+    );
   }
 }
 
