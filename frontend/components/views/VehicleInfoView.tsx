@@ -10,6 +10,7 @@ import { TASK_STATUS_COLORS, TASK_IMPORTANCE_COLORS, DEFAULT_VEHICLE_IMAGE_URL }
 import { formatDate, getISODateString, isDateOverdue, daysUntil, timeAgo } from '../../utils/dateUtils';
 import { Button, IconButton, TextField, Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
 import AddTaskModal from '../modals/AddTaskModal';
+import FabButton from '../shared/FabButton';
 import { SiFord, SiToyota, SiHonda, SiBmw, SiMercedes, SiChevrolet, SiHyundai, SiKia, SiNissan, SiVolkswagen, SiAudi, SiMazda, SiJeep, SiSubaru, SiTesla, SiPorsche, SiJaguar, SiLandrover, SiMitsubishi, SiPeugeot, SiRenault, SiSuzuki, SiFiat, SiVolvo, SiCitroen, SiRam, SiMini, SiInfiniti, SiAcura, SiCadillac, SiChrysler, SiGmx, SiAlfaromeo, SiSmart, SiSaturn } from 'react-icons/si';
 import { IconType } from 'react-icons';
 
@@ -479,6 +480,15 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
           </AnimatePresence>
         )}
       </motion.section>
+      {/* Render FAB only if edit modal is not open */}
+      {!showEditTaskModal && (
+        <FabButton
+          onClick={onAddTask}
+          icon={<Icons.Plus className="w-6 h-6" />}
+          ariaLabel={t('addTask')}
+          position={{ bottom: 32, right: 32, zIndex: 1200 }}
+        />
+      )}
       {/* Edit Task Modal (used for both edit and complete) */}
       {showEditTaskModal && editingTask && (
         <AddTaskModal
