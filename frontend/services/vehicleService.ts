@@ -227,6 +227,19 @@ class VehicleService {
       }
     );
   }
+
+  /**
+   * Delete a maintenance task for a vehicle
+   */
+  async deleteTask(vehicleId: string, taskId: string): Promise<VehicleResponse> {
+    const sessionId = SessionService.getSessionId();
+    return this.makeRequest<VehicleResponse>(
+      `${TASK_ENDPOINTS.DELETE(vehicleId, taskId)}?sessionId=${encodeURIComponent(sessionId)}`,
+      {
+        method: 'DELETE',
+      }
+    );
+  }
 }
 
 // Export singleton instance
