@@ -253,7 +253,7 @@ const App: React.FC = () => {
   const handleOpenAddTaskForSelected = () => rest.handleOpenAddTaskModal();
   const handleCloseAddTask = () => rest.handleCloseAddTaskModal();
 
-  const handleErrorClose = () => rest.clearError();
+  const handleErrorClose = () => rest.setError(null);
 
   const handleOpenEditTask = (task: MaintenanceTask) => {
     if (selectedVehicleId) rest.handleOpenAddTaskModal(task);
@@ -396,7 +396,7 @@ const App: React.FC = () => {
                     </AnimatePresence>
                 </div>
               {/* FAB and Menu */}
-              {!isModalOpen && selectedVehicle && !rest.showAddTaskModal && (
+              {!isModalOpen && selectedVehicle && !rest.showAddTaskModal && activeView !== 'vehicles' && (
                 <FabButton
                   onClick={handleFabClick}
                   icon={<AddIcon />}
