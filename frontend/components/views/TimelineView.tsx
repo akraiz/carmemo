@@ -362,18 +362,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({
   try {
     // @ts-ignore
     taskStatusOverdueValue = TaskStatus?.Overdue;
-    console.log("DEBUG: TaskStatus.Overdue value", taskStatusOverdueValue);
   } catch (e) {}
-  console.log("DEBUG: vehicle prop", vehicle);
-  if (vehicle) {
-    console.log("DEBUG: maintenanceSchedule", vehicle.maintenanceSchedule);
-    if (vehicle.maintenanceSchedule) {
-      const overdueCount = vehicle.maintenanceSchedule.filter(t => t.status === taskStatusOverdueValue || t.status === "Overdue").length;
-      console.log("DEBUG: Overdue count", overdueCount);
-      console.log("DEBUG: All statuses", vehicle.maintenanceSchedule.map(t => t.status));
-    }
-  }
-  // DEBUG LOGGING END
   const { t } = useTranslation();
   const theme = useTheme();
   const toast = useToast();
