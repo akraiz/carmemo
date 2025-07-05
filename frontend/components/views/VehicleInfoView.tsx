@@ -75,7 +75,6 @@ export interface VehicleInfoViewProps {
   vehicle: Vehicle;
   onEditTask: (task: MaintenanceTask) => void;
   onDeleteTask: (taskId: string) => void;
-  onToggleTaskStatus: (taskId: string, newStatus?: TaskStatus, skipEdit?: boolean) => void;
   onAddTask: () => void;
   onEditVehicle: (vehicle: Vehicle) => void;
   onViewRecalls: () => void; 
@@ -136,7 +135,7 @@ const getVehicleImageUrl = (vehicle: Vehicle) => {
 
 // VehicleInfoView Component (moved from App.tsx)
 const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({ 
-    vehicle, onEditTask, onDeleteTask, onToggleTaskStatus, 
+    vehicle, onEditTask, onDeleteTask, 
     onAddTask, onEditVehicle, onViewRecalls, mainScrollRef,
     onUpdateVehiclePhoto
 }) => {
@@ -474,9 +473,6 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
                     {task.completedDate && <p className="text-xs text-green-400">{t('task.completedDateLabel')} {formatDate(task.completedDate, language)}</p>}
                     {task.notes && <p className="text-xs text-[#707070] mt-2 line-clamp-2" title={task.notes}>{task.notes}</p>}
                     <div className="mt-3 pt-3 border-t border-[#333333]/50 flex items-center justify-end space-x-2 rtl:space-x-reverse">
-                        <Button onClick={() => onToggleTaskStatus(task.id)} variant="contained" color={task.status === TaskStatus.Completed ? 'warning' : 'success'} size="small" sx={{ fontWeight: 'bold' }}>
-                            {task.status === TaskStatus.Completed ? t('task.markPending') : t('task.markDone')}
-                        </Button>
                         <Button onClick={() => onEditTask(task)} variant="outlined" color="primary" size="small" startIcon={<Icons.Pencil className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
                             {t('common.edit')}
                         </Button>

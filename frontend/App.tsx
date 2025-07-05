@@ -295,7 +295,6 @@ const App: React.FC = () => {
             vehicle={selectedVehicle}
             onEditTask={handleOpenEditTask}
             onDeleteTask={rest.handleDeleteTask}
-            onToggleTaskStatus={rest.handleToggleTaskStatus}
             onAddTask={handleOpenAddTaskForSelected}
             onEditVehicle={rest.handleOpenEditVehicleModal}
             onViewRecalls={handleViewSelectedVehicleRecalls}
