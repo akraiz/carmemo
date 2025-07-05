@@ -92,8 +92,8 @@ export class VehicleService {
         error: 'Invalid VIN: must be exactly 17 characters long'
       };
     }
-    // 2. Check for duplicate VIN only if VIN is provided and non-empty
-    if (vehicleData.vin) {
+    // 2. Check for duplicate VIN only if VIN is a valid 17-character string
+    if (typeof vehicleData.vin === 'string' && vehicleData.vin.trim().length === 17) {
       const existingVehicle = await Vehicle.findOne({ vin: vehicleData.vin, owner: vehicleData.sessionId || 'anonymous' });
       if (existingVehicle) {
         return {
@@ -418,17 +418,19 @@ export class VehicleService {
         }
         const owner = vehicleBeforeUpdate.owner;
 
-        // Check if VIN is already used by another vehicle for the same owner
-        const existingVehicle = await Vehicle.findOne({ 
-          vin: updateFields.vin, 
-          owner: owner,
-          _id: { $ne: id } 
-        });
-        if (existingVehicle) {
-          return {
-            success: false,
-            error: 'Vehicle with this VIN already exists'
-          };
+        // Check if VIN is already used by another vehicle for the same owner (only if VIN is valid)
+        if (typeof updateFields.vin === 'string' && updateFields.vin.trim().length === 17) {
+          const existingVehicle = await Vehicle.findOne({ 
+            vin: updateFields.vin, 
+            owner: owner,
+            _id: { $ne: id } 
+          });
+          if (existingVehicle) {
+            return {
+              success: false,
+              error: 'Vehicle with this VIN already exists'
+            };
+          }
         }
       }
 
