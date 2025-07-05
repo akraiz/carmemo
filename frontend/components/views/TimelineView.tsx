@@ -260,7 +260,7 @@ const OutlookStyleTaskCard: React.FC<{
                     : 'Completed')}
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 400, color: '#A0A0A0' }}>
-              {t(`taskCategories.${(task.category || '').replace(/\s+/g, '')}` as any) || task.category || 'Other'}
+              {t(`taskCategories.${(task.category || '').replace(/[-\s]+/g, '')}` as any, { defaultValue: task.category || 'Other' })}
             </Typography>
             {task.status === TaskStatus.Completed && task.cost !== undefined && (
               <Typography variant="body2" sx={{ fontWeight: 400, color: '#bbbbbb' }}>

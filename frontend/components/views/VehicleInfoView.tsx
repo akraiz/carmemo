@@ -478,9 +478,7 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
                         <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${TASK_STATUS_COLORS[task.status]?.pillBg || 'bg-[#404040]'} ${TASK_STATUS_COLORS[task.status]?.pillText || 'text-[#cfcfcf]'}`}>{t(`taskStatuses.${task.status || ''}` as any, { defaultValue: task.status })}</span>
                     </div>
                     <p className="font-normal text-[14px] text-[#B0B0B0] leading-[1.5] mb-1">
-                      {t(`taskCategories.${task.category || ''}` as any) !== `taskCategories.${task.category || ''}`
-                        ? t(`taskCategories.${task.category || ''}` as any)
-                        : (task.category || 'Other')}
+                      {t(`taskCategories.${(task.category || '').replace(/[-\s]+/g, '')}` as any, { defaultValue: task.category || 'Other' })}
                     </p>
                     {task.dueDate && (
                         <p className="text-xs text-[#a0a0a0]">
