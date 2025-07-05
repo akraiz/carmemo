@@ -9,7 +9,7 @@ import { Vehicle, MaintenanceTask, TaskCategory, TaskStatus, TaskImportance, Ext
 import { TASK_STATUS_COLORS, TASK_IMPORTANCE_COLORS, DEFAULT_VEHICLE_IMAGE_URL } from '../../constants';
 import { formatDate, getISODateString, isDateOverdue, daysUntil, timeAgo } from '../../utils/dateUtils';
 import { Button, IconButton, TextField, Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
-// Remove import CompleteTaskModal from '../modals/CompleteTaskModal';
+import CompleteTaskModal from '../modals/CompleteTaskModal';
 import { SiFord, SiToyota, SiHonda, SiBmw, SiMercedes, SiChevrolet, SiHyundai, SiKia, SiNissan, SiVolkswagen, SiAudi, SiMazda, SiJeep, SiSubaru, SiTesla, SiPorsche, SiJaguar, SiLandrover, SiMitsubishi, SiPeugeot, SiRenault, SiSuzuki, SiFiat, SiVolvo, SiCitroen, SiRam, SiMini, SiInfiniti, SiAcura, SiCadillac, SiChrysler, SiGmx, SiAlfaromeo, SiSmart, SiSaturn } from 'react-icons/si';
 import { IconType } from 'react-icons';
 
@@ -143,6 +143,7 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
   const exportDropdownRef = useRef<HTMLDivElement>(null);
   const { t, language } = useTranslation();
   const vehicleManager = useVehicleManager();
+  const [completingTask, setCompletingTask] = useState<MaintenanceTask | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -461,11 +462,14 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
                     {task.completedDate && <p className="text-xs text-green-400">{t('task.completedDateLabel')} {formatDate(task.completedDate, language)}</p>}
                     {task.notes && <p className="text-xs text-[#707070] mt-2 line-clamp-2" title={task.notes}>{task.notes}</p>}
                     <div className="mt-3 pt-3 border-t border-[#333333]/50 flex items-center justify-end space-x-2 rtl:space-x-reverse">
+                        <Button onClick={() => setCompletingTask(task)} variant="contained" color="success" size="small" startIcon={<Icons.CheckCircle className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
+                          {t('common.complete')}
+                        </Button>
                         <Button onClick={() => onEditTask(task)} variant="outlined" color="primary" size="small" startIcon={<Icons.Pencil className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
-                            {t('common.edit')}
+                          {t('common.edit')}
                         </Button>
                         <Button onClick={() => onDeleteTask(task.id)} variant="outlined" color="error" size="small" startIcon={<Icons.Trash className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
-                            {t('common.delete')}
+                          {t('common.delete')}
                         </Button>
                     </div>
                 </motion.div>
@@ -474,6 +478,18 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
           </AnimatePresence>
         )}
       </motion.section>
+      {/* Complete Task Modal */}
+      {completingTask && (
+        <CompleteTaskModal
+          isOpen={!!completingTask}
+          onClose={() => setCompletingTask(null)}
+          task={completingTask}
+          onComplete={(updated) => {
+            onEditTask({ ...completingTask, ...updated });
+            setCompletingTask(null);
+          }}
+        />
+      )}
     </motion.div>
   );
 };
