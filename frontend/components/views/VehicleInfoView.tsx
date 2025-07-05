@@ -463,7 +463,7 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
                     {task.notes && <p className="text-xs text-[#707070] mt-2 line-clamp-2" title={task.notes}>{task.notes}</p>}
                     <div className="mt-3 pt-3 border-t border-[#333333]/50 flex items-center justify-end space-x-2 rtl:space-x-reverse">
                         <Button onClick={() => onEditTask({ ...task, status: TaskStatus.Completed })} variant="contained" color="success" size="small" startIcon={<Icons.CheckCircle className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
-                          {t('common.complete')}
+                          {t('actions.complete')}
                         </Button>
                         <Button onClick={() => onEditTask(task)} variant="outlined" color="primary" size="small" startIcon={<Icons.Pencil className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
                           {t('common.edit')}
