@@ -108,7 +108,7 @@ export enum TaskCategory {
   BrakeService = "Brake Service",
   FluidCheck = "Fluid Check",
   BatteryService = "Battery Service",
-  EngineTuneUp = "Engine Tune-Up",
+  EngineTuneUp = "Engine",
   AirFilter = "Air Filter",
   WiperBlades = "Wiper Blades",
   Inspection = "Inspection",
