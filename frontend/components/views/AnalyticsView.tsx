@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Vehicle, MaintenanceTask, TaskStatus, TaskCategory } from '../../types';
 import { Icons } from '../Icon'; 
 import { useTranslation } from '../../hooks/useTranslation';
+import { CANONICAL_TASK_CATEGORIES } from '../../constants';
 import useVehicleManager from '../../hooks/useVehicleManager';
 import { formatDate } from '../../utils/dateUtils';
 
@@ -41,7 +42,7 @@ const AnalyticsView: React.FC = () => {
       .filter((t: MaintenanceTask) => t.cost && t.status === TaskStatus.Completed)
       .reduce((sum: number, t: MaintenanceTask) => sum + (t.cost || 0), 0);
     
-    const categoryBreakdown = Object.values(TaskCategory).map(category => ({
+    const categoryBreakdown = CANONICAL_TASK_CATEGORIES.map(category => ({
       category,
       count: allTasks.filter((t: MaintenanceTask) => t.category === category).length,
       completed: allTasks.filter((t: MaintenanceTask) => t.category === category && t.status === TaskStatus.Completed).length

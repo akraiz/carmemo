@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { MaintenanceTask, TaskCategory, TaskStatus, TaskImportance } from '../../types';
 import { getISODateString, addMonths } from '../../utils/dateUtils';
 import { useTranslation } from '../../hooks/useTranslation';
+import { CANONICAL_TASK_CATEGORIES } from '../../constants';
 import { Button, Dialog, DialogTitle, DialogContent, IconButton, Typography, useTheme, useMediaQuery } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -145,77 +146,11 @@ function getCategoryContext(category: TaskCategory | undefined) {
       description: 'Visibility',
       priority: 'low'
     },
-    [TaskCategory.Engine]: {
-      icon: '🔥',
-      color: '#FF5722',
-      description: 'Engine System',
-      priority: 'high'
-    },
-    [TaskCategory.EngineAirIntake]: {
-      icon: '💨',
-      color: '#795548',
-      description: 'Air Intake System',
-      priority: 'medium'
-    },
-    [TaskCategory.EngineIgnition]: {
-      icon: '⚡',
-      color: '#FFC107',
-      description: 'Ignition System',
-      priority: 'high'
-    },
-    [TaskCategory.EngineInspection]: {
-      icon: '🔧',
-      color: '#FF9800',
-      description: 'Engine Inspection',
-      priority: 'medium'
-    },
-    [TaskCategory.Brakes]: {
-      icon: '🛑',
-      color: '#F44336',
-      description: 'Brake System',
-      priority: 'high'
-    },
-    [TaskCategory.BrakesFluids]: {
-      icon: '🛑',
-      color: '#E91E63',
-      description: 'Brake Fluids',
-      priority: 'high'
-    },
     [TaskCategory.Tires]: {
       icon: '🛞',
       color: '#2196F3',
       description: 'Tire System',
       priority: 'medium'
-    },
-    [TaskCategory.TiresSuspension]: {
-      icon: '🛞',
-      color: '#3F51B5',
-      description: 'Tires & Suspension',
-      priority: 'medium'
-    },
-    [TaskCategory.Transmission]: {
-      icon: '⚙️',
-      color: '#FF9800',
-      description: 'Transmission System',
-      priority: 'high'
-    },
-    [TaskCategory.CoolingSystem]: {
-      icon: '🌡️',
-      color: '#FF5722',
-      description: 'Cooling System',
-      priority: 'high'
-    },
-    [TaskCategory.Electrical]: {
-      icon: '⚡',
-      color: '#FFC107',
-      description: 'Electrical System',
-      priority: 'medium'
-    },
-    [TaskCategory.Safety]: {
-      icon: '🛡️',
-      color: '#F44336',
-      description: 'Safety System',
-      priority: 'high'
     }
   };
 
@@ -451,7 +386,7 @@ const ModernTaskForm = ({ task, onSave, onClose, currentMileage }: { task: Maint
           onChange={handleChange}
           className="w-full px-3 py-2 bg-[#2a2a2a] border border-[#404040] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#F7C843] focus:border-transparent"
         >
-          {Object.values(TaskCategory).map(category => (
+          {CANONICAL_TASK_CATEGORIES.map(category => (
             <option key={category} value={category}>
               {t(`taskCategories.${(category || '').replace(/\s+/g, '')}` as any) || category || 'Other'}
             </option>

@@ -37,14 +37,137 @@ function normalizeCategory(str: string): string {
 
 const canonicalCategories = Object.values(TaskCategory);
 
+// Smart category consolidation system
+interface CategoryHierarchy {
+  parent: string;
+  children: string[];
+  synonyms: string[];
+  keywords: string[];
+}
+
+const CATEGORY_HIERARCHY: Record<string, CategoryHierarchy> = {
+  'Engine': {
+    parent: 'Engine',
+    children: ['Engine/Air Intake', 'Engine/Ignition', 'Engine/Inspection', 'Engine Tune-Up'],
+    synonyms: ['engine', 'motor', 'powerplant'],
+    keywords: ['engine', 'tune', 'ignition', 'air intake', 'inspection']
+  },
+  'Brakes': {
+    parent: 'Brakes',
+    children: ['Brake Service', 'Brakes/Fluids'],
+    synonyms: ['brake', 'braking', 'stopping'],
+    keywords: ['brake', 'brakes', 'fluid']
+  },
+  'Tires': {
+    parent: 'Tires',
+    children: ['Tire Rotation', 'Tires/Suspension', 'Tires/Wheels', 'Wheels/Tires', 'Wheels & Tires'],
+    synonyms: ['tire', 'tyre', 'wheel', 'wheels'],
+    keywords: ['tire', 'wheel', 'suspension']
+  },
+  'Transmission': {
+    parent: 'Transmission',
+    children: ['Transmission/Fluids', 'Transmission/Inspection'],
+    synonyms: ['transmission', 'gearbox', 'transaxle'],
+    keywords: ['transmission', 'fluid', 'inspection']
+  },
+  'Drivetrain': {
+    parent: 'Drivetrain',
+    children: ['Drivetrain/Inspection'],
+    synonyms: ['drivetrain', 'drive train', 'powertrain'],
+    keywords: ['drivetrain', 'inspection']
+  },
+  'Suspension': {
+    parent: 'Suspension/Steering',
+    children: ['Suspension/Steering/Inspection'],
+    synonyms: ['suspension', 'steering', 'chassis'],
+    keywords: ['suspension', 'steering', 'inspection']
+  },
+  'Cooling': {
+    parent: 'Cooling System',
+    children: ['Cooling'],
+    synonyms: ['cooling', 'radiator', 'thermostat'],
+    keywords: ['cooling', 'radiator', 'thermostat']
+  },
+  'Electrical': {
+    parent: 'Electrical',
+    children: ['Electrical/Inspection'],
+    synonyms: ['electrical', 'electric', 'battery'],
+    keywords: ['electrical', 'battery', 'inspection']
+  },
+  'Fluids': {
+    parent: 'Fluid Check',
+    children: ['Fluids', 'Fluids/Inspection'],
+    synonyms: ['fluid', 'lubricant', 'oil'],
+    keywords: ['fluid', 'oil', 'lubricant']
+  },
+  'Filters': {
+    parent: 'Air Filter',
+    children: ['Filters'],
+    synonyms: ['filter', 'air filter', 'cabin filter'],
+    keywords: ['filter', 'air']
+  },
+  'Inspection': {
+    parent: 'Inspection',
+    children: ['General Inspection'],
+    synonyms: ['inspection', 'check', 'examination'],
+    keywords: ['inspection', 'check', 'examine']
+  }
+};
+
+// Smart category consolidation function
+function consolidateCategory(category: string): string {
+  const normalized = normalizeCategory(category);
+  
+  // First, try exact matches with hierarchy
+  for (const [parent, hierarchy] of Object.entries(CATEGORY_HIERARCHY)) {
+    // Check if the category is a child of this parent
+    if (hierarchy.children.some(child => normalizeCategory(child) === normalized)) {
+      return parent;
+    }
+    
+    // Check if the category matches the parent
+    if (normalizeCategory(parent) === normalized) {
+      return parent;
+    }
+    
+    // Check synonyms
+    if (hierarchy.synonyms.some(synonym => normalizeCategory(synonym) === normalized)) {
+      return parent;
+    }
+    
+    // Check keywords
+    if (hierarchy.keywords.some(keyword => normalized.includes(normalizeCategory(keyword)))) {
+      return parent;
+    }
+  }
+  
+  // If no consolidation found, return the original category
+  return category;
+}
+
+// Enhanced category mapping with consolidation
 export function mapCategoryToTaskCategory(baselineCategory: string): TaskCategory {
   if (!baselineCategory) return TaskCategory.Other;
-  const normalized = normalizeCategory(baselineCategory);
-  // 1. Exact match
+  
+  // First, try to consolidate the category
+  const consolidatedCategory = consolidateCategory(baselineCategory);
+  const normalized = normalizeCategory(consolidatedCategory);
+  
+  // 1. Exact match with consolidated categories
   for (const cat of canonicalCategories) {
     if (normalizeCategory(cat) === normalized) return cat as TaskCategory;
   }
-  // 2. Fuzzy match (Levenshtein distance <= 2)
+  
+  // 2. Check if consolidated category maps to a parent category
+  for (const [parent, hierarchy] of Object.entries(CATEGORY_HIERARCHY)) {
+    if (normalizeCategory(parent) === normalized) {
+      // Map to the most appropriate TaskCategory
+      const parentCategory = getParentTaskCategory(parent);
+      if (parentCategory) return parentCategory;
+    }
+  }
+  
+  // 3. Fuzzy match (Levenshtein distance <= 2)
   let minDist = Infinity;
   let closest: string | null = null;
   for (const cat of canonicalCategories) {
@@ -55,8 +178,9 @@ export function mapCategoryToTaskCategory(baselineCategory: string): TaskCategor
     }
   }
   if (minDist <= 2 && closest) return closest as TaskCategory;
-  // 3. Strong substring/synonym match (only backend categories)
-  const synonymMap: Record<string, TaskCategory> = {
+  
+  // 4. Enhanced synonym mapping with consolidation
+  const enhancedSynonymMap: Record<string, TaskCategory> = {
     oil: TaskCategory.OilChange,
     tire: TaskCategory.TireRotation,
     tires: TaskCategory.Tires,
@@ -67,12 +191,20 @@ export function mapCategoryToTaskCategory(baselineCategory: string): TaskCategor
     inspect: TaskCategory.Inspection,
     wiper: TaskCategory.WiperBlades,
     tune: TaskCategory.EngineTuneUp,
+    engine: TaskCategory.EngineTuneUp, // Map engine-related to Engine Tune-Up
+    transmission: TaskCategory.Other, // Will be handled by consolidation
+    drivetrain: TaskCategory.Other, // Will be handled by consolidation
+    suspension: TaskCategory.Other, // Will be handled by consolidation
+    cooling: TaskCategory.Other, // Will be handled by consolidation
+    electrical: TaskCategory.BatteryService, // Map to Battery Service as closest
     other: TaskCategory.Other,
   };
-  for (const key in synonymMap) {
-    if (normalized.includes(key)) return synonymMap[key];
+  
+  for (const key in enhancedSynonymMap) {
+    if (normalized.includes(key)) return enhancedSynonymMap[key];
   }
-  // 4. Log unmapped category for admin review
+  
+  // 5. Log unmapped category for admin review
   if (process.env.NODE_ENV !== 'production') {
     try {
       const scriptPath = path.join(__dirname, '../../../scripts/auto_add_category.js');
@@ -86,7 +218,27 @@ export function mapCategoryToTaskCategory(baselineCategory: string): TaskCategor
   } else {
     console.warn(`[Category Mapping] Unmapped category: '${baselineCategory}'. Consider adding to TaskCategory enum and translations.`);
   }
+  
   return TaskCategory.Other;
+}
+
+// Helper function to get the appropriate TaskCategory for a parent category
+function getParentTaskCategory(parent: string): TaskCategory | null {
+  const parentMap: Record<string, TaskCategory> = {
+    'Engine': TaskCategory.EngineTuneUp,
+    'Brakes': TaskCategory.BrakeService,
+    'Tires': TaskCategory.TireRotation,
+    'Transmission': TaskCategory.Other, // Keep as Other for now
+    'Drivetrain': TaskCategory.Other, // Keep as Other for now
+    'Suspension': TaskCategory.Other, // Keep as Other for now
+    'Cooling': TaskCategory.Other, // Keep as Other for now
+    'Electrical': TaskCategory.BatteryService, // Map to Battery Service as closest
+    'Fluids': TaskCategory.FluidCheck,
+    'Filters': TaskCategory.AirFilter,
+    'Inspection': TaskCategory.Inspection,
+  };
+  
+  return parentMap[parent] || null;
 }
 
 export function normalizeKey(make: string, model: string, year: number): string {

@@ -21,8 +21,23 @@ export const TASK_IMPORTANCE_COLORS: Record<TaskImportance, string> = {
   [TaskImportance.Optional]:    "border-s-4 border-sky-500", // Or a neutral like border-gray-500
 };
 
+// Canonical categories that match the backend TaskCategory enum
+export const CANONICAL_TASK_CATEGORIES: TaskCategory[] = [
+  TaskCategory.OilChange,
+  TaskCategory.TireRotation,
+  TaskCategory.BrakeService,
+  TaskCategory.FluidCheck,
+  TaskCategory.BatteryService,
+  TaskCategory.EngineTuneUp,
+  TaskCategory.AirFilter,
+  TaskCategory.WiperBlades,
+  TaskCategory.Inspection,
+  TaskCategory.Tires,
+  TaskCategory.Other,
+];
 
-export const TASK_CATEGORIES: TaskCategory[] = Object.values(TaskCategory);
+// Use canonical categories for dropdowns and UI elements
+export const TASK_CATEGORIES: TaskCategory[] = CANONICAL_TASK_CATEGORIES;
 export const TASK_IMPORTANCES: TaskImportance[] = Object.values(TaskImportance);
 
 export const MOCK_MANUFACTURER_SCHEDULES: Record<string, { intervalMileage: number; intervalMonths: number; task: Partial<MaintenanceTask> }[]> = {

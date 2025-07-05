@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Icons } from '../Icon';
 import { useTranslation } from '../../hooks/useTranslation';
 import { MaintenanceTask, TaskCategory } from '../../types';
+import { CANONICAL_TASK_CATEGORIES } from '../../constants';
 import { Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 interface OcrStepModalProps {
@@ -149,7 +150,7 @@ const OcrStepModal: React.FC<OcrStepModalProps> = ({ isOpen, onClose, onSave }) 
                   onChange={handleEditField}
                   label={t('Category')}
                 >
-                  {Object.values(TaskCategory).map(cat => (
+                  {CANONICAL_TASK_CATEGORIES.map(cat => (
                     <MenuItem key={cat} value={cat}>
                       {t(`taskCategories.${(cat || '').replace(/\s+/g, '')}` as any) || cat || 'Other'}
                     </MenuItem>
