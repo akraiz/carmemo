@@ -105,6 +105,8 @@ const App: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(false);
 
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+  const [recallsForModal, setRecallsForModal] = useState<RecallInfo[]>([]);
+  const [showRecallsModal, setShowRecallsModal] = useState(false);
 
   console.log(`[HOOK ORDER] #${hookIndex++}: useEffect sidebar tracking`);
   useEffect(() => {}, [isSidebarOpen, language]);
@@ -260,7 +262,10 @@ const App: React.FC = () => {
   };
 
   const handleViewSelectedVehicleRecalls = () => {
-    if (selectedVehicle) rest.handleOpenViewRecallsModal();
+    if (selectedVehicle) {
+      setRecallsForModal(selectedVehicle.recalls || []);
+      setShowRecallsModal(true);
+    }
   };
 
   const handleFabClick = () => setAddTaskMode('manual');
@@ -289,7 +294,7 @@ const App: React.FC = () => {
             onDeleteTask={rest.handleDeleteTask}
             onAddTask={handleOpenAddTaskForSelected}
             onEditVehicle={rest.handleOpenEditVehicleModal}
-            onViewRecalls={handleViewSelectedVehicleRecalls}
+            onViewRecalls={handleViewRecalls}
             mainScrollRef={mainContentRef as React.RefObject<HTMLElement>}
             onUpdateVehiclePhoto={rest.handleUpdateVehiclePhoto}
           />
@@ -325,6 +330,11 @@ const App: React.FC = () => {
     await rest.handleAddVehicle(vehicleData);
     const latestVehicle = vehicles[vehicles.length - 1];
     return latestVehicle?.id;
+  };
+
+  const handleViewRecalls = (recalls: RecallInfo[]) => {
+    setRecallsForModal(recalls);
+    setShowRecallsModal(true);
   };
 
   return (
@@ -457,6 +467,14 @@ const App: React.FC = () => {
                     recalls={selectedVehicle.recalls || []}
                     vehicleNickname={selectedVehicle.nickname || `${selectedVehicle.make} ${selectedVehicle.model}`}
                 />
+            )}
+            {showRecallsModal && selectedVehicle && (
+              <ViewRecallsModal
+                isOpen={showRecallsModal}
+                onClose={() => setShowRecallsModal(false)}
+                recalls={recallsForModal}
+                vehicleNickname={selectedVehicle.nickname || `${selectedVehicle.make} ${selectedVehicle.model}`}
+              />
             )}
           </AnimatePresence>
           {addTaskMode && (
