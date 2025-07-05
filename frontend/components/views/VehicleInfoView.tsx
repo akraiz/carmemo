@@ -13,6 +13,7 @@ import AddTaskModal from '../modals/AddTaskModal';
 import FabButton from '../shared/FabButton';
 import { SiFord, SiToyota, SiHonda, SiBmw, SiMercedes, SiChevrolet, SiHyundai, SiKia, SiNissan, SiVolkswagen, SiAudi, SiMazda, SiJeep, SiSubaru, SiTesla, SiPorsche, SiJaguar, SiLandrover, SiMitsubishi, SiPeugeot, SiRenault, SiSuzuki, SiFiat, SiVolvo, SiCitroen, SiRam, SiMini, SiInfiniti, SiAcura, SiCadillac, SiChrysler, SiGmx, SiAlfaromeo, SiSmart, SiSaturn } from 'react-icons/si';
 import { IconType } from 'react-icons';
+import { buildApiUrl } from '../../config/api';
 
 // Animation Variants (moved from App.tsx)
 const sectionVariants = {
@@ -155,7 +156,7 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
     }
     setRecallsLoading(true);
     setRecallsError(null);
-    fetch(`/api/recall/${vehicle.vin}`)
+    fetch(buildApiUrl(`/recall/${vehicle.vin}`))
       .then(async (res) => {
         if (!res.ok) throw new Error('Failed to fetch recalls');
         return res.json();
