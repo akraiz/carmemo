@@ -144,8 +144,6 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
   const exportDropdownRef = useRef<HTMLDivElement>(null);
   const { t, language } = useTranslation();
   const vehicleManager = useVehicleManager();
-  const [showEditTaskModal, setShowEditTaskModal] = useState(false);
-  const [editingTask, setEditingTask] = useState<MaintenanceTask | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -464,10 +462,10 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
                     {task.completedDate && <p className="text-xs text-green-400">{t('task.completedDateLabel')} {formatDate(task.completedDate, language)}</p>}
                     {task.notes && <p className="text-xs text-[#707070] mt-2 line-clamp-2" title={task.notes}>{task.notes}</p>}
                     <div className="mt-3 pt-3 border-t border-[#333333]/50 flex items-center justify-end space-x-2 rtl:space-x-reverse">
-                        <Button onClick={() => { setEditingTask({ ...task, status: TaskStatus.Completed }); setShowEditTaskModal(true); }} variant="contained" color="success" size="small" startIcon={<Icons.CheckCircle className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
+                        <Button onClick={() => onEditTask({ ...task, status: TaskStatus.Completed })} variant="contained" color="success" size="small" startIcon={<Icons.CheckCircle className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
                           {t('common.complete')}
                         </Button>
-                        <Button onClick={() => { setEditingTask(task); setShowEditTaskModal(true); }} variant="outlined" color="primary" size="small" startIcon={<Icons.Pencil className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
+                        <Button onClick={() => onEditTask(task)} variant="outlined" color="primary" size="small" startIcon={<Icons.Pencil className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
                           {t('common.edit')}
                         </Button>
                         <Button onClick={() => onDeleteTask(task.id)} variant="outlined" color="error" size="small" startIcon={<Icons.Trash className="w-3 h-3" />} sx={{ fontWeight: 'bold' }}>
@@ -480,17 +478,6 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
           </AnimatePresence>
         )}
       </motion.section>
-      {/* Edit Task Modal (used for both edit and complete) */}
-      {showEditTaskModal && editingTask && (
-        <AddTaskModal
-          isOpen={showEditTaskModal}
-          onClose={() => { setShowEditTaskModal(false); setEditingTask(null); }}
-          onSaveTask={(updatedTask) => { onEditTask(updatedTask); setShowEditTaskModal(false); setEditingTask(null); }}
-          vehicleId={vehicle.id}
-          task={editingTask}
-          currentMileage={vehicle.currentMileage}
-        />
-      )}
     </motion.div>
   );
 };
