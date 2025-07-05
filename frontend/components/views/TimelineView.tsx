@@ -539,6 +539,14 @@ const TimelineView: React.FC<TimelineViewProps> = ({
     }
   }, [headerRef.current, containerRef.current]);
 
+  // Replace the overdue banner logic to match the visual indicator (solid point) logic
+  // Show the banner if any task is overdue by date (not completed and dueDate in the past)
+  const overdueTasks = vehicle && vehicle.maintenanceSchedule
+    ? vehicle.maintenanceSchedule.filter(
+        t => t.status !== TaskStatus.Completed && t.dueDate && isDateOverdue(t.dueDate)
+      )
+    : [];
+
   return (
     <Box ref={containerRef} sx={{ p: 2, pb: isMobile ? '72px' : '80px', backgroundColor: '#121212', minHeight: '100%', position: 'relative' }}>
       <Box
@@ -602,11 +610,11 @@ const TimelineView: React.FC<TimelineViewProps> = ({
         </Box>
       </Box>
 
-      {activeTab === 'upcoming' && vehicle && vehicle.maintenanceSchedule && vehicle.maintenanceSchedule.some(t => t.status === TaskStatus.Overdue) && (
+      {activeTab === 'upcoming' && vehicle && vehicle.maintenanceSchedule && overdueTasks.length > 0 && (
         <Box sx={{ mb: 2 }}>
           <OverdueAlertBanner
             vehicleName={vehicle.nickname || `${vehicle.make} ${vehicle.model}`}
-            overdueCount={vehicle.maintenanceSchedule.filter(t => t.status === TaskStatus.Overdue).length}
+            overdueCount={overdueTasks.length}
             onViewOverdue={() => setIsUpcomingOverdueFiltered(true)}
             isFiltered={isUpcomingOverdueFiltered}
             onClearFilter={() => setIsUpcomingOverdueFiltered(false)}
