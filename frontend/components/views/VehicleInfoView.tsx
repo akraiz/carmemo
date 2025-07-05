@@ -11,7 +11,7 @@ import { TASK_STATUS_COLORS, TASK_IMPORTANCE_COLORS, DEFAULT_VEHICLE_IMAGE_URL }
 import { formatDate, getISODateString, isDateOverdue, daysUntil, timeAgo } from '../../utils/dateUtils';
 import { Button, IconButton, TextField, Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
 import CompleteTaskModal from '../modals/CompleteTaskModal';
-import { SiFord, SiToyota, SiHonda, SiBmw, SiMercedes, SiChevrolet, SiHyundai, SiKia, SiNissan, SiVolkswagen, SiAudi, SiMazda, SiJeep, SiSubaru, SiTesla, SiPorsche, SiJaguar, SiLandrover, SiMitsubishi, SiPeugeot, SiRenault, SiSuzuki, SiFiat, SiVolvo, SiCitroen, SiRam, SiMini, SiInfiniti, SiAcura, SiCadillac, SiChrysler, SiGmx, SiAlfaromeo, SiSmart, SiSaturn, SiSuzuki as SiDefaultCar } from 'react-icons/si';
+import { SiFord, SiToyota, SiHonda, SiBmw, SiMercedes, SiChevrolet, SiHyundai, SiKia, SiNissan, SiVolkswagen, SiAudi, SiMazda, SiJeep, SiSubaru, SiTesla, SiPorsche, SiJaguar, SiLandrover, SiMitsubishi, SiPeugeot, SiRenault, SiSuzuki, SiFiat, SiVolvo, SiCitroen, SiRam, SiMini, SiInfiniti, SiAcura, SiCadillac, SiChrysler, SiGmx, SiAlfaromeo, SiSmart, SiSaturn } from 'react-icons/si';
 import { IconType } from 'react-icons';
 
 // Animation Variants (moved from App.tsx)
@@ -124,9 +124,9 @@ const makeIconMap: Record<string, IconType> = {
 };
 
 const getBrandIcon = (make?: string) => {
-  if (!make) return SiDefaultCar;
+  if (!make) return Icons.Car;
   const key = make.toLowerCase().replace(/[^a-z]/g, '');
-  return makeIconMap[key] || SiDefaultCar;
+  return makeIconMap[key] || Icons.Car;
 };
 
 const getVehicleImageUrl = (vehicle: Vehicle) => {

@@ -5,7 +5,7 @@ import { Icons } from './Icon';
 import { DEFAULT_VEHICLE_IMAGE_URL } from '../constants';
 import { useTranslation } from '../hooks/useTranslation';
 import { IconButton } from '@mui/material';
-import { SiFord, SiToyota, SiHonda, SiBmw, SiMercedes, SiChevrolet, SiHyundai, SiKia, SiNissan, SiVolkswagen, SiAudi, SiMazda, SiJeep, SiSubaru, SiTesla, SiPorsche, SiJaguar, SiLandrover, SiMitsubishi, SiPeugeot, SiRenault, SiSuzuki, SiFiat, SiVolvo, SiCitroen, SiRam, SiMini, SiInfiniti, SiAcura, SiCadillac, SiChrysler, SiGmx, SiAlfaromeo, SiSmart, SiSaturn, SiSuzuki as SiDefaultCar } from 'react-icons/si';
+import { SiFord, SiToyota, SiHonda, SiBmw, SiMercedes, SiChevrolet, SiHyundai, SiKia, SiNissan, SiVolkswagen, SiAudi, SiMazda, SiJeep, SiSubaru, SiTesla, SiPorsche, SiJaguar, SiLandrover, SiMitsubishi, SiPeugeot, SiRenault, SiSuzuki, SiFiat, SiVolvo, SiCitroen, SiRam, SiMini, SiInfiniti, SiAcura, SiCadillac, SiChrysler, SiGmx, SiAlfaromeo, SiSmart, SiSaturn } from 'react-icons/si';
 import { IconType } from 'react-icons';
 
 
@@ -69,9 +69,9 @@ const makeIconMap: Record<string, IconType> = {
 };
 
 const getBrandIcon = (make?: string) => {
-  if (!make) return SiDefaultCar;
+  if (!make) return Icons.Car;
   const key = make.toLowerCase().replace(/[^a-z]/g, '');
-  return makeIconMap[key] || SiDefaultCar;
+  return makeIconMap[key] || Icons.Car;
 };
 
 const getVehicleImageUrl = (vehicle: Vehicle) => {
