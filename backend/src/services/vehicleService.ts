@@ -408,9 +408,20 @@ export class VehicleService {
           };
         }
 
-        // Check if VIN is already used by another vehicle
+        // Get the owner/sessionId of the vehicle being updated
+        const vehicleBeforeUpdate = await Vehicle.findById(id);
+        if (!vehicleBeforeUpdate) {
+          return {
+            success: false,
+            error: 'Vehicle not found'
+          };
+        }
+        const owner = vehicleBeforeUpdate.owner;
+
+        // Check if VIN is already used by another vehicle for the same owner
         const existingVehicle = await Vehicle.findOne({ 
           vin: updateFields.vin, 
+          owner: owner,
           _id: { $ne: id } 
         });
         if (existingVehicle) {
