@@ -7,7 +7,8 @@ import VehicleSidebar from './components/VehicleSidebar';
 import AddVehicleModal from './components/modals/AddVehicleModal';
 import AddTaskModal from './components/modals/AddTaskModal';
 import EditVehicleModal from './components/modals/EditVehicleModal';
-import ViewRecallsModal from './components/modals/ViewRecallsModal'; 
+import ViewRecallsModal from './components/modals/ViewRecallsModal';
+import CompleteTaskModal from './components/modals/CompleteTaskModal'; 
 import ErrorMessage from './components/shared/ErrorMessage';
 import NoVehicleSelected from './components/shared/NoVehicleSelected';
 import SelectVehiclePlaceholder from './components/shared/SelectVehiclePlaceholder';
@@ -393,7 +394,7 @@ const App: React.FC = () => {
                                 {activeView === 'timeline' ? (
                                   <TimelineView 
                                     vehicle={selectedVehicle} 
-                                    onCompleteTask={(taskId: string) => rest.handleToggleTaskStatus(taskId)}
+                                    onCompleteTask={handleOpenCompleteTaskModal}
                                     onEditTask={handleOpenEditTask}
                                     onDeleteTask={rest.handleDeleteTask}
                                     isFilterMenuOpen={isFilterMenuOpen}
@@ -467,6 +468,14 @@ const App: React.FC = () => {
                     }}
                     recalls={selectedVehicle.recalls || []}
                     vehicleNickname={selectedVehicle.nickname || `${selectedVehicle.make} ${selectedVehicle.model}`}
+                />
+            )}
+            {rest.showCompleteTaskModal && rest.completingTask && (
+                <CompleteTaskModal
+                    isOpen={rest.showCompleteTaskModal}
+                    onClose={rest.handleCloseCompleteTaskModal}
+                    onComplete={rest.handleCompleteTask}
+                    task={rest.completingTask}
                 />
             )}
           </AnimatePresence>
