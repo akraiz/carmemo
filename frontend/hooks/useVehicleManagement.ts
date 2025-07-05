@@ -929,5 +929,8 @@ export default function useVehicleManagement() {
     refreshVehicles,
     refreshVehicleData,
     handleOpenAddVehicleModal: () => setShowAddVehicleModal(true),
+    handleCloseAddVehicleModal: () => setShowAddVehicleModal(false),
+    handleCloseEditVehicleModal: () => setShowEditVehicleModal(false),
+    handleCloseAddTaskModal: () => setShowAddTaskModal(false),
   };
 }; 
