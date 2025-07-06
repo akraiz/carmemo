@@ -97,7 +97,7 @@ const VehicleSidebar: React.FC<VehicleSidebarProps> = ({ vehicles, selectedVehic
       {/* Separator above logo */}
       <div className="w-full border-t border-[#333333] my-4" />
       {/* Logo section - move to very bottom above nav bar */}
-      <div className="flex justify-center items-center mb-2">
+      <div className="flex justify-center items-center mb-2 py-1.5 px-3">
         <img
           src="/levers-logo.png"
           alt="Levers Logo"
