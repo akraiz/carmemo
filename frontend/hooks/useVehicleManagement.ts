@@ -294,7 +294,7 @@ export default function useVehicleManagement() {
           setShowAddVehicleModal(false);
           return backendVehicle.id;
         } else {
-          throw new Error(response.error || 'Failed to create vehicle');
+          throw new Error(response.error || response.message || 'Failed to create vehicle');
         }
       } else {
         console.log('[ADD VEHICLE] Using localStorage mode');
@@ -346,11 +346,10 @@ export default function useVehicleManagement() {
         setShowAddVehicleModal(false);
         return newVehicle.id;
       }
-    } catch (error) {
-      console.error("Error adding vehicle:", error);
+    } catch (error: any) {
       setIsLoading(false);
-      setError("errors.addVehicleFailed");
-      return undefined;
+      setError(error.message || "errors.addVehicleFailed");
+      throw error;
     }
   };
 
