@@ -413,8 +413,8 @@ const TimelineView: React.FC<TimelineViewProps> = ({
       ? (vehicle?.maintenanceSchedule || []).filter(t => t.status !== TaskStatus.Completed) 
       : (vehicle?.maintenanceSchedule || []).filter(t => t.status === TaskStatus.Completed);
       
-    const tasksToSourceCategories = isUpcomingOverdueFiltered 
-      ? baseTasks.filter(t => t.status === TaskStatus.Overdue) 
+    const tasksToSourceCategories = isUpcomingOverdueFiltered
+      ? baseTasks.filter(t => t.dueDate && isDateOverdue(t.dueDate))
       : baseTasks;
 
     const categories = [...new Set(tasksToSourceCategories.map(t => t.category))];
