@@ -81,6 +81,8 @@ const VehicleSidebar: React.FC<VehicleSidebarProps> = ({ vehicles, selectedVehic
           ))}
         </AnimatePresence>
       </div>
+      {/* Top separator above Add Vehicle button */}
+      <div className="w-full border-t border-[#F7C843] my-4" />
       <Button
         variant="contained"
         color="primary"
@@ -89,11 +91,23 @@ const VehicleSidebar: React.FC<VehicleSidebarProps> = ({ vehicles, selectedVehic
         startIcon={<Icons.PlusCircle className="w-5 h-5 me-2 rtl:ms-2 rtl:me-0" strokeWidth={2.5}/>} 
         onClick={onAddVehicle}
         aria-label={t('sidebar.addVehicleAria')}
-        sx={{ mt: 'auto', fontWeight: 'bold', borderRadius: 2 }}
+        sx={{ fontWeight: 'bold', borderRadius: 2 }}
       >
         {t('sidebar.addVehicleButton')}
       </Button>
       <p className="text-xs text-[#F7C843] mt-1 text-center">{t('sidebar.addVehicleHint')}</p>
+      {/* Separator above logo */}
+      <div className="w-full border-t border-[#F7C843] my-4" />
+      {/* Logo section */}
+      <div className="flex justify-center items-center my-4">
+        <img
+          src="/levers-logo.png"
+          alt="Levers Logo"
+          style={{ maxWidth: 180, maxHeight: 60, objectFit: 'contain', filter: 'drop-shadow(0 0 12px #fff8)' }}
+        />
+      </div>
+      {/* Bottom separator below logo */}
+      <div className="w-full border-t border-[#F7C843] my-4" />
     </>
   );
 
