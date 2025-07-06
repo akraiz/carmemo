@@ -4,6 +4,7 @@ import { Vehicle, MaintenanceTask, TaskStatus, TaskCategory } from '../../types'
 import { Icons } from '../Icon'; 
 import { useTranslation } from '../../hooks/useTranslation';
 import { CANONICAL_TASK_CATEGORIES } from '../../constants';
+import { isDateOverdue } from '../../utils/dateUtils';
 
 interface AnalyticsViewProps {
   vehicle: Vehicle | null;
@@ -18,7 +19,10 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
     const allTasks = vehicle.maintenanceSchedule || [];
     const totalTasks = allTasks.length;
     const completedTasks = allTasks.filter((t: MaintenanceTask) => t.status === TaskStatus.Completed).length;
-    const overdueTasks = allTasks.filter((t: MaintenanceTask) => t.status === TaskStatus.Overdue).length;
+    // Updated overdue logic to match TimelineView
+    const overdueTasks = allTasks.filter(
+      (t: MaintenanceTask) => t.status !== TaskStatus.Completed && t.dueDate && isDateOverdue(t.dueDate)
+    ).length;
     const upcomingTasks = allTasks.filter((t: MaintenanceTask) => t.status === TaskStatus.Upcoming).length;
     
     const totalCost = allTasks
