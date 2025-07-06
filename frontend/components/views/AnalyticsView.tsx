@@ -270,10 +270,10 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
         </h3>
         <div className="flex flex-col gap-2">
           {analytics.categoryBreakdown.map((cat, idx) => (
-            <div key={cat.category} className="flex items-center justify-between text-xs md:text-sm">
-              <span className="text-[#cfcfcf]">{t(`taskCategories.${(cat.category || '').replace(/[-\s]+/g, '')}`, { defaultValue: cat.category })}</span>
-              <span className="font-bold text-[#F7C843]">{cat.count}</span>
-              <span className="text-green-400">{cat.completed} {t('analytics.completed')}</span>
+            <div key={cat.category} className="flex items-center text-xs md:text-sm">
+              <span className="text-[#cfcfcf] flex-1">{t(`taskCategories.${(cat.category || '').replace(/[-\s]+/g, '')}`, { defaultValue: cat.category })}</span>
+              <span className="font-bold text-[#F7C843] text-center" style={{ minWidth: 24, display: 'inline-block' }}>{cat.count}</span>
+              <span className="text-green-400 flex-1 text-right">{cat.completed} {t('analytics.completed')}</span>
             </div>
           ))}
         </div>
