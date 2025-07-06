@@ -170,6 +170,7 @@ const useVehicleManager = () => {
     } catch (error) {
       console.error("Error adding vehicle:", error);
       setState(prev => ({ ...prev, isLoading: false, error: "errors.addVehicleFailed" }));
+      throw error; // Ensure error is propagated to the modal for toast
     }
   };
 
