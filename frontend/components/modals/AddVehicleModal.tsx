@@ -9,6 +9,7 @@ import { TextField, Box } from '@mui/material';
 import Button from '../shared/Button';
 import { buildApiUrl } from '../../config/api';
 import { SessionService } from '../../services/sessionService';
+import { useToast } from '../../contexts/ToastContext';
 
 interface AddVehicleModalProps {
   isOpen: boolean;
@@ -95,6 +96,7 @@ const backdropVariants = {
 const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAddVehicle }) => {
   // Move all hooks to the top level
   const { t, language } = useTranslation();
+  const { showGenericError } = useToast();
   const [wizardStep, setWizardStep] = useState(0);
   const [wizardData, setWizardData] = useState<WizardData>(initialWizardData);
   const [isDecodingVin, setIsDecodingVin] = useState(false);
@@ -344,8 +346,12 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     const cleanedVehicleData = Object.fromEntries(
       Object.entries(finalVehicleData).filter(([_, v]) => v !== "")
     );
-    const vehicleId = await onAddVehicle(cleanedVehicleData as Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { recalls?: RecallInfo[] });
-    onClose();
+    try {
+      const vehicleId = await onAddVehicle(cleanedVehicleData as Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { recalls?: RecallInfo[] });
+      onClose();
+    } catch (err: any) {
+      showGenericError(t('addVehicleModal.error.failedToAddVehicle'), err?.message || undefined);
+    }
   };
 
   const renderProgressBar = () => (
