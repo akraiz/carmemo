@@ -1,548 +1,0 @@
-{
-  "_toneRule": "تحدث دائماً كأنك مساعد هادئ يساعد سائقاً مشغولاً. استخدم الأفعال، لا التسميات. تجنب المصطلحات التقنية.",
-  "app.name": "كار ميمو",
-  "loadingScreen.openingGarage": "جاري فتح الكراج...",
-  "loadingScreen.hint": "رفيق صيانة مركبتك",
-  "common.error": "خطأ",
-  "common.closeErrorAria": "إغلاق رسالة الخطأ",
-  "common.dismiss": "تجاهل",
-  "common.notApplicable": "غير متاح",
-  "common.none": "لا شيء",
-  "common.miles": "كم",
-  "common.milesAbbr": "كم",
-  "common.optional": "اختياري",
-  "common.yearPlaceholder": "YYYY",
-  "common.back": "رجوع",
-  "common.next": "التالي",
-  "common.processing": "جاري المعالجة...",
-  "common.decoding": "جاري فك التشفير...",
-  "common.details": "تفاصيل",
-  "common.showLess": "عرض أقل",
-  "common.showAll": "عرض الكل",
-  "common.showDetails": "عرض التفاصيل",
-  "common.uploading": "جاري الرفع...",
-  "common.closeModalAria": "إغلاق النافذة",
-  "common.saveTask": "حفظ المهمة",
-  "common.saveChanges": "حفظ التغييرات",
-  "common.cancel": "إلغاء",
-  "common.edit": "تعديل",
-  "common.delete": "حذف",
-  "common.inXDays": "خلال {count} يوم",
-  "common.byXDays": "بمقدار {count} يوم",
-  "common.today": "اليوم",
-  "header.toggleSidebarAria": "تبديل الشريط الجانبي",
-  "header.changeLanguageAria": "تغيير اللغة",
-  "languages.english": "English (EN)",
-  "languages.arabic": "العربية (AR)",
-  "sidebar.myGarageTitle": "كراجي",
-  "sidebar.garageEmpty": "كراجك فارغ. أضف مركبتك الأولى!",
-  "sidebar.addVehicleAria": "إضافة مركبة جديدة",
-  "sidebar.addVehicleButton": "إضافة مركبة",
-  "sidebar.addVehicleHint": "أضف مركبتك لبدء تتبع صيانتها",
-  "vehicleCard.deleteAria": "حذف {name}",
-  "vehicleCard.deleteTitle": "حذف المركبة",
-  "noVehicleSelected.welcomeTitle": "مرحباً بك في {appName}!",
-  "noVehicleSelected.description": "يبدو أن كراجك فارغ. أضف مركبتك الأولى لبدء تتبع صيانتها وحالتها.",
-  "noVehicleSelected.addFirstVehicleButton": "أضف مركبتك الأولى",
-  "noVehicleSelected.addFirstVehicleAria": "إضافة مركبة جديدة",
-  "selectVehiclePlaceholder.title": "اختر مركبة",
-  "selectVehiclePlaceholder.description": "اختر مركبة من كراجك على اليسار لعرض سجل صيانتها وتفاصيلها.",
-  "addVehicleModal.title": "إضافة مركبة جديدة",
-  "addVehicleModal.stepProgress": "خطوة {current} من {total}",
-  "addVehicleModal.step0.title": "تحديد المركبة",
-  "addVehicleModal.step0.description": "أدخل رقم الهيكل لمركبتك لاسترداد التفاصيل تلقائيًا، أو قدم المعلومات الأساسية يدويًا.",
-  "addVehicleModal.step0.vinLabel": "رقم الهيكل (رقم تعريف المركبة)",
-  "addVehicleModal.step0.vinPlaceholder": "أدخل رقم الهيكل المكون من 17 رمزًا",
-  "addVehicleModal.step0.decodingVin": "جاري فك تشفير رقم الهيكل...",
-  "addVehicleModal.step0.fetchingRecalls": "جاري جلب الاستدعاءات...",
-  "addVehicleModal.step0.tryVinInstead": "جرب التعبئة التلقائية برقم الهيكل بدلاً من ذلك",
-  "addVehicleModal.step0.enterManually": "أو أدخل تفاصيل المركبة يدويًا",
-  "addVehicleModal.vinError.enterVinOrManual": "يرجى إدخال رقم الهيكل أو اختيار إدخال التفاصيل يدويًا.",
-  "addVehicleModal.vinError.decodeFailed": "تعذر فك تشفير رقم الهيكل. يرجى التحقق من الرقم أو إدخال التفاصيل يدويًا.",
-  "addVehicleModal.vinError.manualMakeModelYearRequired": "الصانع، الطراز، والسنة مطلوبة للإدخال اليدوي.",
-  "addVehicleModal.recallsFound": "المركبة لديها {count} استدعاء(ات) نشطة!",
-  "addVehicleModal.step1.title": "تفاصيل المركبة",
-  "addVehicleModal.step1.description": "تأكد من التفاصيل أدناه أو قم بتعديلها وأضف صورة لمركبتك.",
-  "addVehicleModal.step1.nicknamePlaceholder": "مثال: اسم مركبتي",
-  "addVehicleModal.step1.vehiclePhoto": "صورة المركبة",
-  "addVehicleModal.step1.photoPreviewAlt": "معاينة صورة المركبة",
-  "addVehicleModal.step2.title": "المعلومات الأساسية",
-  "addVehicleModal.step2.description": "قدم المسافة الحالية المقطوعة وتاريخ الشراء لجدولة دقيقة.",
-  "addVehicleModal.step2.mileagePlaceholder": "مثال: 50000",
-  "addVehicleModal.step2.purchaseDateNote": "يُستخدم كمرجع لجدولة الصيانة الأولية.",
-  "addVehicleModal.step3.title": "تسجيل الصيانة الأولية",
-  "addVehicleModal.step3.titleUpdated": "تسجيل الخدمة الأولية/الأخيرة",
-  "addVehicleModal.step3.description": "أضف بسرعة أي صيانة هامة تم إجراؤها بالفعل لهذه المركبة. هذا يساعد في بناء تاريخها.",
-  "addVehicleModal.step3.descriptionUpdated": "سجل أي خدمات حديثة أو هامة مكتملة بالفعل (مثل آخر تغيير زيت، تدوير إطارات).",
-  "addVehicleModal.step3.commonTasksLabel": "المهام الشائعة:",
-  "addVehicleModal.step3.loggedEntriesLabel": "الإدخالات المسجلة:",
-  "addVehicleModal.step3.customEntryTitle": "إدخال سجل مخصص",
-  "addVehicleModal.step3.taskTitleLabel": "عنوان المهمة",
-  "addVehicleModal.step3.dateCompletedLabel": "تاريخ الإكمال",
-  "addVehicleModal.step3.mileageAtCompletionLabel": "المسافة المقطوعة عند الإكمال",
-  "addVehicleModal.step3.saveCustomEntryButton": "حفظ الإدخال المخصص",
-  "addVehicleModal.step3.completedLabel": "مكتمل",
-  "addVehicleModal.step3.atMileageAbbr": "عند",
-  "addVehicleModal.step3.removeEntryAria": "إزالة إدخال السجل",
-  "addVehicleModal.step3.noInitialMaintenanceLogged": "لم يتم تسجيل أي صيانة أولية بعد. اختر مهمة شائعة أو أضف واحدة مخصصة.",
-  "addVehicleModal.customTaskTitleError": "يرجى إدخال عنوان لمهمة الصيانة المخصصة.",
-  "addVehicleModal.error.makeModelYearRequired": "الصانع، الطراز، والسنة مطلوبة.",
-  "addVehicleModal.error.currentMileageRequired": "المسافة المقطوعة حالياً مطلوبة.",
-  "addVehicleModal.finishAndSaveButton": "إنهاء وحفظ المركبة",
-  "addTaskModal.addTitle": "إضافة مهمة صيانة جديدة",
-  "addTaskModal.editTitle": "تعديل مهمة الصيانة",
-  "addTaskModal.error.titleRequired": "عنوان المهمة مطلوب.",
-  "addTaskModal.currentMileageLabel": "الحالي:",
-  "addTaskModal.dueMileagePlaceholder": "مثال: 60000",
-  "addTaskModal.costPlaceholder": "مثال: 75.50",
-  "addTaskModal.editingPresetTaskNote": "ملاحظة: أنت تقوم بتعديل مهمة بناءً على إعداد مسبق للجدول. العنوان يمثل نوعها العام.",
-  "editVehicleModal.title": "تعديل المركبة",
-  "editVehicleModal.error.enterVinToDecode": "يرجى إدخال رقم الهيكل لفك تشفيره.",
-  "editVehicleModal.vinDecodedSuccess": "تم فك تشفير رقم الهيكل. تم تحديث الحقول إذا تم العثور على معلومات جديدة.",
-  "editVehicleModal.error.couldNotDecodeVin": "تعذر فك تشفير رقم الهيكل أو لم يتم العثور على معلومات جديدة.",
-  "editVehicleModal.redecodeVinButton": "إعادة فك تشفير رقم الهيكل",
-  "editVehicleModal.recallsUpdated": "تم تحديث الاستدعاءات للمركبة.",
-  "editVehicleModal.tabsAriaLabel": "علامات تبويب تعديل المركبة",
-  "editVehicleModal.tabBasicInfo": "المعلومات الأساسية والصورة",
-  "editVehicleModal.tabSpecifications": "المواصفات التفصيلية",
-  "vehicle.make": "الصانع",
-  "vehicle.model": "الطراز",
-  "vehicle.year": "السنة",
-  "vehicle.vin": "رقم الهيكل",
-  "vehicle.vinLabel": "رقم الهيكل",
-  "vehicle.nickname": "اسم المركبة",
-  "vehicle.currentMileage": "المسافة المقطوعة حالياً",
-  "vehicle.currentMileageLabel": "المسافة المقطوعة حالياً",
-  "vehicle.purchaseDate": "تاريخ شراء المركبة",
-  "vehicle.trim": "الفئة",
-  "vehicle.driveType": "نظام الدفع",
-  "vehicle.primaryFuelType": "نوع الوقود الأساسي",
-  "vehicle.secondaryFuelType": "نوع الوقود الثانوي",
-  "vehicle.engineBrakeHP": "القدرة الحصانية (HP)",
-  "vehicle.engineDisplacementL": "السعة اللترية للمحرك",
-  "vehicle.transmissionStyle": "نمط ناقل الحركة",
-  "vehicle.gvwr": "الوزن الإجمالي للمركبة (GVWR)",
-  "vehicle.cylinders": "عدد الأسطوانات",
-  "vehicle.electrificationLevel": "مستوى الكهرباء/التحويل الكهربائي",
-  "vehicle.engineModel": "طراز المحرك",
-  "vehicle.bodyClass": "نوع الهيكل",
-  "vehicle.doors": "الأبواب",
-  "vehicle.engineConfiguration": "ترتيب الأسطوانات",
-  "vehicle.manufacturerName": "الشركة المصنعة",
-  "vehicle.plantCountry": "بلد المصنع",
-  "vehicle.plantState": "ولاية المصنع",
-  "vehicle.plantCity": "مدينة المصنع",
-  "vehicle.specifications": "المواصفات الفنية",
-  "vehicle.editDetails": "تعديل التفاصيل",
-  "vehicle.editDetailsAria": "تعديل تفاصيل المركبة",
-  "vehicle.recallAlertBadge": "تنبيه استدعاء! ({count})",
-  "vehicle.viewRecallsAria": "عرض {count} استدعاءات للمركبة",
-  "vehicle.changePhotoAria": "تغيير صورة المركبة",
-  "vehicle.changePhoto": "تغيير الصورة",
-  "vehicle.uploadPhotoAria": "رفع صورة المركبة",
-  "viewRecallsModal.title": "الاستدعاءات النشطة لـ {nickname}",
-  "viewRecallsModal.noRecalls": "لا توجد استدعاءات نشطة لهذه المركبة.",
-  "viewRecallsModal.recallID": "معرف الاستدعاء",
-  "viewRecallsModal.consequence": "العواقب",
-  "viewRecallsModal.remedy": "الإصلاح",
-  "viewRecallsModal.reportedDate": "تاريخ الإبلاغ",
-  "viewRecallsModal.brand": "العلامة التجارية",
-  "viewRecallsModal.model": "الموديل",
-  "viewRecallsModal.viewDetails": "عرض التفاصيل",
-  "task.task": "المهمة",
-  "task.title": "العنوان",
-  "task.description": "الوصف",
-  "task.newTask": "مهمة جديدة",
-  "task.category": "الفئة",
-  "task.status": "الحالة",
-  "task.dueDate": "تاريخ الاستحقاق",
-  "task.dueDateLabel": "مستحقة:",
-  "task.dueMileage": "المسافة المستحقة",
-  "task.completedDate": "تاريخ الإكمال",
-  "task.completedDateLabel": "مكتملة:",
-  "task.createdDateLabel": "أنشئت:",
-  "task.cost": "التكلفة",
-  "task.notes": "ملاحظات",
-  "task.notesLabel": "ملاحظات",
-  "task.parts": "قطع الغيار",
-  "task.photos": "الصور",
-  "task.receipts": "الإيصالات",
-  "task.isRecurring": "متكررة",
-  "task.recurrenceInterval": "فترة التكرار",
-  "task.creationDate": "تاريخ الإنشاء",
-  "task.importance": "الأهمية",
-  "task.addTask": "إضافة مهمة",
-  "task.addTaskAria": "إضافة مهمة صيانة جديدة",
-  "task.markDone": "وضع علامة كمكتمل",
-  "task.markPending": "وضع علامة كقيد الانتظار",
-  "task.skipTask": "تخطي المهمة",
-  "task.photo": "صورة",
-  "task.receiptOcr": "إيصال/OCR",
-  "task.addPhotoAria": "إضافة صورة للمهمة",
-  "task.addReceiptAria": "إضافة إيصال للمهمة",
-  "task.attachments": "المرفقات",
-  "task.defaultScheduledMaintenance": "الصيانة المجدولة",
-  "taskCategories.OilChange": "تغيير الزيت",
-  "taskCategories.TireRotation": "تدوير الإطارات",
-  "taskCategories.BrakeService": "خدمة الفرامل",
-  "taskCategories.FluidCheck": "فحص السوائل",
-  "taskCategories.BatteryService": "خدمة البطارية",
-  "taskCategories.EngineTuneUp": "المحرك",
-  "taskCategories.AirFilter": "فلتر الهواء",
-  "taskCategories.WiperBlades": "مساحات الزجاج",
-  "taskCategories.Inspection": "فحص",
-  "taskCategories.Engine": "المحرك",
-  "taskCategories.EngineAirIntake": "المحرك/سحب الهواء",
-  "taskCategories.EngineIgnition": "المحرك/الإشعال",
-  "taskCategories.EngineInspection": "المحرك/الفحص",
-  "taskCategories.Brakes": "الفرامل",
-  "taskCategories.BrakesFluids": "الفرامل/السوائل",
-  "taskCategories.Tires": "الإطارات",
-  "taskCategories.TiresSuspension": "الإطارات/التعليق",
-  "taskCategories.TiresWheels": "الإطارات/العجلات",
-  "taskCategories.WheelsTires": "العجلات/الإطارات",
-  "taskCategories.WheelsAndTires": "العجلات والإطارات",
-  "taskCategories.Transmission": "ناقل الحركة",
-  "taskCategories.TransmissionFluids": "ناقل الحركة/السوائل",
-  "taskCategories.TransmissionInspection": "ناقل الحركة/الفحص",
-  "taskCategories.Drivetrain": "نظام الدفع",
-  "taskCategories.DrivetrainInspection": "نظام الدفع/الفحص",
-  "taskCategories.SuspensionSteering": "التعليق/التوجيه",
-  "taskCategories.SuspensionSteeringInspection": "التعليق/التوجيه/الفحص",
-  "taskCategories.CoolingSystem": "نظام التبريد",
-  "taskCategories.Cooling": "التبريد",
-  "taskCategories.HVAC": "التكييف",
-  "taskCategories.Electrical": "الأنظمة الكهربائية",
-  "taskCategories.ElectricalInspection": "الأنظمة الكهربائية/الفحص",
-  "taskCategories.FuelSystem": "نظام الوقود",
-  "taskCategories.Exhaust": "نظام العادم",
-  "taskCategories.Chassis": "الهيكل",
-  "taskCategories.ChassisSuspension": "الهيكل/التعليق",
-  "taskCategories.ChassisTires": "الهيكل/الإطارات",
-  "taskCategories.Exterior": "الخارجية",
-  "taskCategories.Filters": "المرشحات",
-  "taskCategories.Fluids": "السوائل",
-  "taskCategories.FluidsInspection": "السوائل/الفحص",
-  "taskCategories.Safety": "السلامة",
-  "taskCategories.GeneralInspection": "الفحص العام",
-  "taskCategories.General": "عام",
-  "taskCategories.Other": "أخرى",
-  "taskStatuses.Upcoming": "قادمة",
-  "taskStatuses.Overdue": "متأخرة",
-  "taskStatuses.Completed": "مكتملة",
-  "taskStatuses.Skipped": "تم تخطيها",
-  "taskStatuses.InProgress": "قيد التنفيذ",
-  "taskImportances.Required": "مطلوبة",
-  "taskImportances.Recommended": "موصى بها",
-  "taskImportances.Optional": "اختيارية",
-  "taskPresets.oilChange.title": "تغيير الزيت",
-  "taskPresets.tireRotation.title": "تدوير الإطارات",
-  "taskPresets.brakeService.title": "خدمة الفرامل",
-  "taskPresets.batteryService.title": "خدمة البطارية",
-  "taskPresets.airFilter.title": "فلتر الهواء",
-  "taskPresets.wiperBlades.title": "شفرات المساحات",
-  "taskPresets.inspection.title": "فحص",
-  "taskPresets.fluidCheck.title": "فحص السوائل",
-  "taskPresets.other.title": "أخرى/مخصصة",
-  "taskPresets.oilChangeSynthetic.title": "تغيير الزيت (اصطناعي)",
-  "taskPresets.tireRotationInspection.title": "تدوير الإطارات والفحص",
-  "maintenance.timelineTitle": "الجدول الزمني للصيانة",
-  "maintenance.upcomingTasksCount": "{count} مهمة قادمة أو متأخرة.",
-  "maintenance.searchPlaceholder": "بحث في المهام...",
-  "maintenance.searchAria": "بحث في مهام الصيانة",
-  "maintenance.filterStatusAria": "تصفية المهام حسب الحالة",
-  "maintenance.allStatuses": "جميع الحالات",
-  "maintenance.filterCategoryAria": "تصفية المهام حسب الفئة",
-  "maintenance.allCategories": "جميع الفئات",
-  "maintenance.noTasksLogged": "لم يتم تسجيل أي مهام صيانة بعد.",
-  "maintenance.addFirstTaskPrompt": "أضف مهمة لبدء بناء تاريخ مركبتك.",
-  "maintenance.addFirstTaskButton": "إضافة المهمة الأولى",
-  "maintenance.noTasksMatchFilter": "لا توجد مهام تطابق عوامل التصفية أو مصطلح البحث الحالي.",
-  "export.exportLog": "تصدير السجل",
-  "export.exportLogOptionsAria": "خيارات تصدير سجل الصيانة",
-  "export.asTxt": "تصدير كنص (.txt)",
-  "export.asCsv": "تصدير كـ CSV (.csv)",
-  "export.asJson": "تصدير كـ JSON (.json)",
-  "export.txtHeader.logFor": "سجل الصيانة لـ",
-  "export.txtHeader.currentMileage": "المسافة الحالية المقطوعة",
-  "export.txtHeader.vehicleSpecs": "مواصفات المركبة",
-  "export.csvHeader.id": "معرف المهمة",
-  "export.csvHeader.title": "العنوان",
-  "export.csvHeader.category": "الفئة",
-  "export.csvHeader.status": "الحالة",
-  "export.csvHeader.importance": "الأهمية",
-  "export.csvHeader.dueDate": "تاريخ الاستحقاق",
-  "export.csvHeader.dueMileage": "المسافة المستحقة",
-  "export.csvHeader.completedDate": "تاريخ الإكمال",
-  "export.csvHeader.cost": "التكلفة",
-  "export.csvHeader.notes": "ملاحظات",
-  "export.csvHeader.parts": "قطع الغيار",
-  "export.csvHeader.creationDate": "تاريخ الإنشاء",
-  "export.csvHeader.recurrence": "التكرار",
-  "errors.addVehicleFailed": "فشل إضافة المركبة.",
-  "errors.ocrFailed": "فشل معالجة الإيصال بواسطة OCR.",
-  "errors.vehicleNotFoundUpdate": "لم يتم العثور على المركبة للتحديث.",
-  "ocr.processingFailed": "فشل معالجة الإيصال بواسطة OCR. تم إرفاق الملف مباشرة إن أمكن.",
-  "ocr.ocrInfo": "معلومات OCR",
-  "ocr.ocrInfoItems": "عناصر OCR",
-  "tabs.vehicles": "المركبات",
-  "tabs.timeline": "الجدول الزمني",
-  "tabs.analytics": "التحليلات",
-  "tabs.settings": "الإعدادات",
-  "analyticsView.title": "التحليلات قريباً!",
-  "settingsView.title": "الإعدادات قريباً!",
-  "settingsView.titleActual": "إعدادات التطبيق",
-  "settings.notifications.title": "الإشعارات والتنبيهات",
-  "settings.notifications.description": "إدارة كيفية تذكيرك بمهام الصيانة القادمة أو المتأخرة.",
-  "settings.notifications.enableOptIn": "تمكين التذكيرات داخل التطبيق وتنبيهات المهام المتأخرة",
-  "settings.notifications.permissionStatusLabel": "إذن إشعارات المتصفح:",
-  "settings.notifications.requestPermissionButton": "طلب الإذن",
-  "settings.notifications.deniedHelpText": "قم بتغيير هذا في إعدادات متصفحك.",
-  "settings.permissionGranted": "ممنوح",
-  "settings.permissionDenied": "مرفوض",
-  "settings.permissionDefault": "لم يُطلب / افتراضي",
-  "overdueAlertBanner.message": "{vehicleName} لديها مهام متأخرة!",
-  "overdueAlertBanner.viewTimelineButton": "عرض الجدول الزمني",
-  "notifications.upcomingTaskTitle": "قادم: {taskTitle}",
-  "notifications.upcomingTaskBody": "لـ {vehicleName}، مستحقة في {date}.",
-  "notifications.overdueTaskTitle": "متأخر: {taskTitle}",
-  "notifications.overdueTaskBody": "{taskTitle} لـ {vehicleName} متأخرة.",
-  "fab.addMaintenanceAria": "إضافة مهمة صيانة جديدة بشكل عام",
-  "timeline.selectVehiclePrompt": "اختر مركبة من كراجك لعرض جدولها الزمني.",
-  "timeline.viewTitle": "الجدول الزمني للمركبة",
-  "timeline.forVehicle": "الجدول الزمني لـ {vehicleName}",
-  "timeline.noEvents": "لا توجد أحداث في الجدول الزمني",
-  "timeline.noEventsDescription": "لم يتم تسجيل أي مهام صيانة أو استدعاءات لهذه المركبة بعد. أضف مهمة للبدء!",
-  "analytics.title": "تحليلات الصيانة",
-  "analytics.lastUpdated": "آخر تحديث",
-  "analytics.totalTasks": "إجمالي المهام",
-  "analytics.completedTasks": "مكتملة",
-  "analytics.overdueTasks": "متأخرة",
-  "analytics.totalSpent": "إجمالي الإنفاق",
-  "analytics.completionRate": "معدل الإكمال",
-  "analytics.averageCost": "متوسط التكلفة",
-  "analytics.taskStatusBreakdown": "توزيع حالة المهام",
-  "analytics.categoryBreakdown": "توزيع الفئات",
-  "analytics.monthlySpending": "الإنفاق الشهري",
-  "analytics.completed": "مكتملة",
-  "analytics.upcoming": "قادمة",
-  "analytics.overdue": "متأخرة",
-  "analytics.noDataTitle": "لا توجد بيانات تحليلية",
-  "analytics.noDataDescription": "أضف مركبات وأكمل مهام الصيانة لرؤية التحليلات والرؤى.",
-  "timeline.forecasted": "متوقع",
-  "timeline.completed": "مكتمل",
-  "timeline.upcoming": "قادم",
-  "timeline.overdue": "متأخر",
-  "timeline.duesoon": "مستحق قريبًا",
-  "timeline.showForecastedOnly": "شوف التوقعات فقط",
-  "timeline.showAll": "عرض الكل",
-  "timeline.showCompletedOnly": "المهام المنجزة",
-  "timeline.showUrgent": "عاجل",
-  "timeline.showUpcoming": "قريباً",
-  "timeline.showRecalls": "استدعاءات المصنع",
-  "timeline.view": "طريقة العرض",
-  "timeline.sort": "ترتيب حسب",
-  "timeline.sortByDueDate": "تاريخ الاستحقاق",
-  "timeline.sortByMileage": "عدد الكيلومترات",
-  "timeline.sortByStatus": "الحالة",
-  "timeline.sortByPriority": "الأولوية",
-  "timeline.sortByCategory": "نوع الخدمة",
-  "timeline.showCompleted": "عرض المنجز",
-  "timeline.urgent": "عاجل",
-  "timeline.recalls": "استدعاءات المصنع",
-  "timeline.loading": "⏳ نحمل البيانات... شوي ونخلص",
-  "timeline.error": "عذرًا، واجهتنا مشكلة. تأكد من الشبكة أو حاول مجددًا",
-  "timeline.retry": "جرب مرة ثانية",
-  "timeline.added": "تمت الإضافة بنجاح!",
-  "timeline.updated": "تم التحديث!",
-  "timeline.deleted": "تم الحذف!",
-  "timeline.undo": "تراجع",
-  "timeline.confirmDelete": "أكيد تبي تحذف؟",
-  "timeline.cancelAction": "تجاهل الرسالة",
-  "timeline.ok": "موافق",
-  "timeline.close": "إغلاق",
-  "timeline.open": "فتح",
-  "timeline.details": "تفاصيل",
-  "timeline.notes": "ملاحظات",
-  "timeline.attachments": "مرفقات",
-  "timeline.addAttachment": "أرفق صورة أو ملف",
-  "timeline.uploading": "جاري الرفع...",
-  "timeline.deleting": "جاري الحذف...",
-  "timeline.saving": "جاري الحفظ...",
-  "timeline.updating": "جاري التحديث...",
-  "timeline.fetching": "جاري الجلب...",
-  "timeline.decoding": "🔍 نتحقق من رقم الهيكل الآن... لحظات ونطلع لك التفاصيل",
-  "timeline.vinDecoded": "تم فك تشفير رقم الهيكل!",
-  "timeline.vinDecodeFailed": "🚫 رقم الهيكل ما قدرنا نتحقق منه. جرب مرة ثانية.",
-  "timeline.recallCheck": "جاري التحقق من الاستدعاءات...",
-  "timeline.recallFound": "تم العثور على استدعاء! تواصل مع الوكيل",
-  "timeline.recallNone": "لا يوجد استدعاءات حالياً",
-  "timeline.recallError": "واجهتنا مشكلة في جلب الاستدعاءات. حاول لاحقاً.",
-  "timeline.completionRate": "معدل الإنجاز: {rate}%",
-  "timeline.completionDescription": "{completed} من {total} مهمة تمت بنجاح",
-  "timeline.aiPowered": "مدعوم بالذكاء الاصطناعي",
-  "timeline.forecast": "توقعات الصيانة",
-  "timeline.noInsights": "ما فيه رؤى متاحة بعد. تابع صيانة مركبتك لنطلع لك التوقعات قريباً.",
-  "timeline.greeting": "مرحباً! كيف نقدر نخدمك اليوم؟",
-  "timeline.readyForTask": "جاهز لصيانة {task}؟ نذكّرك اليوم 👍",
-  "timeline.emptyState2": "ما عندنا بيانات صيانة للحين. ودنا نعرف متى آخر خدمة سويتها؟",
-  "timeline.errorNetwork": "📡 فيه مشكلة في الاتصال. تأكد من الشبكة وجرب مجددًا.",
-  "timeline.errorUnknown": "حدث شيء غير متوقع. جرب لاحقًا أو تواصل معنا.",
-  "timeline.errorVIN": "🚫 رقم الهيكل ما قدرنا نتحقق منه. جرب مرة ثانية.",
-  "timeline.errorAddVehicle": "حصلت مشكلة أثناء إضافة المركبة. جرب مرة ثانية أو تأكد من المعلومات",
-  "timeline.errorAddTask": "حصلت مشكلة أثناء إضافة المهمة. جرب مرة ثانية.",
-  "timeline.errorDelete": "ما قدرنا نحذف. حاول مرة ثانية.",
-  "timeline.errorUpdate": "ما قدرنا نحدث البيانات. حاول مرة ثانية.",
-  "timeline.errorRecall": "واجهتنا مشكلة في جلب الاستدعاءات. حاول لاحقاً.",
-  "timeline.errorAttachment": "ما قدرنا نرفع الملف. جرب مرة ثانية.",
-  "timeline.errorForm": "تأكد من تعبئة كل الحقول المطلوبة.",
-  "timeline.errorRequired": "هذا الحقل مطلوب",
-  "timeline.errorInvalid": "القيمة غير صحيحة",
-  "timeline.errorDate": "التاريخ غير صحيح",
-  "timeline.errorMileage": "عدد الكيلومترات غير صحيح",
-  "timeline.errorFileType": "نوع الملف غير مدعوم",
-  "timeline.errorFileSize": "حجم الملف كبير جداً",
-  "timeline.errorOCR": "ما قدرنا نقرأ الفاتورة. جرب صورة أوضح.",
-  "timeline.successAddVehicle": "🚗 تم إضافة المركبة بنجاح!",
-  "timeline.successAddTask": "تمت إضافة المهمة بنجاح!",
-  "timeline.successUpdate": "تم التحديث بنجاح!",
-  "timeline.successDelete": "تم الحذف بنجاح!",
-  "timeline.successRecall": "تم جلب الاستدعاءات بنجاح!",
-  "timeline.successAttachment": "تم رفع الملف بنجاح!",
-  "timeline.successOCR": "تم قراءة الفاتورة بنجاح!",
-  "timeline.successForm": "تم الحفظ بنجاح!",
-  "timeline.successVIN": "تم فك تشفير رقم الهيكل بنجاح!",
-  "timeline.successEnrichment": "تم إثراء جدول الصيانة بنجاح!",
-  "timeline.successForecast": "تم تحديث التوقعات بنجاح!",
-  "timeline.success": "تم بنجاح!",
-  "timeline.undoSuccess": "تم التراجع عن الحذف!",
-  "timeline.undoFailed": "ما قدرنا نرجع البيانات. جرب مرة ثانية.",
-  "timeline.confirm": "نعم، أكد",
-  "timeline.cancelAction": "تجاهل الرسالة",
-  "timeline.ok": "موافق",
-  "timeline.close": "إغلاق",
-  "timeline.open": "فتح",
-  "timeline.details": "تفاصيل",
-  "timeline.showLess": "عرض أقل",
-  "timeline.showAll": "عرض الكل",
-  "timeline.showDetails": "عرض التفاصيل",
-  "timeline.saveTask": "حفظ المهمة",
-  "timeline.saveChanges": "حفظ التغييرات",
-  "timeline.cancel": "إلغاء",
-  "timeline.edit": "تعديل",
-  "timeline.delete": "حذف",
-  "timeline.inXDays": "خلال {count} يوم",
-  "timeline.byXDays": "بمقدار {count} يوم",
-  "timeline.today": "اليوم",
-  "timeline.milesAbbr": "كم",
-  "toasts.vehicleAdded": "تمت إضافة {name} ({year}) إلى كراجك.",
-  "toasts.vehicleUpdated": "تم تحديث بيانات {name}.",
-  "toasts.vehicleDeleted": "تمت إزالة {name} من كراجك.",
-  "toasts.taskAdded": "تمت إضافة '{task}' لـ {vehicle} (مستحقة {dueDate}).",
-  "toasts.taskUpdated": "تم تحديث '{task}' لـ {vehicle}.",
-  "toasts.taskCompleted": "تم وضع '{task}' كمكتملة لـ {vehicle}. عمل رائع!",
-  "toasts.taskDeleted": "تم حذف '{task}' من {vehicle}.",
-  "toasts.enrichmentStarted": "جاري البحث عن صيانة موصى بها لـ {vehicle}...",
-  "toasts.enrichmentCompleted": "تمت إضافة {count} مهمة موصى بها لـ {vehicle}.",
-  "toasts.enrichmentFailed": "تعذر جلب التوصيات لـ {vehicle}. {error}",
-  "toasts.recallFetchStarted": "جاري التحقق من الاستدعاءات لـ {vehicle}...",
-  "toasts.recallFetchCompleted": "تم العثور على {count} استدعاء لـ {vehicle}.",
-  "toasts.recallFetchFailed": "تعذر التحقق من الاستدعاءات لـ {vehicle}. {error}",
-  "toasts.vinDecoded": "تم فك تشفير رقم الهيكل! تم التحديث: {fields} لـ {make} {model} {year}.",
-  "toasts.vinDecodeFailed": "تعذر فك تشفير رقم الهيكل {vin}. {error}",
-  "timeline.selectVehicle": "اختر مركبة لرؤية الجدول الزمني.",
-  "timeline.dueTomorrow": "مستحق غداً",
-  "timeline.thisWeek": "هذا الأسبوع",
-  "timeline.thisMonth": "هذا الشهر",
-  "timeline.later": "لاحقاً",
-  "timeline.allCaughtUp": "تم الانتهاء من كل شيء!",
-  "timeline.noCompletedTasks": "لا توجد مهام مكتملة بعد.",
-  "urgentTasks.title": "إجراء عاجل مطلوب",
-  "urgentTasks.description": "هذه المهام تتطلب انتباهك الفوري.",
-  "filter.ariaLabel": "تصفية المهام",
-  "filter.buttonText": "تصفية",
-  "tabs.upcoming": "قادم",
-  "tabs.upcomingShort": "قادم",
-  "tabs.completed": "مكتمل",
-  "tabs.completedShort": "مكتمل",
-  "actions.complete": "إكمال",
-  "actions.edit": "تعديل",
-  "actions.delete": "حذف",
-  "actions.cancel": "إلغاء",
-  "actions.close": "إغلاق",
-  "task.overdueBy": "متأخر {count} يوم",
-  "task.dueToday": "مستحق اليوم",
-  "task.dueTomorrow": "مستحق غداً",
-  "task.dueInDays": "مستحق خلال {count} يوم",
-  "task.dueOnDate": "مستحق {date}",
-  "task.completedOn": "مكتمل {date}",
-  "taskStatus.Upcoming": "قادم",
-  "taskStatus.Overdue": "متأخر",
-  "taskStatus.Completed": "مكتمل",
-  "taskStatus.Skipped": "متخطى",
-  "taskStatus.InProgress": "قيد التنفيذ",
-  "deleteTask.title": "حذف المهمة",
-  "deleteTask.confirmation": "هل أنت متأكد من حذف \"{taskTitle}\"؟",
-  "deleteTask.confirmationPrompt": "هل أنت متأكد من حذف \"{taskTitle}\"؟ لا يمكن التراجع عن هذا الإجراء.",
-  "deleteTask.dialogTitle": "حذف المهمة",
-  "toast.taskCompleted": "تم تحديد المهمة كمكتملة!",
-  "toast.taskDeleted": "تم حذف المهمة!",
-  "task.status.completedOnDate": "مكتمل {date}",
-  "task.dueStatus.notSet": "التاريخ غير محدد",
-  "task.dueStatus.overdueBy": "متأخر {count} يوم",
-  "task.dueStatus.today": "مستحق اليوم",
-  "task.dueStatus.tomorrow": "مستحق غداً",
-  "task.dueStatus.inDays": "مستحق خلال {count} يوم",
-  "task.dueStatus.onDate": "مستحق {date}",
-  "filterModal.title": "تصفية حسب الفئة",
-  "filterModal.selectCategoryPrompt": "اختر فئة لتصفية المهام.",
-  "filterModal.clearAll": "مسح جميع المرشحات",
-  "task.titlePlaceholder": "أدخل عنوان المهمة",
-  "common.save": "حفظ",
-  "vehicleInfo.errorFetchingRecalls": "خطأ في جلب الاستدعاءات",
-  "timeline.upcoming": "قادم",
-  "timeline.completed": "مكتمل",
-  "timeline.complete": "إكمال",
-  "timeline.edit": "تعديل",
-  "timeline.deleteTask": "حذف المهمة",
-  "timeline.deleteConfirmation": "هل أنت متأكد من أنك تريد حذف هذه المهمة؟",
-  "timeline.cancel": "إلغاء",
-  "timeline.delete": "حذف",
-  "timeline.tryAdjusting": "حاول تعديل البحث أو الفلتر.",
-  "timeline.clearFilter": "مسح الفلتر",
-  "timeline.completedOn": "مكتمل في",
-  "vehicleInfo.loadingRecalls": "جاري تحميل الاستدعاءات...",
-  "vehicleInfo.nextMaintenance": "الصيانة القادمة",
-  "vehicleInfo.allCaughtUp": "جميع المهام محدثة!",
-  "vehicleInfo.upToDateMessage": "مركبتك {make} {model} محدثة مع الصيانة.",
-  "vinLookup.title": "البحث عن تفاصيل المركبة",
-  "vinLookup.description": "أدخل رقم هيكل مكون من 17 حرفًا للحصول على معلومات المركبة",
-  "vinLookup.vinLabel": "رقم هوية المركبة (VIN)",
-  "vinLookup.vinPlaceholder": "أدخل رقم هيكل مكون من 17 حرفًا",
-  "vinLookup.formatted": "مُنسق:",
-  "vinLookup.pleaseEnterVin": "يرجى إدخال رقم هيكل",
-  "vinLookup.invalidVinFormat": "تنسيق VIN غير صحيح. يجب أن يكون VIN مكونًا من 17 حرفًا بالضبط ويحتوي على أحرف وأرقام فقط (باستثناء I, O, Q).",
-  "vinLookup.couldNotDecode": "لا يمكن فك تشفير VIN. يرجى التحقق من رقم VIN.",
-  "vinLookup.errorOccurred": "حدث خطأ أثناء البحث عن VIN",
-  "vinLookup.lookingUp": "جاري البحث...",
-  "vinLookup.lookup": "بحث",
-  "vinLookup.lookingUpVehicleInfo": "جاري البحث عن معلومات المركبة...",
-  "vinLookup.vehicleDetails": "تفاصيل المركبة",
-  "vinLookup.basicInformation": "المعلومات الأساسية",
-  "vinLookup.technicalSpecifications": "المواصفات التقنية",
-  "vinLookup.manufacturingDetails": "تفاصيل التصنيع",
-  "vinLookup.year": "السنة",
-  "vinLookup.make": "الصنع",
-  "vinLookup.model": "الموديل",
-  "vinLookup.trim": "الطراز",
-  "vinLookup.engine": "المحرك",
-  "vinLookup.cylinders": "الأسطوانات",
-  "vinLookup.driveType": "نوع الدفع",
-  "vinLookup.fuelType": "نوع الوقود",
-  "vinLookup.transmission": "الناقل",
-  "vinLookup.bodyClass": "فئة الهيكل",
-  "vinLookup.manufacturer": "الشركة المصنعة",
-  "vinLookup.country": "البلد",
-  "vinLookup.city": "المدينة",
-  "recalls.noRecallsFound": "لم يتم العثور على استدعاءات لهذا الرقم التسلسلي. أنت آمن!"
-}
