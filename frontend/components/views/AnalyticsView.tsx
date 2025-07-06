@@ -35,28 +35,28 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
       completed: allTasks.filter((t: MaintenanceTask) => t.category === category && t.status === TaskStatus.Completed).length
     })).filter(item => item.count > 0);
 
-    // --- UPDATED MONTHLY SPENDING LOGIC ---
-    // Find all completed tasks with a cost and completedDate
-    const completedTasksWithCost = allTasks.filter(
-      (t: MaintenanceTask) => t.status === TaskStatus.Completed && t.completedDate && t.cost
+    // --- UPDATED MONTHLY SPENDING LOGIC (DUE DATE BASED) ---
+    // Find all tasks with a cost and dueDate
+    const tasksWithCostAndDueDate = allTasks.filter(
+      (t: MaintenanceTask) => t.dueDate && t.cost
     );
 
     // Find the earliest month to display (12 months ago)
     const now = new Date();
     const earliestMonth = new Date(now.getFullYear(), now.getMonth() - 11, 1); // 12 months ago
 
-    // Find the latest month to display (either this month or the latest completed task's month, whichever is later)
-    let latestCompletedMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    completedTasksWithCost.forEach(t => {
-      const d = new Date(t.completedDate!);
+    // Find the latest month to display (either this month or the latest due task's month, whichever is later)
+    let latestDueMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    tasksWithCostAndDueDate.forEach(t => {
+      const d = new Date(t.dueDate!);
       const taskMonth = new Date(d.getFullYear(), d.getMonth(), 1);
-      if (taskMonth > latestCompletedMonth) latestCompletedMonth = taskMonth;
+      if (taskMonth > latestDueMonth) latestDueMonth = taskMonth;
     });
 
-    // Generate all months from earliestMonth to latestCompletedMonth (inclusive)
+    // Generate all months from earliestMonth to latestDueMonth (inclusive)
     const months: Date[] = [];
     let m = new Date(earliestMonth);
-    while (m <= latestCompletedMonth) {
+    while (m <= latestDueMonth) {
       months.push(new Date(m));
       m.setMonth(m.getMonth() + 1);
     }
@@ -64,8 +64,8 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
     const monthlySpending = months.map(month => {
       const monthStart = new Date(month.getFullYear(), month.getMonth(), 1);
       const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 0);
-      const monthTasks = completedTasksWithCost.filter(t => {
-        const d = new Date(t.completedDate!);
+      const monthTasks = tasksWithCostAndDueDate.filter(t => {
+        const d = new Date(t.dueDate!);
         return d >= monthStart && d <= monthEnd;
       });
       return {
@@ -73,8 +73,8 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
         spending: monthTasks.reduce((sum: number, t: MaintenanceTask) => sum + (t.cost || 0), 0),
         tasks: monthTasks.length
       };
-    }).filter(m => m.spending > 0 && m.tasks > 0); // Only show months with spending and completed tasks with cost
-    // --- END UPDATED MONTHLY SPENDING LOGIC ---
+    }).filter(m => m.spending > 0 && m.tasks > 0); // Only show months with spending and tasks with cost
+    // --- END UPDATED MONTHLY SPENDING LOGIC (DUE DATE BASED) ---
 
     return {
       totalTasks,
