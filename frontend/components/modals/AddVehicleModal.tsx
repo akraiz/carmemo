@@ -100,7 +100,6 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
   const [wizardStep, setWizardStep] = useState(0);
   const [wizardData, setWizardData] = useState<WizardData>(initialWizardData);
   const [isDecodingVin, setIsDecodingVin] = useState(false);
-  const [vinError, setVinError] = useState<string | null>(null);
   const [isFetchingRecalls, setIsFetchingRecalls] = useState(false);
   const [showManualEntry, setShowManualEntry] = useState(false);
   const [validation, setValidation] = useState<ValidationState>(initialValidation);
@@ -110,7 +109,6 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     if (isOpen) {
       setWizardStep(0);
       setWizardData(initialWizardData);
-      setVinError(null);
       setIsDecodingVin(false);
       setIsFetchingRecalls(false);
       setShowManualEntry(false);
@@ -160,6 +158,12 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
         if (!value.trim()) {
           message = t('addVehicleModal.vinError.manualMakeModelYearRequired');
           isValid = false;
+        } else {
+          const yearNum = parseInt(value, 10);
+          if (isNaN(yearNum) || yearNum < 1900 || yearNum > 2026) {
+            message = 'Invalid year: must be between 1900 and 2026';
+            isValid = false;
+          }
         }
         break;
       case 'currentMileage':
@@ -213,7 +217,6 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     }
 
     if (!allValid) {
-      setVinError(t('addVehicleModal.error.validationFailed'));
       return;
     }
 
@@ -266,7 +269,13 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
           setIsFetchingRecalls(false);
           setWizardStep(1);
         } else {
-          setVinError(t('addVehicleModal.vinError.decodeFailed') || 'Could not decode VIN. Please check the VIN number or enter vehicle details manually.');
+          setValidation(prev => ({
+            ...prev,
+            vin: {
+              isValid: false,
+              message: t('addVehicleModal.vinError.decodeFailed') || 'Could not decode VIN. Please check the VIN number or enter vehicle details manually.'
+            }
+          }));
           setShowManualEntry(true);
         }
       } catch (err) {
@@ -278,7 +287,12 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
 
     if (wizardStep === 0 && showManualEntry) {
         if (!wizardData.make || !wizardData.model || !wizardData.year) {
-            setVinError(t('addVehicleModal.vinError.manualMakeModelYearRequired'));
+            setValidation(prev => ({
+              ...prev,
+              make: { isValid: false, message: t('addVehicleModal.vinError.manualMakeModelYearRequired') },
+              model: { isValid: false, message: t('addVehicleModal.vinError.manualMakeModelYearRequired') },
+              year: { isValid: false, message: t('addVehicleModal.vinError.manualMakeModelYearRequired') }
+            }));
             return;
         }
     }
@@ -308,17 +322,24 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     }
 
     if (!allValid) {
-      setVinError(t('addVehicleModal.error.validationFailed'));
       return;
     }
 
     if (!wizardData.make || !wizardData.model || !wizardData.year) {
-        setVinError(t('addVehicleModal.error.makeModelYearRequired'));
+        setValidation(prev => ({
+          ...prev,
+          make: { isValid: false, message: t('addVehicleModal.vinError.manualMakeModelYearRequired') },
+          model: { isValid: false, message: t('addVehicleModal.vinError.manualMakeModelYearRequired') },
+          year: { isValid: false, message: t('addVehicleModal.vinError.manualMakeModelYearRequired') }
+        }));
         setWizardStep(showManualEntry || !wizardData.vin ? 0 : 1);
         return;
     }
     if (!wizardData.currentMileage) {
-        setVinError(t('addVehicleModal.error.currentMileageRequired'));
+        setValidation(prev => ({
+          ...prev,
+          currentMileage: { isValid: false, message: t('addVehicleModal.error.currentMileageRequired') }
+        }));
         setWizardStep(2);
         return;
     }
@@ -404,7 +425,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
           variant="text"
           color="primary"
           size="small"
-          onClick={() => { setShowManualEntry(!showManualEntry); setVinError(null); if (showManualEntry) setWizardData(prev => ({...prev, vin: ''})); }}
+          onClick={() => { setShowManualEntry(!showManualEntry); setValidation(prev => ({ ...prev, vin: { ...prev.vin, message: '' } })); if (showManualEntry) setWizardData(prev => ({...prev, vin: ''})); }}
           sx={{ textTransform: 'none', fontSize: '0.875rem', mb: 3 }}
         >
           {t(showManualEntry ? 'addVehicleModal.step0.tryVinInstead' : 'addVehicleModal.step0.enterManually')}
