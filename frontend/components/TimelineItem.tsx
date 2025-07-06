@@ -100,6 +100,9 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, vehicle, onTaskUpdate
             borderLeft: `4px solid ${(statusConfig.border || '').replace('border-', '').replace('[#', '#').replace(']', '')}`,
             border: 'none',
           }}
+          onClick={() => setShowMenu(v => !v)} // Added onClick to toggle menu
+          role="button" // Added for accessibility
+          tabIndex={0} // Added for accessibility
         >
           <div className="flex-shrink-0 flex flex-col items-center justify-center">
             <span className={`w-14 h-14 rounded-full flex items-center justify-center ring-2 ring-[#1c1c1c] ${task.status === TaskStatus.Completed ? 'bg-green-500 ring-green-600' : task.status === TaskStatus.Overdue ? 'bg-red-500 ring-red-600' : 'bg-[#F7C843] ring-[#e0b330]'}`}> 

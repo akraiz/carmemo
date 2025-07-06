@@ -5,7 +5,8 @@ import { getISODateString } from '../../utils/dateUtils';
 import { decodeVinWithApiNinjas, decodeVinWithGeminiBackend, mergeVinResults, validateVin } from '../../services/vinLookupService';
 import { Icons } from '../Icon';
 import { useTranslation } from '../../hooks/useTranslation';
-import { Button, TextField, Box } from '@mui/material';
+import { TextField, Box } from '@mui/material';
+import Button from '../shared/Button';
 import { buildApiUrl } from '../../config/api';
 import { SessionService } from '../../services/sessionService';
 
@@ -44,6 +45,15 @@ interface WizardData {
   plantCity?: string;
 }
 
+// Validation state interface
+interface ValidationState {
+  vin: { isValid: boolean; message: string };
+  make: { isValid: boolean; message: string };
+  model: { isValid: boolean; message: string };
+  year: { isValid: boolean; message: string };
+  currentMileage: { isValid: boolean; message: string };
+}
+
 const initialWizardData: WizardData = {
   vin: '', make: '', model: '', year: '', nickname: '',
   currentMileage: '', purchaseDate: getISODateString(new Date()),
@@ -52,6 +62,14 @@ const initialWizardData: WizardData = {
   transmissionStyle: '', gvwr: '', cylinders: undefined, electrificationLevel: '',
   engineModel: '', bodyClass: '', doors: undefined, engineConfiguration: '',
   manufacturerName: '', plantCountry: '', plantState: '', plantCity: '',
+};
+
+const initialValidation: ValidationState = {
+  vin: { isValid: true, message: '' },
+  make: { isValid: true, message: '' },
+  model: { isValid: true, message: '' },
+  year: { isValid: true, message: '' },
+  currentMileage: { isValid: true, message: '' },
 };
 
 const bottomSheetVariants = {
@@ -83,6 +101,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
   const [vinError, setVinError] = useState<string | null>(null);
   const [isFetchingRecalls, setIsFetchingRecalls] = useState(false);
   const [showManualEntry, setShowManualEntry] = useState(false);
+  const [validation, setValidation] = useState<ValidationState>(initialValidation);
   const totalSteps = 3;
 
   useEffect(() => {
@@ -93,6 +112,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
       setIsDecodingVin(false);
       setIsFetchingRecalls(false);
       setShowManualEntry(false);
+      setValidation(initialValidation);
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -105,35 +125,97 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setWizardData(prev => ({ ...prev, [name]: value }));
+    setValidation(prev => ({ ...prev, [name]: { ...prev[name as keyof ValidationState], message: '' } }));
+  };
+
+       const validateField = (name: keyof ValidationState, value: string) => {
+    let message = '';
+    let isValid = true;
+
+    switch (name) {
+      case 'vin':
+        if (!value.trim()) {
+          message = t('addVehicleModal.vinError.enterVinOrManual');
+          isValid = false;
+        } else if (!validateVin(value.trim())) {
+          message = t('addVehicleModal.vinError.invalidVinFormat') || 'Invalid VIN format. VIN must be exactly 17 characters and contain only letters and numbers (excluding I, O, Q).';
+          isValid = false;
+        }
+        break;
+      case 'make':
+        if (!value.trim()) {
+          message = t('addVehicleModal.vinError.manualMakeModelYearRequired');
+          isValid = false;
+        }
+        break;
+      case 'model':
+        if (!value.trim()) {
+          message = t('addVehicleModal.vinError.manualMakeModelYearRequired');
+          isValid = false;
+        }
+        break;
+      case 'year':
+        if (!value.trim()) {
+          message = t('addVehicleModal.vinError.manualMakeModelYearRequired');
+          isValid = false;
+        }
+        break;
+      case 'currentMileage':
+        if (!value.trim()) {
+          message = t('addVehicleModal.error.currentMileageRequired');
+          isValid = false;
+        }
+        break;
+    }
+    setValidation(prev => ({ ...prev, [name]: { isValid, message } }));
+    return isValid;
+  };
+
+  const validateVinAsync = async (vin: string) => {
+    if (!vin.trim()) return false;
+    if (!validateVin(vin.trim())) return false;
+    
+    try {
+      const sessionId = SessionService.getSessionId();
+      const checkDuplicate = await fetch(buildApiUrl(`/vehicles/vin/${vin.trim()}?sessionId=${encodeURIComponent(sessionId)}`));
+      if (checkDuplicate.ok) {
+        const data = await checkDuplicate.json();
+        if (data && data.data) {
+          setValidation(prev => ({ 
+            ...prev, 
+            vin: { 
+              isValid: false, 
+              message: 'A vehicle with this VIN already exists in your garage.' 
+            } 
+          }));
+          return false;
+        }
+      }
+      return true;
+    } catch (err) {
+      console.error('VIN validation error:', err);
+      return false;
+    }
   };
 
   const handleNextStep = async () => {
-    setVinError(null);
-    if (wizardStep === 0 && !showManualEntry) {
-      if (!wizardData.vin.trim()) {
-        setVinError(t('addVehicleModal.vinError.enterVinOrManual'));
-        return;
-      }
-      
-      // Validate VIN format before attempting to decode
-      if (!validateVin(wizardData.vin.trim())) {
-        setVinError(t('addVehicleModal.vinError.invalidVinFormat') || 'Invalid VIN format. VIN must be exactly 17 characters and contain only letters and numbers (excluding I, O, Q).');
-        return;
-      }
-      // Duplicate VIN check before VIN lookup
-      try {
-        const sessionId = SessionService.getSessionId();
-        const checkDuplicate = await fetch(buildApiUrl(`/vehicles/vin/${wizardData.vin.trim()}?sessionId=${encodeURIComponent(sessionId)}`));
-        if (checkDuplicate.ok) {
-          const data = await checkDuplicate.json();
-          if (data && data.data) {
-            setVinError('A vehicle with this VIN already exists in your garage.');
-            return;
-          }
+    let allValid = true;
+    for (const key in validation) {
+      if (validation.hasOwnProperty(key)) {
+        const field = validation[key as keyof ValidationState];
+        if (!field.isValid) {
+          allValid = false;
+          break;
         }
-      } catch (err) {
-        // Optionally log or ignore
       }
+    }
+
+    if (!allValid) {
+      setVinError(t('addVehicleModal.error.validationFailed'));
+      return;
+    }
+
+    if (wizardStep === 0 && !showManualEntry) {
       try {
         setIsDecodingVin(true);
         // Call both endpoints in parallel and merge
@@ -212,13 +294,29 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
 
 
   const handleSubmit = async () => {
+    let allValid = true;
+    for (const key in validation) {
+      if (validation.hasOwnProperty(key)) {
+        const field = validation[key as keyof ValidationState];
+        if (!field.isValid) {
+          allValid = false;
+          break;
+        }
+      }
+    }
+
+    if (!allValid) {
+      setVinError(t('addVehicleModal.error.validationFailed'));
+      return;
+    }
+
     if (!wizardData.make || !wizardData.model || !wizardData.year) {
-        alert(t('addVehicleModal.error.makeModelYearRequired'));
+        setVinError(t('addVehicleModal.error.makeModelYearRequired'));
         setWizardStep(showManualEntry || !wizardData.vin ? 0 : 1);
         return;
     }
     if (!wizardData.currentMileage) {
-        alert(t('addVehicleModal.error.currentMileageRequired'));
+        setVinError(t('addVehicleModal.error.currentMileageRequired'));
         setWizardStep(2);
         return;
     }
@@ -269,22 +367,31 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
       <h3 className="text-lg md:text-xl font-semibold text-white mb-1.5 font-heading uppercase">{t('addVehicleModal.step0.title')}</h3>
       <p className="text-sm text-[#cfcfcf] mb-5 md:mb-6">{t('addVehicleModal.step0.description')}</p>
       {!showManualEntry && (
-        <div className="mb-4 md:mb-5">
-          <TextField
-            fullWidth
-            label={t('addVehicleModal.step0.vinLabel')}
-            name="vin"
-            id="vin"
-            value={wizardData.vin}
-            onChange={handleInputChange}
-            placeholder={t('addVehicleModal.step0.vinPlaceholder')}
-            inputProps={{ maxLength: 17 }}
-            aria-describedby="vin-error"
-            variant="outlined"
-            size="small"
-          />
-          {(isDecodingVin || isFetchingRecalls) && <p className="text-sm text-[#F7C843] mt-1.5 flex items-center"><Icons.Wrench className="animate-spin w-4 h-4 me-2 rtl:ms-2 rtl:me-0" /> {isDecodingVin ? t('addVehicleModal.step0.decodingVin') : t('addVehicleModal.step0.fetchingRecalls')}</p>}
-          {vinError && <p id="vin-error" className="text-sm text-red-400 mt-1.5">{vinError}</p>}
+        <div className="space-y-4"> {/* Adjusted from mb-4 md:mb-5 to space-y-4 */}
+          <div>
+            <label htmlFor="vin" className="block text-sm font-medium text-white mb-2">VIN *</label>
+            <TextField
+              fullWidth
+              id="vin"
+              name="vin"
+              value={wizardData.vin}
+              onChange={handleInputChange}
+              onBlur={() => {
+                validateField('vin', wizardData.vin);
+                if (wizardData.vin.trim()) {
+                  validateVinAsync(wizardData.vin);
+                }
+              }}
+              placeholder={t('addVehicleModal.step0.vinPlaceholder')}
+              inputProps={{ maxLength: 17 }}
+              aria-describedby="vin-error"
+              variant="filled"
+              size="small"
+              InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+            />
+            {(isDecodingVin || isFetchingRecalls) && <p className="text-sm text-[#F7C843] mt-1.5 flex items-center"><Icons.Wrench className="animate-spin w-4 h-4 me-2 rtl:ms-2 rtl:me-0" /> {isDecodingVin ? t('addVehicleModal.step0.decodingVin') : t('addVehicleModal.step0.fetchingRecalls')}</p>}
+            {!validation.vin.isValid && <p id="vin-error" className="text-sm text-red-400 mt-1.5">{validation.vin.message}</p>}
+          </div>
         </div>
       )}
        <Button
@@ -299,45 +406,61 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
 
       {showManualEntry && (
         <motion.div
-            className="space-y-3 md:space-y-4 pt-3 md:pt-4 border-t border-[#333333]"
-            initial={{ opacity:0, height: 0 }} animate={{ opacity:1, height: 'auto', transition: {duration: 0.25} }} // Quicker reveal
+            className="space-y-4 pt-3 md:pt-4 border-t border-[#333333]" // Ensure space-y-4 and consistent pt
+            initial={{ opacity:0, height: 0 }} animate={{ opacity:1, height: 'auto', transition: {duration: 0.25} }}
         >
-          <TextField
-            fullWidth
-            label={t('vehicle.make')}
-            name="make"
-            id="make"
-            value={wizardData.make}
-            onChange={handleInputChange}
-            required
-            variant="outlined"
-            size="small"
-          />
-          <TextField
-            fullWidth
-            label={t('vehicle.model')}
-            name="model"
-            id="model"
-            value={wizardData.model}
-            onChange={handleInputChange}
-            required
-            variant="outlined"
-            size="small"
-          />
-          <TextField
-            fullWidth
-            label={t('vehicle.year')}
-            name="year"
-            id="year"
-            type="number"
-            value={wizardData.year}
-            onChange={handleInputChange}
-            required
-            placeholder={t('common.yearPlaceholder')}
-            variant="outlined"
-            size="small"
-          />
-           {vinError && showManualEntry && <p className="text-sm text-red-400 mt-1">{vinError}</p>}
+          <div>
+            <label htmlFor="make" className="block text-sm font-medium text-white mb-2">Make *</label>
+            <TextField
+              fullWidth
+              id="make"
+              name="make"
+              value={wizardData.make}
+              onChange={handleInputChange}
+              onBlur={() => validateField('make', wizardData.make)}
+              required
+              variant="filled"
+              size="small"
+              InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+              placeholder="e.g., Ford"
+            />
+            {!validation.make.isValid && <p className="text-sm text-red-400 mt-1">{validation.make.message}</p>}
+          </div>
+          <div>
+            <label htmlFor="model" className="block text-sm font-medium text-white mb-2">Model *</label>
+            <TextField
+              fullWidth
+              id="model"
+              name="model"
+              value={wizardData.model}
+              onChange={handleInputChange}
+              onBlur={() => validateField('model', wizardData.model)}
+              required
+              variant="filled"
+              size="small"
+              InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+              placeholder="e.g., F-150"
+            />
+            {!validation.model.isValid && <p className="text-sm text-red-400 mt-1">{validation.model.message}</p>}
+          </div>
+          <div>
+            <label htmlFor="year" className="block text-sm font-medium text-white mb-2">Year *</label>
+            <TextField
+              fullWidth
+              id="year"
+              name="year"
+              type="number"
+              value={wizardData.year}
+              onChange={handleInputChange}
+              onBlur={() => validateField('year', wizardData.year)}
+              required
+              placeholder={t('common.yearPlaceholder')}
+              variant="filled"
+              size="small"
+              InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+            />
+            {!validation.year.isValid && <p className="text-sm text-red-400 mt-1">{validation.year.message}</p>}
+          </div>
         </motion.div>
       )}
     </motion.div>
@@ -349,7 +472,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
       <p className="text-sm text-[#cfcfcf] mb-5 md:mb-6">{t('addVehicleModal.step1.description')}</p>
       
       {wizardData.recalls && wizardData.recalls.length > 0 && (
-        <motion.div 
+        <motion.div
             className="mb-4 md:mb-5 p-3 bg-red-700/30 border border-red-600/50 rounded-lg flex items-center text-red-200 shadow-md"
             initial={{opacity: 0, y: -10}} animate={{opacity:1, y: 0, transition: {duration: 0.25}}}
         >
@@ -358,94 +481,120 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
         </motion.div>
       )}
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2, mb: 3 }}>
-        <TextField
-          fullWidth
-          label={t('vehicle.make')}
-          name="make"
-          id="make"
-          value={wizardData.make}
-          onChange={handleInputChange}
-          required
-          variant="outlined"
-          size="small"
-        />
-        <TextField
-          fullWidth
-          label={t('vehicle.model')}
-          name="model"
-          id="model"
-          value={wizardData.model}
-          onChange={handleInputChange}
-          required
-          variant="outlined"
-          size="small"
-        />
-        <TextField
-          fullWidth
-          label={t('vehicle.year')}
-          name="year"
-          id="year"
-          type="number"
-          value={wizardData.year}
-          onChange={handleInputChange}
-          required
-          placeholder={t('common.yearPlaceholder')}
-          variant="outlined"
-          size="small"
-        />
-        <TextField
-          fullWidth
-          label={t('vehicle.nickname')}
-          name="nickname"
-          id="nickname"
-          value={wizardData.nickname}
-          onChange={handleInputChange}
-          placeholder={t('addVehicleModal.step1.nicknamePlaceholder')}
-          variant="outlined"
-          size="small"
-        />
-         <TextField
+      <div className="space-y-4"> {/* Ensure this wrapper is space-y-4 */}
+        <div>
+          <label htmlFor="make" className="block text-sm font-medium text-white mb-2">Make *</label>
+          <TextField
             fullWidth
-            label={t('vehicle.trim')}
-            name="trim"
+            id="make"
+            name="make"
+            value={wizardData.make}
+            onChange={handleInputChange}
+            required
+            variant="filled"
+            size="small"
+            InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+            placeholder="e.g., Ford"
+          />
+        </div>
+        <div>
+          <label htmlFor="model" className="block text-sm font-medium text-white mb-2">Model *</label>
+          <TextField
+            fullWidth
+            id="model"
+            name="model"
+            value={wizardData.model}
+            onChange={handleInputChange}
+            required
+            variant="filled"
+            size="small"
+            InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+            placeholder="e.g., F-150"
+          />
+        </div>
+        <div>
+          <label htmlFor="year" className="block text-sm font-medium text-white mb-2">Year *</label>
+          <TextField
+            fullWidth
+            id="year"
+            name="year"
+            type="number"
+            value={wizardData.year}
+            onChange={handleInputChange}
+            required
+            placeholder={t('common.yearPlaceholder')}
+            variant="filled"
+            size="small"
+            InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+          />
+        </div>
+        <div>
+          <label htmlFor="nickname" className="block text-sm font-medium text-white mb-2">Nickname</label>
+          <TextField
+            fullWidth
+            id="nickname"
+            name="nickname"
+            value={wizardData.nickname}
+            onChange={handleInputChange}
+            placeholder={t('addVehicleModal.step1.nicknamePlaceholder')}
+            variant="filled"
+            size="small"
+            InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+          />
+        </div>
+         <div>
+           <label htmlFor="trim" className="block text-sm font-medium text-white mb-2">Trim</label>
+           <TextField
+            fullWidth
             id="trim"
+            name="trim"
             value={wizardData.trim || ''}
             onChange={handleInputChange}
-            variant="outlined"
+            variant="filled"
             size="small"
-        />
-         <TextField
+            InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+          />
+         </div>
+         <div>
+           <label htmlFor="manufacturerName" className="block text-sm font-medium text-white mb-2">Manufacturer Name</label>
+           <TextField
             fullWidth
-            label={t('vehicle.manufacturerName')}
-            name="manufacturerName"
             id="manufacturerName"
+            name="manufacturerName"
             value={wizardData.manufacturerName || ''}
             onChange={handleInputChange}
-            variant="outlined"
+            variant="filled"
             size="small"
-        />
-         <TextField
+            InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+          />
+         </div>
+         <div>
+           <label htmlFor="driveType" className="block text-sm font-medium text-white mb-2">Drive Type</label>
+           <TextField
             fullWidth
-            label={t('vehicle.driveType')}
-            name="driveType"
             id="driveType"
+            name="driveType"
             value={wizardData.driveType || ''}
             onChange={handleInputChange}
-            variant="outlined"
+            variant="filled"
             size="small"
-        />
-         <TextField
+            InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+          />
+         </div>
+         <div>
+           <label htmlFor="primaryFuelType" className="block text-sm font-medium text-white mb-2">Primary Fuel Type</label>
+           <TextField
             fullWidth
-            label={t('vehicle.primaryFuelType')}
-            name="primaryFuelType"
             id="primaryFuelType"
+            name="primaryFuelType"
             value={wizardData.primaryFuelType || ''}
             onChange={handleInputChange}
-            variant="outlined"
+            variant="filled"
             size="small"
-        />
-      </Box>
+            InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+          />
+         </div>
+      </div>
     </motion.div>
   );
 
@@ -453,32 +602,39 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
      <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="text-start rtl:text-right">
       <h3 className="text-lg md:text-xl font-semibold text-white mb-1 font-heading uppercase">{t('addVehicleModal.step2.title')}</h3>
       <p className="text-sm text-[#cfcfcf] mb-5 md:mb-6">{t('addVehicleModal.step2.description')}</p>
-      <div className="space-y-4 md:space-y-5">
-        <TextField
+      <div className="space-y-4"> {/* Adjusted from md:space-y-5 to space-y-4 */}
+        <div>
+          <label htmlFor="currentMileage" className="block text-sm font-medium text-white mb-2">Current Mileage *</label>
+          <TextField
             fullWidth
-            label={t('vehicle.currentMileage')}
-            name="currentMileage"
             id="currentMileage"
+            name="currentMileage"
             type="number"
             value={wizardData.currentMileage}
             onChange={handleInputChange}
+            onBlur={() => validateField('currentMileage', wizardData.currentMileage)}
             required
             placeholder={t('addVehicleModal.step2.mileagePlaceholder')}
-            variant="outlined"
+            variant="filled"
             size="small"
-        />
-        <TextField
+            InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+          />
+          {!validation.currentMileage.isValid && <p className="text-sm text-red-400 mt-1">{validation.currentMileage.message}</p>}
+        </div>
+        <div>
+          <label htmlFor="purchaseDate" className="block text-sm font-medium text-white mb-2">Purchase Date *</label>
+          <TextField
             fullWidth
-            label={t('vehicle.purchaseDate')}
-            name="purchaseDate"
             id="purchaseDate"
+            name="purchaseDate"
             type="date"
             value={wizardData.purchaseDate}
             onChange={handleInputChange}
-            variant="outlined"
+            variant="filled"
             size="small"
-            InputLabelProps={{ shrink: true }}
-        />
+            InputProps={{ disableUnderline: true, sx: { borderRadius: 1.5, background: '#232323', border: '1px solid #404040', input: { color: '#fff', paddingTop: '16.5px', paddingBottom: '16.5px', alignItems: 'center' } } }}
+          />
+        </div>
         <p className="text-xs text-[#707070] mt-1.5">{t('addVehicleModal.step2.purchaseDateNote')}</p>
       </div>
     </motion.div>
@@ -504,13 +660,13 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
             <h2 className="text-xl md:text-2xl font-bold text-white font-heading uppercase tracking-wide text-start rtl:text-right">{t('addVehicleModal.title')}</h2>
             <Button 
               onClick={onClose} 
-              variant="outlined"
-              color="primary"
+              variant="text"
+              size="small"
               className="text-[#a0a0a0] hover:text-[#F7C843] p-1 md:p-1.5 rounded-full hover:bg-[#2a2a2a] transition-colors" 
               aria-label={t('common.closeModalAria')}
               sx={{ minWidth: 'auto' }}
             >
-              <Icons.XMark className="w-5 h-5 md:w-6 md:w-6" strokeWidth={2.5}/>
+              <Icons.XMark className="w-5 h-5 md:w-6 md:h-6" strokeWidth={2.5}/>
             </Button>
         </div>
 
@@ -518,13 +674,12 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
           {renderProgressBar()}
         </div>
         
-
         <div className="overflow-y-auto flex-grow pe-2 -me-2 rtl:pe-0 rtl:ps-2 scrollbar-thin scrollbar-thumb-[#404040] scrollbar-track-[#2a2a2a] pb-2">
           <AnimatePresence mode="wait">
             <motion.div
               key={wizardStep}
-              initial={{ opacity: 0, x: (language === 'ar' ? -1 : 1) * (wizardStep % 2 === 0 ? 30 : -30) }} // Energetic x shift
-              animate={{ opacity: 1, x: 0, transition: { type: "spring", stiffness: 120, damping: 18 } }} // Spring transition
+              initial={{ opacity: 0, x: (language === 'ar' ? -1 : 1) * (wizardStep % 2 === 0 ? 30 : -30) }}
+              animate={{ opacity: 1, x: 0, transition: { type: 'spring', stiffness: 120, damping: 18 } }}
               exit={{ opacity: 0, x: (language === 'ar' ? -1 : 1) * (wizardStep % 2 === 0 ? -30 : 30), transition: { duration: 0.2 } }}
             >
               {wizardStep === 0 && renderStep0_VinOrManual()}
@@ -540,10 +695,8 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
               <Button 
                 type="button" 
                 onClick={handlePrevStep} 
-                variant="outlined"
-                color="inherit"
+                variant="outline"
                 size="small"
-                sx={{ fontWeight: 'bold' }}
               >
                 {t('common.back')}
               </Button>
@@ -555,10 +708,8 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
                 type="button"
                 onClick={handleNextStep}
                 disabled={isDecodingVin || isFetchingRecalls || (wizardStep === 0 && !showManualEntry && !wizardData.vin.trim())}
-                variant="contained"
-                color="primary"
+                variant="primary"
                 size="small"
-                sx={{ fontWeight: 'bold' }}
               >
                 {isDecodingVin || isFetchingRecalls ? t('common.processing') : t('common.next')}
               </Button>
@@ -567,10 +718,8 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
               <Button 
                 type="button" 
                 onClick={handleSubmit} 
-                variant="contained"
-                color="success"
+                variant="primary"
                 size="small"
-                sx={{ fontWeight: 'bold' }}
               >
                 {t('addVehicleModal.finishAndSaveButton')}
               </Button>

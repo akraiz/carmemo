@@ -4,11 +4,14 @@ import { MaintenanceTask, TaskCategory, TaskStatus, TaskImportance } from '../..
 import { getISODateString, addMonths } from '../../utils/dateUtils';
 import { useTranslation } from '../../hooks/useTranslation';
 import { CANONICAL_TASK_CATEGORIES } from '../../constants';
-import { Button, Dialog, DialogTitle, DialogContent, IconButton, Typography, useTheme, useMediaQuery } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, IconButton, Typography, useTheme, useMediaQuery } from '@mui/material';
+import Button from '../shared/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { Icons } from '../Icon';
+import { TextField } from '@mui/material';
+import { Tabs, Tab, Box, MenuItem } from '@mui/material'; // Added Tabs and Tab, Box for layout
 
 interface AddTaskModalProps {
   isOpen: boolean;
@@ -194,7 +197,7 @@ const UrgencyIndicatorCard = ({ task, currentMileage }: { task: Partial<Maintena
   );
 };
 
-const ModernTaskForm = ({ task, onSave, onClose, currentMileage }: { task: MaintenanceTask | null, onSave: (task: MaintenanceTask) => void, onClose: () => void, currentMileage?: number }) => {
+const ModernTaskForm = ({ task, onSave, onClose, currentMileage, activeTab }: { task: MaintenanceTask | null, onSave: (task: MaintenanceTask) => void, onClose: () => void, currentMileage?: number, activeTab: string }) => {
   const { t, language } = useTranslation();
   const [taskData, setTaskData] = useState<Partial<MaintenanceTask>>(task || {
     title: '',
@@ -203,7 +206,7 @@ const ModernTaskForm = ({ task, onSave, onClose, currentMileage }: { task: Maint
     importance: TaskImportance.Recommended,
     dueDate: getISODateString(addMonths(new Date(),1)),
   });
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  // Removed showAdvanced state
   const [isSaving, setIsSaving] = useState(false);
   const [validation, setValidation] = useState({
     title: { isValid: true, message: '' },
@@ -315,152 +318,224 @@ const ModernTaskForm = ({ task, onSave, onClose, currentMileage }: { task: Maint
 
   return (
     <div className="space-y-4">
-      {/* Title Field */}
-      <div>
-        <label className="block text-sm font-medium text-white mb-2">
-          {t('task.title')} *
-        </label>
-        <input
-          type="text"
-          name="title"
-          value={taskData.title || ''}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 bg-[#2a2a2a] border rounded-lg text-white placeholder-[#707070] focus:outline-none focus:ring-2 focus:ring-[#F7C843] focus:border-transparent ${
-            !validation.title.isValid ? 'border-red-500' : 'border-[#404040]'
-          }`}
-          placeholder={t('task.titlePlaceholder')}
-        />
-        {!validation.title.isValid && (
-          <p className="text-red-400 text-sm mt-1">{validation.title.message}</p>
-        )}
-      </div>
-      
-      {/* Date and Mileage Fields */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div>
-          <label className="block text-sm font-medium text-white mb-2">
-            {t('task.dueDate')}
-          </label>
-          <input
-            type="date"
-            name="dueDate"
-            value={taskData.dueDate ? String(taskData.dueDate).substring(0,10) : ''}
-            onChange={handleChange}
-            className="w-full px-3 py-2 bg-[#2a2a2a] border border-[#404040] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#F7C843] focus:border-transparent"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-white mb-2">
-            {t('task.dueMileage')}
-          </label>
-          <input
-            type="number"
-            name="dueMileage"
-            value={taskData.dueMileage || ''}
-            onChange={handleChange}
-            placeholder={t('addTaskModal.dueMileagePlaceholder')}
-            className={`w-full px-3 py-2 bg-[#2a2a2a] border rounded-lg text-white placeholder-[#707070] focus:outline-none focus:ring-2 focus:ring-[#F7C843] focus:border-transparent ${
-              !validation.dueMileage.isValid ? 'border-red-500' : 'border-[#404040]'
-            }`}
-          />
-          {!validation.dueMileage.isValid && (
-            <p className="text-red-400 text-sm mt-1">{validation.dueMileage.message}</p>
-          )}
-          {getMileageHelperText() && (
-            <p className="text-[#a0a0a0] text-sm mt-1">{getMileageHelperText()}</p>
-          )}
-          <p className="text-[#707070] text-xs mt-1">
-            {t('addTaskModal.currentMileageShort')}: {currentMileage?.toLocaleString(language) || t('common.notApplicable')}
-          </p>
-        </div>
-      </div>
-
-      {/* Category Field (moved out of advanced options) */}
-      <div>
-        <label className="block text-sm font-medium text-white mb-2">
-          {t('task.category')}
-        </label>
-        <select
-          name="category"
-          value={taskData.category}
-          onChange={handleChange}
-          className="w-full px-3 py-2 bg-[#2a2a2a] border border-[#404040] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#F7C843] focus:border-transparent"
-        >
-          {CANONICAL_TASK_CATEGORIES.map(category => (
-            <option key={category} value={category}>
-              {t(`taskCategories.${(category || '').replace(/\s+/g, '')}` as any) || category || 'Other'}
-            </option>
-          ))}
-        </select>
-      </div>
-      
-      {/* Urgency Indicator */}
-      <UrgencyIndicatorCard task={taskData} currentMileage={currentMileage} />
-      
-      {/* Advanced Options */}
-      <div className="space-y-3">
-        <button
-          type="button"
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="flex items-center text-[#F7C843] hover:text-[#ffd700] transition-colors"
-        >
-          {showAdvanced ? <ExpandLessIcon className="w-4 h-4 mr-1" /> : <ExpandMoreIcon className="w-4 h-4 mr-1" />}
-          {showAdvanced ? t('addTaskModal.hideMoreOptions') : t('addTaskModal.showMoreOptions')}
-        </button>
-        
-        {showAdvanced && (
-          <div className="space-y-3 pl-4 border-l-2 border-[#404040]">
-            {/* Cost Field (always under advanced options) */}
+      {activeTab === 'basic' && (
+        <motion.div initial={{opacity:0, x: -15}} animate={{opacity:1, x:0}} exit={{opacity:0, x:15}} className="space-y-4">
+          {/* Title Field */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">
+              {t('task.title')} *
+            </label>
+            <TextField
+              variant="filled"
+              name="title"
+              value={taskData.title || ''}
+              onChange={handleChange}
+              InputProps={{
+                disableUnderline: true,
+                sx: {
+                  borderRadius: 1.5,
+                  background: '#232323',
+                  border: '1px solid #404040',
+                  input: { color: '#fff', fontSize: 16, fontWeight: 400, padding: '16.5px 14px' },
+                }
+              }}
+              placeholder={t('task.titlePlaceholder')}
+              fullWidth
+            />
+            {!validation.title.isValid && (
+              <p className="text-red-400 text-sm mt-1">{validation.title.message}</p>
+            )}
+          </div>
+          
+          {/* Date and Mileage Fields */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-white mb-2">
-                {t('task.cost')}
+                {t('task.dueDate')}
               </label>
-              <input
+              <TextField
+                variant="filled"
+                type="date"
+                name="dueDate"
+                value={taskData.dueDate ? String(taskData.dueDate).substring(0,10) : ''}
+                onChange={handleChange}
+                InputProps={{
+                  disableUnderline: true,
+                  sx: {
+                    borderRadius: 1.5,
+                    background: '#232323',
+                    border: '1px solid #404040',
+                    input: { color: '#fff', fontSize: 16, fontWeight: 400, padding: '16.5px 14px' },
+                  }
+                }}
+                fullWidth
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                {t('task.dueMileage')}
+              </label>
+              <TextField
+                variant="filled"
                 type="number"
-                name="cost"
-                value={taskData.cost || ''}
+                name="dueMileage"
+                value={taskData.dueMileage || ''}
                 onChange={handleChange}
-                className="w-full px-3 py-2 bg-[#2a2a2a] border border-[#404040] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#F7C843] focus:border-transparent"
-                placeholder={t('task.costPlaceholder')}
+                placeholder={t('addTaskModal.dueMileagePlaceholder')}
+                InputProps={{
+                  disableUnderline: true,
+                  sx: {
+                    borderRadius: 1.5,
+                    background: '#232323',
+                    border: '1px solid #404040',
+                    input: { color: '#fff', fontSize: 16, fontWeight: 400, padding: '16.5px 14px' },
+                  }
+                }}
+                fullWidth
               />
-            </div>
-            
-            {/* Importance Selector */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                {t('task.importance')}
-              </label>
-              <select
-                name="importance"
-                value={taskData.importance}
-                onChange={handleChange}
-                className="w-full px-3 py-2 bg-[#2a2a2a] border border-[#404040] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#F7C843] focus:border-transparent"
-              >
-                {Object.values(TaskImportance).map(importance => (
-                  <option key={importance} value={importance}>
-                    {t(`taskImportances.${(importance || '').replace(/\s+/g, '')}` as any) || importance || 'Recommended'}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            {/* Notes Field */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                {t('task.notes')}
-              </label>
-              <textarea
-                name="notes"
-                value={taskData.notes || ''}
-                onChange={handleChange}
-                rows={3}
-                className="w-full px-3 py-2 bg-[#2a2a2a] border border-[#404040] rounded-lg text-white placeholder-[#707070] focus:outline-none focus:ring-2 focus:ring-[#F7C843] focus:border-transparent resize-none"
-                placeholder={t('task.notesPlaceholder')}
-              />
+              {!validation.dueMileage.isValid && (
+                <p className="text-red-400 text-sm mt-1">{validation.dueMileage.message}</p>
+              )}
+              {getMileageHelperText() && (
+                <p className="text-[#a0a0a0] text-sm mt-1">{getMileageHelperText()}</p>
+              )}
+              <p className="text-[#707070] text-xs mt-1">
+                {t('addTaskModal.currentMileageShort')}: {currentMileage?.toLocaleString(language) || t('common.notApplicable')}
+              </p>
             </div>
           </div>
-        )}
-      </div>
+
+          {/* Category Field */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">
+              {t('task.category')}
+            </label>
+            <TextField
+              variant="filled"
+              name="category"
+              value={taskData.category}
+              onChange={handleChange}
+              select
+              InputProps={{
+                disableUnderline: true,
+                sx: {
+                  borderRadius: 1.5,
+                  background: '#232323',
+                  border: '1px solid #404040',
+                  display: 'flex', // Ensures the content within the input field is a flex container
+                  alignItems: 'center', // Vertically centers the content within the input field
+                  padding: '16.5px 14px', // Apply padding directly here
+                  height: '56px', // Explicit height for consistent centering
+                  color: '#fff', // Apply text color here
+                  fontSize: 16, // Apply font size here
+                  fontWeight: 400, // Apply font weight here
+                }
+              }}
+              fullWidth
+            >
+              {CANONICAL_TASK_CATEGORIES.map(category => (
+                <MenuItem key={category} value={category}> {/* Changed <option> to <MenuItem> */}
+                  {t(`taskCategories.${(category || '').replace(/\s+/g, '')}` as any) || category || 'Other'}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
+          
+          {/* Urgency Indicator */}
+          <UrgencyIndicatorCard task={taskData} currentMileage={currentMileage} />
+        </motion.div>
+      )}
+      
+      {activeTab === 'advanced' && (
+        <motion.div initial={{opacity:0, x: 15}} animate={{opacity:1, x:0}} exit={{opacity:0, x:-15}} className="space-y-4">
+          {/* Cost Field */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">
+              {t('task.cost')}
+            </label>
+            <TextField
+              variant="filled"
+              type="number"
+              name="cost"
+              value={taskData.cost || ''}
+              onChange={handleChange}
+              InputProps={{
+                disableUnderline: true,
+                sx: {
+                  borderRadius: 1.5,
+                  background: '#232323',
+                  border: '1px solid #404040',
+                  input: { color: '#fff', fontSize: 16, fontWeight: 400, padding: '16.5px 14px' },
+                }
+              }}
+              placeholder={t('task.costPlaceholder')}
+              fullWidth
+            />
+          </div>
+          
+          {/* Importance Selector */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">
+              {t('task.importance')}
+            </label>
+            <TextField
+              variant="filled"
+              name="importance"
+              value={taskData.importance}
+              onChange={handleChange}
+              select
+              InputProps={{
+                disableUnderline: true,
+                sx: {
+                  borderRadius: 1.5,
+                  background: '#232323',
+                  border: '1px solid #404040',
+                  display: 'flex', // Ensures the content within the input field is a flex container
+                  alignItems: 'center', // Vertically centers the content within the input field
+                  padding: '16.5px 14px', // Apply padding directly here
+                  height: '56px', // Explicit height for consistent centering
+                  color: '#fff', // Apply text color here
+                  fontSize: 16, // Apply font size here
+                  fontWeight: 400, // Apply font weight here
+                }
+              }}
+              fullWidth
+            >
+              {Object.values(TaskImportance).map(importance => (
+                <MenuItem key={importance} value={importance}> {/* Changed <option> to <MenuItem> */}
+                  {t(`taskImportances.${(importance || '').replace(/\s+/g, '')}` as any) || importance || 'Recommended'}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
+          
+          {/* Notes Field */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">
+              {t('task.notes')}
+            </label>
+            <TextField
+              variant="filled"
+              name="notes"
+              value={taskData.notes || ''}
+              onChange={handleChange}
+              multiline
+              rows={3}
+              InputProps={{
+                disableUnderline: true,
+                sx: {
+                  borderRadius: 1.5,
+                  background: '#232323',
+                  border: '1px solid #404040',
+                  input: { color: '#fff', fontSize: 16, fontWeight: 400, padding: '16.5px 14px' },
+                }
+              }}
+              placeholder={t('task.notesPlaceholder')}
+              fullWidth
+            />
+          </div>
+        </motion.div>
+      )}
       
       {/* Action Buttons */}
       <div className="flex gap-3 justify-end pt-4 border-t border-[#404040]">
@@ -514,10 +589,13 @@ const ModernTaskEditModal: React.FC<AddTaskModalProps> = (props) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { isOpen, onClose, task, onSaveTask, currentMileage } = props;
+  const [activeTab, setActiveTab] = useState<'basic' | 'advanced'>('basic'); // Added state for tabs
+  const { t } = useTranslation(); // Added useTranslation hook
 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setActiveTab('basic'); // Reset tab when modal opens
     } else {
       document.body.style.overflow = '';
     }
@@ -527,6 +605,10 @@ const ModernTaskEditModal: React.FC<AddTaskModalProps> = (props) => {
   }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const handleTabChange = (_: React.SyntheticEvent, newValue: 'basic' | 'advanced') => {
+    setActiveTab(newValue);
+  };
 
   // Mobile: use custom bottom sheet, Desktop: use Dialog
   if (isMobile) {
@@ -545,24 +627,53 @@ const ModernTaskEditModal: React.FC<AddTaskModalProps> = (props) => {
           exit="exit"
           className="fixed bottom-0 left-0 right-0 bg-[#1c1c1c] p-4 pt-5 sm:p-6 md:p-8 rounded-t-2xl shadow-2xl w-full h-auto max-h-[90vh] flex flex-col border-t border-s border-e border-[#333333]"
         >
-          <div className="flex justify-between items-center mb-4 md:mb-6 flex-shrink-0">
-            <h2 className="text-xl md:text-2xl font-bold text-white font-heading uppercase tracking-wide">
-              {task ? 'Edit Task' : 'Add Task'}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}> {/* Added Box for header layout */}
+            <h2 className="text-xl md:text-2xl font-bold text-white font-heading uppercase tracking-wide text-start rtl:text-right">
+              {task ? t('addTaskModal.editTaskTitle') : t('addTaskModal.addTaskTitle')}
             </h2>
             <Button 
               onClick={onClose} 
-              variant="outlined"
-              color="primary"
+              variant="text"
+              size="small"
               className="text-[#a0a0a0] hover:text-[#F7C843] p-1 md:p-1.5 rounded-full hover:bg-[#2a2a2a] transition-colors" 
-              aria-label="Close"
+              aria-label={t('common.closeModalAria')}
               sx={{ minWidth: 'auto' }}
             >
-              <Icons.XMark className="w-5 h-5 md:w-6 md:w-6" strokeWidth={2.5}/>
+              <Icons.XMark className="w-5 h-5 md:w-6 md:h-6" strokeWidth={2.5}/>
             </Button>
-          </div>
+          </Box>
 
-          <div className="overflow-y-auto flex-grow pe-2 -me-2 scrollbar-thin scrollbar-thumb-[#404040] scrollbar-track-[#2a2a2a] pb-2">
-            <ModernTaskForm task={task} onSave={onSaveTask} onClose={onClose} currentMileage={currentMileage} />
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}> {/* Added Box and Tabs for navigation */}
+            <Tabs 
+              value={activeTab} 
+              onChange={handleTabChange}
+              aria-label={t('addTaskModal.tabsAriaLabel')}
+              sx={{
+                '& .MuiTab-root': {
+                  color: '#707070',
+                  fontWeight: 700,
+                  fontFamily: 'inherit',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  fontSize: { xs: '1rem', md: '1.1rem' },
+                  '&.Mui-selected': {
+                    color: '#F7C843',
+                  },
+                },
+                '& .MuiTabs-indicator': {
+                  backgroundColor: '#F7C843',
+                  height: 3,
+                  borderRadius: 2,
+                },
+              }}
+            >
+              <Tab label={t('addTaskModal.tabBasicInfo')} value="basic" />
+              <Tab label={t('addTaskModal.tabAdvancedOptions')} value="advanced" />
+            </Tabs>
+          </Box>
+
+          <div className="overflow-y-auto flex-grow pe-2 -me-2 scrollbar-thin scrollbar-thumb-[#404040] scrollbar-track-[#2a2a2a] pb-2"> 
+            <ModernTaskForm task={task} onSave={onSaveTask} onClose={onClose} currentMileage={currentMileage} activeTab={activeTab} />
           </div>
         </motion.div>
       </motion.div>
@@ -586,14 +697,42 @@ const ModernTaskEditModal: React.FC<AddTaskModalProps> = (props) => {
     >
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 2 }}>
         <Typography variant="h6">
-          {task ? 'Edit Task' : 'Add Task'}
+          {task ? t('addTaskModal.editTaskTitle') : t('addTaskModal.addTaskTitle')}
         </Typography>
         <IconButton onClick={onClose} size="large">
           <CloseIcon />
         </IconButton>
       </DialogTitle>
       <DialogContent>
-        <ModernTaskForm task={task} onSave={onSaveTask} onClose={onClose} currentMileage={currentMileage} />
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+          <Tabs 
+            value={activeTab} 
+            onChange={handleTabChange}
+            aria-label={t('addTaskModal.tabsAriaLabel')}
+            sx={{
+              '& .MuiTab-root': {
+                color: '#707070',
+                fontWeight: 700,
+                fontFamily: 'inherit',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                fontSize: { xs: '1rem', md: '1.1rem' },
+                '&.Mui-selected': {
+                  color: '#F7C843',
+                },
+              },
+              '& .MuiTabs-indicator': {
+                backgroundColor: '#F7C843',
+                height: 3,
+                borderRadius: 2,
+              },
+            }}
+          >
+            <Tab label={t('addTaskModal.tabBasicInfo')} value="basic" />
+            <Tab label={t('addTaskModal.tabAdvancedOptions')} value="advanced" />
+          </Tabs>
+        </Box>
+        <ModernTaskForm task={task} onSave={onSaveTask} onClose={onClose} currentMileage={currentMileage} activeTab={activeTab} />
       </DialogContent>
     </Dialog>
   );
