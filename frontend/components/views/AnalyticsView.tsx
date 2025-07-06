@@ -252,7 +252,7 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
               <div key={m.month} className="flex items-center justify-between text-xs md:text-sm">
                 <span className="text-[#cfcfcf]">{m.month}</span>
                 <span className="font-bold text-[#F7C843]">${m.spending.toFixed(2)}</span>
-                <span className="text-[#a0a0a0]">({m.tasks} {t('analytics.task')})</span>
+                <span className="text-[#a0a0a0]">({m.tasks} {t('task')})</span>
               </div>
             ))}
           </div>
