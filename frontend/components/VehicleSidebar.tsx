@@ -94,7 +94,9 @@ const VehicleSidebar: React.FC<VehicleSidebarProps> = ({ vehicles, selectedVehic
         {t('sidebar.addVehicleButton')}
       </Button>
       <p className="text-xs text-[#F7C843] mt-1 text-center">{t('sidebar.addVehicleHint')}</p>
-      {/* Logo section - moved up above the bottom separator */}
+      {/* Separator above logo */}
+      <div className="w-full border-t border-[#333333] my-4" />
+      {/* Logo section */}
       <div className="flex justify-center items-center my-4">
         <img
           src="/levers-logo.png"
@@ -102,8 +104,6 @@ const VehicleSidebar: React.FC<VehicleSidebarProps> = ({ vehicles, selectedVehic
           style={{ maxWidth: 180, maxHeight: 60, objectFit: 'contain' }}
         />
       </div>
-      {/* Bottom separator below logo - match header line style */}
-      <div className="w-full border-t border-[#333333] my-4" />
     </>
   );
 
