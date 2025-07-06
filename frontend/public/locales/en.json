@@ -464,7 +464,7 @@
   "timeline.searchPlaceholder": "Search Tasks...",
   "timeline.categoryAll": "All",
   "toasts.vehicleAdded": "Added {name} ({year}) to your garage.",
-  "toasts.vehicleUpdated": "Updated details for {name}.",
+  "toasts.vehicleUpdated": "Vehicle Updated Successfully",
   "toasts.vehicleDeleted": "Removed {name} from your garage.",
   "toasts.taskAdded": "Added '{task}' for {vehicle} (due {dueDate}).",
   "toasts.taskUpdated": "Updated '{task}' for {vehicle}.",

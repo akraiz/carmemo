@@ -436,7 +436,7 @@
   "timeline.today": "اليوم",
   "timeline.milesAbbr": "كم",
   "toasts.vehicleAdded": "تمت إضافة {name} ({year}) إلى كراجك.",
-  "toasts.vehicleUpdated": "تم تحديث بيانات {name}.",
+  "toasts.vehicleUpdated": "تم تحديث بيانات المركبة بنجاح",
   "toasts.vehicleDeleted": "تمت إزالة {name} من كراجك.",
   "toasts.taskAdded": "تمت إضافة '{task}' لـ {vehicle} (مستحقة {dueDate}).",
   "toasts.taskUpdated": "تم تحديث '{task}' لـ {vehicle}.",
