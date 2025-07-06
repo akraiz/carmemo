@@ -5,6 +5,7 @@ import { getISODateString, addMonths, isDateOverdue } from '../utils/dateUtils';
 import { loadVehiclesFromStorage, saveVehiclesToStorage, loadSelectedVehicleIdFromStorage, saveSelectedVehicleIdToStorage } from '../services/localStorageService';
 import { ocrReceiptWithGemini, enrichBaselineSchedule } from '../services/aiService';
 import { useTranslation } from './useTranslation'; // Added for t function
+import { useToast } from '../contexts/ToastContext';
 import { API_CONFIG, buildApiUrl } from '../config/api';
 
 // --- App State Interface ---
@@ -42,6 +43,7 @@ const initialState: VehicleManagerState = {
 const useVehicleManager = () => {
   const [state, setState] = useState<VehicleManagerState>(initialState);
   const { t } = useTranslation(); // Get t function
+  const toast = useToast();
 
   useEffect(() => {
     const loadedVehicles = loadVehiclesFromStorage();
@@ -394,7 +396,12 @@ const useVehicleManager = () => {
       const vehicleIndex = vehiclesCopy.findIndex(v => v.id === updatedVehicleData.id);
       if (vehicleIndex === -1) return { ...prev, error: "errors.vehicleNotFoundUpdate" }; 
 
-      vehiclesCopy[vehicleIndex] = { ...vehiclesCopy[vehicleIndex], ...updatedVehicleData };
+      const updatedVehicle = { ...vehiclesCopy[vehicleIndex], ...updatedVehicleData };
+      vehiclesCopy[vehicleIndex] = updatedVehicle;
+      
+      // Show success toast
+      toast.showVehicleUpdated(updatedVehicle);
+      
       return { ...prev, vehicles: vehiclesCopy, showEditVehicleModal: false, editingVehicle: null };
     });
   };

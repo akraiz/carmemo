@@ -766,6 +766,14 @@ export default function useVehicleManagement() {
         }
         return vehiclesCopy;
       });
+      
+      // Show success toast
+      const updatedVehicle = vehicles.find(v => v.id === updatedVehicleData.id);
+      if (updatedVehicle) {
+        const finalVehicle = { ...updatedVehicle, ...updatedVehicleData };
+        toast.showVehicleUpdated(finalVehicle);
+      }
+      
       setShowEditVehicleModal(false);
       setEditingVehicle(null);
     } catch (error) {
