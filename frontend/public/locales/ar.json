@@ -109,7 +109,7 @@
   "editVehicleModal.redecodeVinButton": "إعادة فك تشفير رقم الهيكل",
   "editVehicleModal.recallsUpdated": "تم تحديث الاستدعاءات للمركبة.",
   "editVehicleModal.tabsAriaLabel": "علامات تبويب تعديل المركبة",
-  "editVehicleModal.tabBasicInfo": "المعلومات الأساسية والصورة",
+  "editVehicleModal.tabBasicInfo": "المعلومات الأساسية",
   "editVehicleModal.tabSpecifications": "المواصفات التفصيلية",
   "vehicle.make": "الصانع",
   "vehicle.model": "الطراز",

@@ -113,7 +113,7 @@
   "editVehicleModal.redecodeVinButton": "Re-decode VIN",
   "editVehicleModal.recallsUpdated": "Recalls updated for the vehicle.",
   "editVehicleModal.tabsAriaLabel": "Vehicle Edit Tabs",
-  "editVehicleModal.tabBasicInfo": "Basic Info & Photo",
+  "editVehicleModal.tabBasicInfo": "Basic Info",
   "editVehicleModal.tabSpecifications": "Detailed Specifications",
   "vehicle.make": "Make",
   "vehicle.model": "Model",
