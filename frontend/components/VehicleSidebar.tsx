@@ -117,7 +117,7 @@ const VehicleSidebar: React.FC<VehicleSidebarProps> = ({ vehicles, selectedVehic
           <img
             src="/levers-logo.png"
             alt="Levers Logo"
-            style={{ maxWidth: 180, maxHeight: 60, objectFit: 'contain' }}
+            style={{ maxWidth: 180, maxHeight: 60, objectFit: 'contain', opacity: 0.5 }}
           />
         </div>
         {/* Separator below logo */}
