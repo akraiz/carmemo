@@ -378,7 +378,7 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
             <p className="font-normal text-[14px] text-[#B0B0B0] leading-[1.5]">{vehicle.year}</p>
             {/* Use liveRecalls for button visibility */}
             {recallsLoading ? (
-              <span className="text-xs text-[#FFD700] block mt-2">Loading recalls...</span>
+              <span className="text-xs text-[#FFD700] block mt-2">{t('vehicleInfo.loadingRecalls')}</span>
             ) : recallsError ? (
               <span className="text-xs text-red-400 block mt-2">{recallsError}</span>
             ) : liveRecalls && liveRecalls.length > 0 && (
@@ -438,9 +438,9 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
       {/* Maintenance Tasks Section */}
       <motion.section variants={sectionVariants} aria-labelledby="maintenance-section-title">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-3 md:mb-4">
-          <h3 id="maintenance-section-title" className="text-xl md:text-2xl font-semibold text-white font-heading uppercase tracking-wide">Next Maintenance</h3>
+          <h3 id="maintenance-section-title" className="text-xl md:text-2xl font-semibold text-white font-heading uppercase tracking-wide">{t('vehicleInfo.nextMaintenance')}</h3>
           {sortedTasks.filter(t => t.status === TaskStatus.Upcoming || t.status === TaskStatus.Overdue).length === 0 ? (
-            <span className="text-sm text-[#a0a0a0] mt-1 sm:mt-0">All caught up!</span>
+            <span className="text-sm text-[#a0a0a0] mt-1 sm:mt-0">{t('vehicleInfo.allCaughtUp')}</span>
           ) : (
             <p className="text-sm text-[#a0a0a0] mt-1 sm:mt-0">{t('maintenance.upcomingTasksCount', { count: sortedTasks.filter(t => t.status === TaskStatus.Upcoming || t.status === TaskStatus.Overdue).length })}</p>
           )}
@@ -452,7 +452,7 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
             initial={{opacity:0, y:20}} animate={{opacity:1, y:0, transition: {delay:0.1, duration:0.3}}}
           >
             <Icons.Search className="w-12 h-12 text-[#404040] mx-auto mb-3" strokeWidth={1}/>
-            <p className="text-[#a0a0a0]">{`Your ${vehicle.make} ${vehicle.model} is up to date with maintenance.`}</p>
+            <p className="text-[#a0a0a0]">{t('vehicleInfo.upToDateMessage', { make: vehicle.make, model: vehicle.model })}</p>
           </motion.div>
         ) : (
           <AnimatePresence>

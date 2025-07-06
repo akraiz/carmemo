@@ -134,6 +134,7 @@ const SegmentedToggle: React.FC<{
   upcomingCount: number;
   completedCount: number;
 }> = ({ activeTab, onTabChange, upcomingCount, completedCount }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const activeColor = theme.palette.primary.main;
   const inactiveColor = theme.palette.text.secondary;
@@ -182,13 +183,13 @@ const SegmentedToggle: React.FC<{
         onClick={() => onTabChange('upcoming')} 
         sx={activeTab === 'upcoming' ? activeTabStyle : tabStyle}
       >
-        Upcoming <Typography component="span" sx={activeTab === 'upcoming' ? activeCountStyle : countStyle}>{upcomingCount}</Typography>
+        {t('timeline.upcoming')} <Typography component="span" sx={activeTab === 'upcoming' ? activeCountStyle : countStyle}>{upcomingCount}</Typography>
       </Button>
       <Button
         onClick={() => onTabChange('completed')} 
         sx={activeTab === 'completed' ? activeTabStyle : tabStyle}
       >
-        Completed <Typography component="span" sx={activeTab === 'completed' ? activeCountStyle : countStyle}>{completedCount}</Typography>
+        {t('timeline.completed')} <Typography component="span" sx={activeTab === 'completed' ? activeCountStyle : countStyle}>{completedCount}</Typography>
       </Button>
     </Box>
   );
@@ -256,8 +257,8 @@ const OutlookStyleTaskCard: React.FC<{
               {task.status !== TaskStatus.Completed
                 ? getPredictiveDueText(task.dueDate)
                 : (task.completedDate
-                    ? `Completed on ${formatDate(task.completedDate)}`
-                    : 'Completed')}
+                    ? `${t('timeline.completedOn')} ${formatDate(task.completedDate)}`
+                    : t('timeline.completed'))}
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 400, color: '#A0A0A0' }}>
               {t(`taskCategories.${(task.category || '').replace(/[-\s]+/g, '')}` as any, { defaultValue: task.category || 'Other' })}
@@ -304,11 +305,11 @@ const OutlookStyleTaskCard: React.FC<{
               <Box sx={{ padding: '8px 16px', display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
                 {task.status !== TaskStatus.Completed && (
                   <Button variant="contained" startIcon={<CheckCircleIcon />} onClick={handleComplete} color="success" size="small">
-                    Complete
+                    {t('timeline.complete')}
                   </Button>
                 )}
                 <Button variant="outlined" startIcon={<EditIcon />} onClick={handleEdit} color="primary" size="small">
-                  Edit
+                  {t('timeline.edit')}
                 </Button>
                 <IconButton onClick={handleDeleteClick} color="error" size="small">
                   <DeleteIcon />
@@ -320,11 +321,11 @@ const OutlookStyleTaskCard: React.FC<{
       </Box>
 
       <Dialog open={showDeleteDialog} onClose={() => setShowDeleteDialog(false)}>
-        <DialogTitle>Delete Task</DialogTitle>
-        <DialogContent><Typography>Are you sure you want to delete this task?</Typography></DialogContent>
+        <DialogTitle>{t('timeline.deleteTask')}</DialogTitle>
+        <DialogContent><Typography>{t('timeline.deleteConfirmation')}</Typography></DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
-          <Button onClick={handleDeleteConfirm} color="error">Delete</Button>
+          <Button onClick={() => setShowDeleteDialog(false)}>{t('timeline.cancel')}</Button>
+          <Button onClick={handleDeleteConfirm} color="error">{t('timeline.delete')}</Button>
         </DialogActions>
       </Dialog>
     </>
@@ -334,14 +335,17 @@ const OutlookStyleTaskCard: React.FC<{
 const EmptyState: React.FC<{
   message: string;
   onClearFilter?: () => void;
-}> = ({ message, onClearFilter }) => (
+}> = ({ message, onClearFilter }) => {
+  const { t } = useTranslation();
+  return (
   <Box textAlign="center" py={10} px={2}>
     <TaskAltIcon sx={{ fontSize: 60, color: 'text.disabled', mb: 2 }} />
     <Typography variant="h6" color="text.primary" gutterBottom>{message}</Typography>
-    <Typography color="text.secondary">Try adjusting your search or filter.</Typography>
-    {onClearFilter && <Button variant="outlined" onClick={onClearFilter} sx={{ mt: 2 }}>Clear Filter</Button>}
+    <Typography color="text.secondary">{t('timeline.tryAdjusting')}</Typography>
+    {onClearFilter && <Button variant="outlined" onClick={onClearFilter} sx={{ mt: 2 }}>{t('timeline.clearFilter')}</Button>}
   </Box>
-);
+  );
+};
 
 // --- MAIN COMPONENT: TimelineView ---
 const TimelineView: React.FC<TimelineViewProps> = ({

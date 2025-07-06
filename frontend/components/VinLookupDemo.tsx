@@ -9,7 +9,7 @@ interface VinLookupDemoProps {
 }
 
 const VinLookupDemo: React.FC<VinLookupDemoProps> = ({ onVehicleFound }) => {
-  const { t: _t } = useTranslation();
+  const { t } = useTranslation();
   const [vin, setVin] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,12 +24,12 @@ const VinLookupDemo: React.FC<VinLookupDemoProps> = ({ onVehicleFound }) => {
 
   const handleLookup = async () => {
     if (!vin.trim()) {
-      setError('Please enter a VIN number');
+      setError(t('vinLookup.pleaseEnterVin'));
       return;
     }
 
     if (!validateVin(vin.trim())) {
-      setError('Invalid VIN format. VIN must be exactly 17 characters and contain only letters and numbers (excluding I, O, Q).');
+      setError(t('vinLookup.invalidVinFormat'));
       return;
     }
 
@@ -44,10 +44,10 @@ const VinLookupDemo: React.FC<VinLookupDemoProps> = ({ onVehicleFound }) => {
         setVehicleData(decodedVehicle);
         onVehicleFound?.(decodedVehicle);
       } else {
-        setError('Could not decode VIN. Please check the VIN number.');
+        setError(t('vinLookup.couldNotDecode'));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while looking up the VIN');
+      setError(err instanceof Error ? err.message : t('vinLookup.errorOccurred'));
     } finally {
       setIsLoading(false);
     }
@@ -62,14 +62,14 @@ const VinLookupDemo: React.FC<VinLookupDemoProps> = ({ onVehicleFound }) => {
   return (
     <div className="max-w-2xl mx-auto p-6 bg-[#1a1a1a] rounded-lg shadow-lg">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-white mb-2">Vehicle Details Lookup</h2>
-        <p className="text-[#cfcfcf]">Enter a 17-character VIN to get vehicle information</p>
+        <h2 className="text-2xl font-bold text-white mb-2">{t('vinLookup.title')}</h2>
+        <p className="text-[#cfcfcf]">{t('vinLookup.description')}</p>
       </div>
 
       {/* VIN Input */}
       <div className="mb-6">
         <label htmlFor="vin" className="block text-sm font-medium text-white mb-2">
-          Vehicle Identification Number (VIN)
+          {t('vinLookup.vinLabel')}
         </label>
         <div className="flex gap-2">
           <TextField
@@ -78,7 +78,7 @@ const VinLookupDemo: React.FC<VinLookupDemoProps> = ({ onVehicleFound }) => {
             value={vin}
             onChange={handleVinChange}
             onKeyPress={handleKeyPress}
-            placeholder="Enter 17-character VIN"
+            placeholder={t('vinLookup.vinPlaceholder')}
             inputProps={{ maxLength: 17 }}
             disabled={isLoading}
             variant="outlined"
@@ -96,12 +96,12 @@ const VinLookupDemo: React.FC<VinLookupDemoProps> = ({ onVehicleFound }) => {
               minWidth: '120px'
             }}
           >
-            {isLoading ? 'Looking up...' : 'Lookup'}
+            {isLoading ? t('vinLookup.lookingUp') : t('vinLookup.lookup')}
           </Button>
         </div>
         {vin && (
           <p className="text-xs text-[#707070] mt-1">
-            Formatted: {formatVin(vin)}
+            {t('vinLookup.formatted')} {formatVin(vin)}
           </p>
         )}
       </div>
