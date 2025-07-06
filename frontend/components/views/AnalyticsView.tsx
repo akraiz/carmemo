@@ -9,7 +9,7 @@ import { formatDate } from '../../utils/dateUtils';
 
 const AnalyticsView: React.FC = () => {
   const { t } = useTranslation();
-  const { vehicles, isLoading } = useVehicleManager();
+  const { selectedVehicle, isLoading } = useVehicleManager();
 
   if (isLoading) {
     return (
@@ -31,8 +31,9 @@ const AnalyticsView: React.FC = () => {
   }
 
   const analytics = useMemo(() => {
-    const vehiclesArray = vehicles || [];
-    const allTasks = vehiclesArray.flatMap((v: Vehicle) => v.maintenanceSchedule || []);
+    if (!selectedVehicle) return null;
+    
+    const allTasks = selectedVehicle.maintenanceSchedule || [];
     const totalTasks = allTasks.length;
     const completedTasks = allTasks.filter((t: MaintenanceTask) => t.status === TaskStatus.Completed).length;
     const overdueTasks = allTasks.filter((t: MaintenanceTask) => t.status === TaskStatus.Overdue).length;
@@ -80,7 +81,7 @@ const AnalyticsView: React.FC = () => {
       monthlySpending,
       averageCost: completedTasks > 0 ? (totalCost / completedTasks).toFixed(2) : '0'
     };
-  }, [vehicles]);
+  }, [selectedVehicle]);
 
   const StatCard: React.FC<{ title: React.ReactNode; value: React.ReactNode; subtitle?: string; icon: React.ReactElement; color: string }> = ({ title, value, subtitle, icon, color }) => (
     <motion.div 
@@ -116,7 +117,7 @@ const AnalyticsView: React.FC = () => {
     </div>
   );
 
-  if (!vehicles || vehicles.length === 0) {
+  if (!selectedVehicle) {
     return (
       <motion.div
         className="flex flex-col items-center justify-center h-full text-center bg-[#1c1c1c] rounded-lg shadow-xl border border-dashed border-[#333333]"
@@ -158,7 +159,7 @@ const AnalyticsView: React.FC = () => {
         <div className="flex items-center gap-2">
           <Icons.BarChart3 className="w-5 h-5 text-[#F7C843]" />
           <span className="font-bold text-[#F7C843] text-base md:text-lg">
-            {t('analytics.title')}
+            {t('analytics.title')} - {selectedVehicle.nickname || `${selectedVehicle.make} ${selectedVehicle.model}`}
           </span>
         </div>
         <div className="flex gap-2 text-xs md:text-sm text-[#a0a0a0]">
