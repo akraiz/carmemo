@@ -557,10 +557,6 @@ const ModernTaskForm = ({ task, onSave, onClose, currentMileage, activeTab }: { 
         </button>
       </div>
       
-      {/* Keyboard shortcuts hint */}
-      <p className="text-[#707070] text-xs text-center">
-        💡 Tip: Press Ctrl+Enter to save, Esc to cancel
-      </p>
     </div>
   );
 };
