@@ -81,8 +81,6 @@ const VehicleSidebar: React.FC<VehicleSidebarProps> = ({ vehicles, selectedVehic
           ))}
         </AnimatePresence>
       </div>
-      {/* Top separator above Add Vehicle button */}
-      <div className="w-full border-t border-[#F7C843] my-4" />
       <Button
         variant="contained"
         color="primary"
@@ -96,18 +94,16 @@ const VehicleSidebar: React.FC<VehicleSidebarProps> = ({ vehicles, selectedVehic
         {t('sidebar.addVehicleButton')}
       </Button>
       <p className="text-xs text-[#F7C843] mt-1 text-center">{t('sidebar.addVehicleHint')}</p>
-      {/* Separator above logo */}
-      <div className="w-full border-t border-[#F7C843] my-4" />
-      {/* Logo section */}
+      {/* Logo section - moved up above the bottom separator */}
       <div className="flex justify-center items-center my-4">
         <img
           src="/levers-logo.png"
           alt="Levers Logo"
-          style={{ maxWidth: 180, maxHeight: 60, objectFit: 'contain', filter: 'drop-shadow(0 0 12px #fff8)' }}
+          style={{ maxWidth: 180, maxHeight: 60, objectFit: 'contain' }}
         />
       </div>
-      {/* Bottom separator below logo */}
-      <div className="w-full border-t border-[#F7C843] my-4" />
+      {/* Bottom separator below logo - match header line style */}
+      <div className="w-full border-t border-[#333333] my-4" />
     </>
   );
 
