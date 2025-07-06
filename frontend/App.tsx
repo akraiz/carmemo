@@ -326,7 +326,7 @@ const App: React.FC = () => {
   const handleUpdateVehiclePhotoFile = async (vehicleId: string, file: File) => {
     await rest.handleUpdateVehiclePhoto(vehicleId, file);
   };
-  const handleAddVehicleWithId = async (vehicleData: Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { initialMaintenanceTasks?: MaintenanceTask[], recalls?: RecallInfo[] }) => {
+  const handleAddVehicleWithId = async (vehicleData: Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { recalls?: RecallInfo[] }) => {
     await rest.handleAddVehicle(vehicleData);
     const latestVehicle = vehicles[vehicles.length - 1];
     return latestVehicle?.id;
@@ -435,7 +435,6 @@ const App: React.FC = () => {
                 isOpen={rest.showAddVehicleModal}
                 onClose={handleCloseAddVehicle}
                 onAddVehicle={handleAddVehicleWithId}
-                onUploadVehicleImage={handleUpdateVehiclePhotoFile}
               />
             )}
             {rest.showAddTaskModal && selectedVehicleId && selectedVehicle && (

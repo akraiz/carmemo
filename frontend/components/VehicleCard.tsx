@@ -70,7 +70,25 @@ const makeIconMap: Record<string, IconType> = {
 
 const getBrandIcon = (make?: string) => {
   if (!make) return Icons.Car;
-  const key = make.toLowerCase().replace(/[^a-z]/g, '');
+  
+  // Normalize the make name: lowercase and remove special characters
+  let key = make.toLowerCase();
+  
+  // Handle specific brand name variations
+  if (key.includes('mercedes')) return makeIconMap.mercedes;
+  if (key.includes('land rover') || key.includes('landrover')) return makeIconMap.landrover;
+  if (key.includes('alfa romeo') || key.includes('alfaromeo')) return makeIconMap.alfaromeo;
+  if (key.includes('volkswagen') || key.includes('vw')) return makeIconMap.volkswagen;
+  if (key.includes('bmw')) return makeIconMap.bmw;
+  if (key.includes('toyota')) return makeIconMap.toyota;
+  if (key.includes('honda')) return makeIconMap.honda;
+  if (key.includes('ford')) return makeIconMap.ford;
+  if (key.includes('porsche')) return makeIconMap.porsche;
+  if (key.includes('tesla')) return makeIconMap.tesla;
+  if (key.includes('audi')) return makeIconMap.audi;
+  
+  // For other brands, use the original logic
+  key = key.replace(/[^a-z]/g, '');
   return makeIconMap[key] || Icons.Car;
 };
 

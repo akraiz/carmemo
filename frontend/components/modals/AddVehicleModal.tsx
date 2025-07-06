@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Vehicle, MaintenanceTask, TaskCategory, TaskStatus, RecallInfo } from '../../types';
-import { COMMON_MAINTENANCE_PRESETS, MaintenanceTaskPreset } from '../../constants';
-import { getISODateString, formatDate } from '../../utils/dateUtils';
+import { Vehicle, RecallInfo } from '../../types';
+import { getISODateString } from '../../utils/dateUtils';
 import { decodeVinWithApiNinjas, decodeVinWithGeminiBackend, mergeVinResults, validateVin } from '../../services/vinLookupService';
-import { getRecallsByVinWithGemini, enrichBaselineSchedule } from '../../services/aiService';
-import { Icons, IconMap, DefaultTaskIcon } from '../Icon';
+import { Icons } from '../Icon';
 import { useTranslation } from '../../hooks/useTranslation';
-import useVehicleManager, { mergeBaselineSchedule } from '../../hooks/useVehicleManager';
 import { Button, TextField, Box } from '@mui/material';
 import { buildApiUrl } from '../../config/api';
 import { SessionService } from '../../services/sessionService';
@@ -15,8 +12,7 @@ import { SessionService } from '../../services/sessionService';
 interface AddVehicleModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddVehicle: (vehicleData: Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { initialMaintenanceTasks?: MaintenanceTask[], recalls?: RecallInfo[] }) => Promise<string | undefined>;
-  onUploadVehicleImage?: (vehicleId: string, file: File) => Promise<void>;
+  onAddVehicle: (vehicleData: Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { recalls?: RecallInfo[] }) => Promise<string | undefined>;
 }
 
 interface WizardData {
@@ -27,8 +23,6 @@ interface WizardData {
   nickname: string;
   currentMileage: string;
   purchaseDate: string;
-  imageUrl?: string;
-  initialMaintenanceTasks: Array<Partial<MaintenanceTask> & { tempId: string; isCustom?: boolean; titleKey?: string }>;
   recalls?: RecallInfo[]; 
   trim?: string;
   driveType?: string;
@@ -52,8 +46,8 @@ interface WizardData {
 
 const initialWizardData: WizardData = {
   vin: '', make: '', model: '', year: '', nickname: '',
-  currentMileage: '', purchaseDate: getISODateString(new Date()), imageUrl: undefined,
-  initialMaintenanceTasks: [], recalls: [], trim: '', driveType: '', primaryFuelType: '',
+  currentMileage: '', purchaseDate: getISODateString(new Date()),
+  recalls: [], trim: '', driveType: '', primaryFuelType: '',
   secondaryFuelType: '', engineBrakeHP: undefined, engineDisplacementL: '',
   transmissionStyle: '', gvwr: '', cylinders: undefined, electrificationLevel: '',
   engineModel: '', bodyClass: '', doors: undefined, engineConfiguration: '',
@@ -80,7 +74,7 @@ const backdropVariants = {
   exit: { opacity: 0, transition: { duration: 0.2, ease: "easeInOut" as const } }
 };
 
-const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAddVehicle, onUploadVehicleImage }) => {
+const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAddVehicle }) => {
   // Move all hooks to the top level
   const { t, language } = useTranslation();
   const [wizardStep, setWizardStep] = useState(0);
@@ -89,9 +83,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
   const [vinError, setVinError] = useState<string | null>(null);
   const [isFetchingRecalls, setIsFetchingRecalls] = useState(false);
   const [showManualEntry, setShowManualEntry] = useState(false);
-  const [showCustomInitialTaskForm, setShowCustomInitialTaskForm] = useState(false);
-
-  const totalSteps = 4;
+  const totalSteps = 3;
 
   useEffect(() => {
     if (isOpen) {
@@ -101,7 +93,6 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
       setIsDecodingVin(false);
       setIsFetchingRecalls(false);
       setShowManualEntry(false);
-      setShowCustomInitialTaskForm(false);
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -218,72 +209,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     }
   };
 
-  const handleAddInitialTaskPreset = (preset: MaintenanceTaskPreset) => {
-    if (preset.key === "OTHER") {
-        setShowCustomInitialTaskForm(true);
-        setWizardData(prev => ({
-          ...prev,
-          initialMaintenanceTasks: [
-            ...prev.initialMaintenanceTasks,
-            { tempId: self.crypto.randomUUID(), title: '', category: TaskCategory.Other, completedDate: getISODateString(), isCustom: true, titleKey: 'taskPresets.other.title' }
-          ]
-        }));
-        return;
-    }
-    setWizardData(prev => ({
-      ...prev,
-      initialMaintenanceTasks: [
-        ...prev.initialMaintenanceTasks,
-        {
-          tempId: self.crypto.randomUUID(),
-          title: preset.title,
-          titleKey: preset.title,
-          category: preset.category,
-          completedDate: getISODateString(),
-        }
-      ]
-    }));
-  };
 
-  const handleInitialTaskChange = (index: number, field: keyof MaintenanceTask, value: any) => {
-    setWizardData(prev => {
-      const tasks = [...prev.initialMaintenanceTasks];
-      tasks[index] = { ...tasks[index], [field]: value };
-      if (field === 'title' && tasks[index].isCustom) {
-          tasks[index].titleKey = undefined;
-      }
-      return { ...prev, initialMaintenanceTasks: tasks };
-    });
-  };
-
-  const handleRemoveInitialTask = (tempIdToRemove: string) => {
-    const taskBeingRemoved = wizardData.initialMaintenanceTasks.find(task => task.tempId === tempIdToRemove);
-    setWizardData(prev => ({
-      ...prev,
-      initialMaintenanceTasks: prev.initialMaintenanceTasks.filter((task) => task.tempId !== tempIdToRemove)
-    }));
-    if (taskBeingRemoved?.isCustom) {
-        setShowCustomInitialTaskForm(false);
-    }
-  };
-
-  const handleSaveCustomInitialTask = () => {
-    const customTaskIndex = wizardData.initialMaintenanceTasks.findIndex(t => t.isCustom && !t.title);
-    if (customTaskIndex !== -1 && !wizardData.initialMaintenanceTasks[customTaskIndex].title) {
-        alert(t('addVehicleModal.customTaskTitleError'));
-        return;
-    }
-    setShowCustomInitialTaskForm(false);
-     setWizardData(prev => {
-        const tasks = [...prev.initialMaintenanceTasks];
-        const taskToFinalize = tasks.find(t => t.isCustom && t.title);
-        if (taskToFinalize) {
-            taskToFinalize.isCustom = false; 
-            taskToFinalize.titleKey = undefined; 
-        }
-        return {...prev, initialMaintenanceTasks: tasks};
-     });
-  };
 
   const handleSubmit = async () => {
     if (!wizardData.make || !wizardData.model || !wizardData.year) {
@@ -297,25 +223,12 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
         return;
     }
 
-    const finalVehicleData: Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { initialMaintenanceTasks?: MaintenanceTask[], recalls?: RecallInfo[] } = {
+    const finalVehicleData: Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { recalls?: RecallInfo[] } = {
       vin: wizardData.vin, make: wizardData.make, model: wizardData.model,
       year: parseInt(wizardData.year, 10), nickname: wizardData.nickname,
       currentMileage: parseInt(wizardData.currentMileage, 10),
       purchaseDate: wizardData.purchaseDate,
       recalls: wizardData.recalls, 
-      initialMaintenanceTasks: wizardData.initialMaintenanceTasks
-        .filter(task => task.title)
-        .map(task => ({
-          id: typeof task.id === 'string' && task.id.trim().length > 0 ? task.id : self.crypto.randomUUID(),
-          title: task.titleKey || task.title!, 
-          category: task.category || TaskCategory.Other,
-          status: TaskStatus.Completed,
-          completedDate: task.completedDate || getISODateString(),
-          creationDate: getISODateString(),
-          notes: task.notes,
-          cost: task.cost ? parseFloat(task.cost.toString()) : undefined,
-          dueMileage: task.dueMileage ? parseInt(task.dueMileage.toString()) : undefined,
-      }) as MaintenanceTask),
       trim: wizardData.trim,
       driveType: wizardData.driveType,
       primaryFuelType: wizardData.primaryFuelType,
@@ -333,7 +246,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     const cleanedVehicleData = Object.fromEntries(
       Object.entries(finalVehicleData).filter(([_, v]) => v !== "")
     );
-    const vehicleId = await onAddVehicle(cleanedVehicleData as Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { initialMaintenanceTasks?: MaintenanceTask[], recalls?: RecallInfo[] });
+    const vehicleId = await onAddVehicle(cleanedVehicleData as Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { recalls?: RecallInfo[] });
     onClose();
   };
 
@@ -430,7 +343,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     </motion.div>
   );
 
-  const renderStep1_DetailsAndPhoto = () => (
+  const renderStep1_Details = () => (
     <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="text-start rtl:text-right">
       <h3 className="text-lg md:text-xl font-semibold text-white mb-1 font-heading uppercase">{t('addVehicleModal.step1.title')}</h3>
       <p className="text-sm text-[#cfcfcf] mb-5 md:mb-6">{t('addVehicleModal.step1.description')}</p>
@@ -571,79 +484,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     </motion.div>
   );
 
-const renderStep3_InitialLog = () => (
-    <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="text-start rtl:text-right">
-      <h3 className="text-lg md:text-xl font-semibold text-white mb-1 font-heading uppercase">{t('addVehicleModal.step3.title')}</h3>
-      <p className="text-sm text-[#cfcfcf] mb-5 md:mb-6">{t('addVehicleModal.step3.description')}</p>
-      
-      <div className="space-y-4 md:space-y-5">
-        {wizardData.initialMaintenanceTasks.map((task, index) => {
-          const TaskIconComponent = (task.titleKey && IconMap[COMMON_MAINTENANCE_PRESETS.find(p => p.title === task.titleKey)?.iconName || 'Wrench']) || DefaultTaskIcon;
-          
-          return (
-            <motion.div key={index} className="p-4 bg-[#2a2a2a] rounded-lg border border-[#404040]">
-              <div className="flex items-center gap-3 mb-3">
-                <TaskIconComponent className="w-6 h-6 text-[#F7C843]" />
-                <div className="flex-1">
-                  <h4 className="font-semibold text-white">{task.titleKey ? t(task.titleKey) : task.title}</h4>
-                  <p className="text-sm text-[#a0a0a0]">{task.description}</p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <TextField
-                  fullWidth
-                  label={t('addVehicleModal.step3.mileageAtCompletionLabel')}
-                  name={`task-mileage-${index}`}
-                  id={`task-mileage-${index}`}
-                  type="number"
-                  value={task.dueMileage || ''}
-                  onChange={(e) => handleInitialTaskChange(index, 'dueMileage', e.target.value)}
-                  placeholder={t('addVehicleModal.step2.mileagePlaceholder')}
-                  variant="outlined"
-                  size="small"
-                />
-                 <TextField
-                    fullWidth
-                    label={t('task.cost')}
-                    name={`task-cost-${index}`}
-                    id={`task-cost-${index}`}
-                    type="number"
-                    value={task.cost || ''}
-                    onChange={(e) => handleInitialTaskChange(index, 'cost', e.target.value)}
-                    placeholder="e.g., 50.00"
-                    variant="outlined"
-                    size="small"
-                />
-                <TextField
-                    fullWidth
-                    label={t('task.notesLabel')}
-                    name={`task-notes-${index}`}
-                    id={`task-notes-${index}`}
-                    value={task.notes || ''}
-                    onChange={(e) => handleInitialTaskChange(index, 'notes', e.target.value)}
-                    rows={2}
-                    multiline
-                    variant="outlined"
-                    size="small"
-                />
-                 <Button 
-                   type="button" 
-                   onClick={handleSaveCustomInitialTask} 
-                   variant="contained"
-                   color="primary"
-                   size="small"
-                   sx={{ mt: 1 }}
-                 >
-                   {t('addVehicleModal.step3.saveCustomEntryButton')}
-                 </Button>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-    </motion.div>
-  );
+
 
   if (!isOpen) return null;
 
@@ -687,9 +528,8 @@ const renderStep3_InitialLog = () => (
               exit={{ opacity: 0, x: (language === 'ar' ? -1 : 1) * (wizardStep % 2 === 0 ? -30 : 30), transition: { duration: 0.2 } }}
             >
               {wizardStep === 0 && renderStep0_VinOrManual()}
-              {wizardStep === 1 && renderStep1_DetailsAndPhoto()}
+              {wizardStep === 1 && renderStep1_Details()}
               {wizardStep === 2 && renderStep2_Essentials()}
-              {wizardStep === 3 && renderStep3_InitialLog()}
             </motion.div>
           </AnimatePresence>
         </div>
