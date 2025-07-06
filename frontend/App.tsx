@@ -8,6 +8,7 @@ import AddVehicleModal from './components/modals/AddVehicleModal';
 import AddTaskModal from './components/modals/AddTaskModal';
 import EditVehicleModal from './components/modals/EditVehicleModal';
 import ViewRecallsModal from './components/modals/ViewRecallsModal';
+import ErrorMessage from './components/shared/ErrorMessage';
 import NoVehicleSelected from './components/shared/NoVehicleSelected';
 import SelectVehiclePlaceholder from './components/shared/SelectVehiclePlaceholder';
 import Tabs from './components/shared/Tabs';
@@ -253,7 +254,9 @@ const App: React.FC = () => {
   
   const handleOpenAddTaskForSelected = () => rest.handleOpenAddTaskModal();
   const handleCloseAddTask = () => rest.handleCloseAddTaskModal();
-  
+
+  const handleErrorClose = () => rest.setError(null);
+
   const handleOpenEditTask = (task: MaintenanceTask) => {
     if (selectedVehicleId) rest.handleOpenAddTaskModal(task);
   };
@@ -333,14 +336,6 @@ const App: React.FC = () => {
     setRecallsForModal(recalls);
     setShowRecallsModal(true);
   };
-
-  const { showGenericError } = useToast();
-  React.useEffect(() => {
-    if (error) {
-      showGenericError(t(error));
-      rest.setError(null); // Clear the error after showing toast
-    }
-  }, [error, showGenericError, t, rest]);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -499,6 +494,7 @@ const App: React.FC = () => {
               currentMileage={selectedVehicle?.currentMileage}
             />
           )}
+          {error && <ErrorMessage message={t(error)} onClose={handleErrorClose} />}
           <NotificationCenter open={showNotifications} onClose={() => setShowNotifications(false)} notifications={notifications} onMarkRead={markAsRead} />
           <AnimatePresence>
             {isMobile && isFilterMenuOpen && (
