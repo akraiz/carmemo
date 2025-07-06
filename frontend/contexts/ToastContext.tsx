@@ -192,6 +192,18 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
     );
   };
 
+  const errorToastStyle = {
+    borderRadius: '12px',
+    background: '#232323',
+    color: '#fff',
+    boxShadow: '0 2px 16px 0 rgba(0,0,0,0.18)',
+    fontSize: '1rem',
+    padding: '14px 20px',
+    border: '1px solid #ff4d4f',
+    minWidth: '260px',
+    maxWidth: '90vw',
+  };
+
   const showEnrichmentFailed = (vehicle: Vehicle, error?: string) => {
     toast.error(
       t('toasts.enrichmentFailed', {
@@ -201,6 +213,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
       {
         duration: 5000,
         icon: '❌',
+        style: errorToastStyle,
       }
     );
   };
@@ -239,6 +252,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
       {
         duration: 5000,
         icon: '❌',
+        style: errorToastStyle,
       }
     );
   };
@@ -267,6 +281,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
       {
         duration: 5000,
         icon: '❌',
+        style: errorToastStyle,
       }
     );
   };
@@ -278,7 +293,11 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   const showGenericError = (message: string, details?: string) => {
     toast.error(
       details ? `${message}: ${details}` : message,
-      { duration: 5000 }
+      {
+        duration: 5000,
+        icon: '❌',
+        style: errorToastStyle,
+      }
     );
   };
 
