@@ -54,7 +54,9 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
         spending: monthTasks.reduce((sum: number, t: MaintenanceTask) => sum + (t.cost || 0), 0),
         tasks: monthTasks.length
       };
-    }).reverse();
+    })
+    .reverse()
+    .filter(m => m.spending > 0 && m.tasks > 0); // Only show months with spending and completed tasks with cost
 
     return {
       totalTasks,
