@@ -310,7 +310,7 @@ const App: React.FC = () => {
           refreshVehicleData={() => selectedVehicleId && rest.refreshVehicleData(selectedVehicleId)}
         />;
       case 'analytics':
-        return <AnalyticsView />;
+        return <AnalyticsView vehicle={selectedVehicle} />;
       case 'settings':
         return <SettingsView />;
       case 'test':

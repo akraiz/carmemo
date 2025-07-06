@@ -4,36 +4,18 @@ import { Vehicle, MaintenanceTask, TaskStatus, TaskCategory } from '../../types'
 import { Icons } from '../Icon'; 
 import { useTranslation } from '../../hooks/useTranslation';
 import { CANONICAL_TASK_CATEGORIES } from '../../constants';
-import useVehicleManager from '../../hooks/useVehicleManager';
-import { formatDate } from '../../utils/dateUtils';
 
-const AnalyticsView: React.FC = () => {
+interface AnalyticsViewProps {
+  vehicle: Vehicle | null;
+}
+
+const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
   const { t } = useTranslation();
-  const { selectedVehicle, isLoading } = useVehicleManager();
-
-  if (isLoading) {
-    return (
-      <motion.div
-        className="flex flex-col items-center justify-center h-full text-center bg-[#1c1c1c] rounded-lg shadow-xl border border-dashed border-[#333333]"
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-      >
-        <Icons.BarChart3 className="w-16 h-16 text-[#404040] mb-4" strokeWidth={1} />
-        <h2 className="text-xl md:text-2xl font-bold text-[#cfcfcf] mb-2 font-heading uppercase">
-          Loading Analytics...
-        </h2>
-        <p className="text-sm text-[#707070] max-w-md">
-          Please wait while we load your vehicle data.
-        </p>
-      </motion.div>
-    );
-  }
 
   const analytics = useMemo(() => {
-    if (!selectedVehicle) return null;
+    if (!vehicle) return null;
     
-    const allTasks = selectedVehicle.maintenanceSchedule || [];
+    const allTasks = vehicle.maintenanceSchedule || [];
     const totalTasks = allTasks.length;
     const completedTasks = allTasks.filter((t: MaintenanceTask) => t.status === TaskStatus.Completed).length;
     const overdueTasks = allTasks.filter((t: MaintenanceTask) => t.status === TaskStatus.Overdue).length;
@@ -81,7 +63,7 @@ const AnalyticsView: React.FC = () => {
       monthlySpending,
       averageCost: completedTasks > 0 ? (totalCost / completedTasks).toFixed(2) : '0'
     };
-  }, [selectedVehicle]);
+  }, [vehicle]);
 
   const StatCard: React.FC<{ title: React.ReactNode; value: React.ReactNode; subtitle?: string; icon: React.ReactElement; color: string }> = ({ title, value, subtitle, icon, color }) => (
     <motion.div 
@@ -117,7 +99,7 @@ const AnalyticsView: React.FC = () => {
     </div>
   );
 
-  if (!selectedVehicle) {
+  if (!vehicle) {
     return (
       <motion.div
         className="flex flex-col items-center justify-center h-full text-center bg-[#1c1c1c] rounded-lg shadow-xl border border-dashed border-[#333333]"
@@ -159,7 +141,7 @@ const AnalyticsView: React.FC = () => {
         <div className="flex items-center gap-2">
           <Icons.BarChart3 className="w-5 h-5 text-[#F7C843]" />
           <span className="font-bold text-[#F7C843] text-base md:text-lg">
-            {t('analytics.title')} - {selectedVehicle.nickname || `${selectedVehicle.make} ${selectedVehicle.model}`}
+            {t('analytics.title')} - {vehicle.nickname || `${vehicle.make} ${vehicle.model}`}
           </span>
         </div>
         <div className="flex gap-2 text-xs md:text-sm text-[#a0a0a0]">
