@@ -176,31 +176,9 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
       </div>
       {/* Key Statistics - single column on mobile */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
-        <StatCard
-          title={<>{t('analytics.totalTasks')}
-            {/* <span title={t('analytics.totalTasksTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span> */}
-          </>}
-          value={analytics.totalTasks}
-          icon={<Icons.ListTodo />}
-          color="bg-blue-500"
-        />
-        <StatCard
-          title={<>{t('analytics.completedTasks')}
-            {/* <span title={t('analytics.completedTasksTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span> */}
-          </>}
-          value={analytics.completedTasks}
-          subtitle={`${analytics.completionRate}% ${t('analytics.completionRate')}`}
-          icon={<Icons.CheckCircle />}
-          color="bg-green-500"
-        />
-        <StatCard
-          title={<>{t('analytics.overdueTasks')}
-            {/* <span title={t('analytics.overdueTasksTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span> */}
-          </>}
-          value={analytics.overdueTasks}
-          icon={<Icons.AlertTriangle />}
-          color="bg-red-500"
-        />
+        {/* Removed StatCard for Total Tasks */}
+        {/* Removed StatCard for Completed */}
+        {/* Removed StatCard for Overdue */}
         <StatCard
           title={t('analytics.totalSpent')}
           value={<div className="flex items-center gap-2">
