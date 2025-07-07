@@ -202,6 +202,8 @@ const recallHandler: RequestHandler = async (req, res) => {
     return;
   }
   const url = `https://recalls.sa/Recall/FindRecallsBySerial/?serial=${encodeURIComponent(vin)}`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000); // 8 seconds
   try {
     const response = await fetch(url, {
       agent,
@@ -209,8 +211,10 @@ const recallHandler: RequestHandler = async (req, res) => {
         'User-Agent': 'Mozilla/5.0 (compatible; CarMemoProxy/1.0)',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'ar-SA,en-US;q=0.9,en;q=0.8'
-      }
+      },
+      signal: controller.signal
     });
+    clearTimeout(timeout);
     if (!response.ok) {
       console.error(`Failed to fetch from recalls.sa: ${response.status} ${response.statusText}`);
       res.status(response.status).json({ error: `recalls.sa returned status ${response.status}` });
@@ -244,10 +248,16 @@ const recallHandler: RequestHandler = async (req, res) => {
       console.warn('No recall data found in the HTML table for VIN:', vin);
     }
     res.json(recalls);
-  } catch (err) {
-    console.error('Error fetching or parsing from recalls.sa:', err);
-    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-    res.status(500).json({ error: 'Error fetching or parsing from recalls.sa', details: errorMessage });
+  } catch (err: any) {
+    clearTimeout(timeout);
+    if (err.name === 'AbortError') {
+      console.error('Timeout fetching from recalls.sa');
+      res.status(504).json({ error: 'Timeout fetching from recalls.sa' });
+    } else {
+      console.error('Error fetching or parsing from recalls.sa:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      res.status(500).json({ error: 'Error fetching or parsing from recalls.sa', details: errorMessage });
+    }
   }
 };
 
