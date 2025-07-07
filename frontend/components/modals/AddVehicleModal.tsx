@@ -334,6 +334,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     }
 
     if (!allValid) {
+      console.warn('[AddVehicleModal] Validation failed:', validation);
       return;
     }
 
@@ -345,6 +346,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
           year: { isValid: false, message: t('addVehicleModal.vinError.manualMakeModelYearRequired') }
         }));
         setWizardStep(showManualEntry || !wizardData.vin ? 0 : 1);
+        console.warn('[AddVehicleModal] Required fields missing: make/model/year');
         return;
     }
     if (!wizardData.currentMileage) {
@@ -353,6 +355,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
           currentMileage: { isValid: false, message: t('addVehicleModal.error.currentMileageRequired') }
         }));
         setWizardStep(2);
+        console.warn('[AddVehicleModal] Required field missing: currentMileage');
         return;
     }
 
@@ -381,9 +384,21 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     );
     setIsSubmitting(true);
     try {
+      if (!onAddVehicle) {
+        showGenericError('Add vehicle function is not available. Please try again later.');
+        setIsSubmitting(false);
+        return;
+      }
+      console.log('[AddVehicleModal] Submitting vehicle:', cleanedVehicleData);
       const vehicleId = await onAddVehicle(cleanedVehicleData as Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { recalls?: RecallInfo[] });
+      if (!vehicleId) {
+        showGenericError('Failed to create vehicle. No response from backend.');
+        setIsSubmitting(false);
+        return;
+      }
       onClose();
     } catch (err: any) {
+      console.error('[AddVehicleModal] Error creating vehicle:', err);
       showGenericError(t('addVehicleModal.error.failedToAddVehicle'), err?.message || undefined);
     } finally {
       setIsSubmitting(false);
