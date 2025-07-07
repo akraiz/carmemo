@@ -40,33 +40,31 @@ const Material3BottomNav: React.FC<Material3BottomNavProps> = ({
 
   // For mobile, use bottom navigation
   if (isMobile) {
+    // When rendering navigation items, filter out the settings tab if present
+    const filteredItems = items.filter(item => item.key !== 'settings');
     return (
       <BottomNavigation
         className={className}
         value={activeTabKey}
-        onChange={(event, newValue) => onTabChange(newValue)}
+        onChange={(_, newValue) => onTabChange(newValue)}
+        showLabels
         sx={{
+          backgroundColor: '#232323',
+          borderTop: '1px solid #333',
+          height: 72,
+          zIndex: 1000,
           position: 'fixed',
           bottom: 0,
           left: 0,
           right: 0,
-          zIndex: 1000,
-          backgroundColor: theme.palette.background.paper,
-          borderTop: `1px solid ${theme.palette.divider}`,
-          '& .MuiBottomNavigationAction-root': {
-            color: theme.palette.text.secondary,
-            '&.Mui-selected': {
-              color: theme.palette.primary.main,
-            },
-          },
         }}
       >
-        {items.map((item) => (
+        {filteredItems.map((item) => (
           <BottomNavigationAction
             key={item.key}
             label={item.label}
-            value={item.key}
             icon={item.icon}
+            value={item.key}
           />
         ))}
       </BottomNavigation>

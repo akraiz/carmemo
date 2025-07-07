@@ -274,7 +274,6 @@ const App: React.FC = () => {
     { key: 'vehicles', label: t('tabs.vehicles'), icon: <CarIcon /> },
     { key: 'timeline', label: t('tabs.timeline'), icon: <TimelineIcon /> },
     { key: 'analytics', label: t('tabs.analytics'), icon: <AnalyticsIcon /> },
-    { key: 'settings', label: t('tabs.settings'), icon: <SettingsIcon /> },
     ...(testMode ? [{ key: 'test', label: 'Test Recalls', icon: <BuildIcon /> }] : [])
   ];
   
@@ -311,8 +310,6 @@ const App: React.FC = () => {
         />;
       case 'analytics':
         return <AnalyticsView vehicle={selectedVehicle} />;
-      case 'settings':
-        return <SettingsView />;
       case 'test':
         return <RecallsTest />;
       default:
