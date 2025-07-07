@@ -322,17 +322,8 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
 
 
   const handleSubmit = async () => {
-    let allValid = true;
-    for (const key in validation) {
-      if (validation.hasOwnProperty(key)) {
-        const field = validation[key as keyof ValidationState];
-        if (!field.isValid) {
-          allValid = false;
-          break;
-        }
-      }
-    }
-
+    const requiredFields: (keyof ValidationState)[] = ['vin', 'make', 'model', 'year', 'currentMileage'];
+    let allValid = requiredFields.every(field => validation[field]?.isValid);
     if (!allValid) {
       console.warn('[AddVehicleModal] Validation failed:', validation);
       return;
