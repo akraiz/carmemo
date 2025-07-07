@@ -381,26 +381,23 @@ const VehicleInfoView: React.FC<VehicleInfoViewProps> = ({
     >
       {/* Vehicle Header Section */}
       <motion.section variants={sectionVariants} aria-labelledby="vehicle-header" className="bg-[#1c1c1c] p-4 md:p-6 rounded-xl shadow-xl border border-[#333333]">
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-10 py-6 md:py-10">
-          <div className="relative group flex-shrink-0 my-2 md:my-4">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-6">
+          <div className="relative group flex-shrink-0">
             {imageUrl ? (
               <img
                 src={imageUrl}
                 alt={vehicle.nickname || vehicle.model}
-                className="w-24 h-24 md:w-32 md:h-32 rounded-lg object-cover border-2 border-[#333333] shadow-lg mx-auto"
-                style={{ marginTop: 8, marginBottom: 8 }}
+                className="w-28 h-28 md:w-36 md:h-36 rounded-lg object-cover border-2 border-[#333333] shadow-lg"
               />
             ) : (
-              <div className="flex items-center justify-center" style={{ minHeight: 120 }}>
-                <BrandIcon size={110} color="#9ca3af" />
-              </div>
+              <BrandIcon size={144} color="#9ca3af" />
             )}
           </div>
-          <div className="flex-grow text-center sm:text-start mt-2 md:mt-4">
-            <h2 id="vehicle-header" className="font-bold text-[28px] tracking-[0.5px] text-[#FFD700] font-heading mb-1">
+          <div className="flex-grow text-center sm:text-start">
+            <h2 id="vehicle-header" className="font-bold text-[28px] tracking-[0.5px] text-[#FFD700] font-heading">
               {vehicle.nickname || `${vehicle.make} ${vehicle.model}`}
             </h2>
-            <p className="font-normal text-[14px] text-[#B0B0B0] leading-[1.5] mb-2">{vehicle.year}</p>
+            <p className="font-normal text-[14px] text-[#B0B0B0] leading-[1.5]">{vehicle.year}</p>
             {/* Use liveRecalls for button visibility */}
             {recallsLoading ? (
               <span className="text-xs text-[#FFD700] block mt-2">{t('vehicleInfo.loadingRecalls')}</span>
