@@ -206,20 +206,31 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
   };
 
   const handleNextStep = async () => {
+    // Always validate all required fields for the current step before proceeding
     let allValid = true;
-    for (const key in validation) {
-      if (validation.hasOwnProperty(key)) {
-        const field = validation[key as keyof ValidationState];
-        if (!field.isValid) {
-          allValid = false;
-          break;
-        }
-      }
+    let newValidation = { ...validation };
+    if (wizardStep === 0 && showManualEntry) {
+      // Manual entry: validate make, model, year
+      (['make', 'model', 'year'] as (keyof ValidationState)[]).forEach((field) => {
+        const isValid = validateField(field, wizardData[field as keyof WizardData] as string);
+        if (!isValid) allValid = false;
+        newValidation[field] = { ...validation[field], isValid };
+      });
+    } else if (wizardStep === 1) {
+      // Step 1: validate make, model, year (again, in case user changed)
+      (['make', 'model', 'year'] as (keyof ValidationState)[]).forEach((field) => {
+        const isValid = validateField(field, wizardData[field as keyof WizardData] as string);
+        if (!isValid) allValid = false;
+        newValidation[field] = { ...validation[field], isValid };
+      });
+    } else if (wizardStep === 2) {
+      // Step 2: validate currentMileage
+      const isValid = validateField('currentMileage', wizardData.currentMileage);
+      if (!isValid) allValid = false;
+      newValidation.currentMileage = { ...validation.currentMileage, isValid };
     }
-
-    if (!allValid) {
-      return;
-    }
+    setValidation(newValidation);
+    if (!allValid) return;
 
     if (wizardStep === 0 && !showManualEntry) {
       try {
@@ -738,7 +749,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
               <Button
                 type="button"
                 onClick={handleNextStep}
-                disabled={isDecodingVin || isFetchingRecalls || (wizardStep === 0 && !showManualEntry && !wizardData.vin.trim())}
+                disabled={isDecodingVin || isFetchingRecalls}
                 variant="primary"
                 size="small"
               >
