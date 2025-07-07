@@ -68,6 +68,7 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
   const [activeTab, setActiveTab] = useState<'basic' | 'specs'>('basic');
   const [validation, setValidation] = useState<ValidationState>(initialValidation);
   const { vehicles, setState } = useVehicleManager();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Always call hooks before any return
   useEffect(() => {
@@ -156,6 +157,26 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
     }
   };
 
+  const enrichBaselineInBackground = async (make: string, model: string, year: number, vehicleId: string) => {
+    try {
+      console.log('[ENRICHMENT] Starting background enrichment for vehicle:', vehicleId);
+      const baseline = await enrichBaselineSchedule(make, model, year);
+      // Find the updated vehicle
+      const updatedVehicle = vehicles.find(v => v.id === vehicleId);
+      if (updatedVehicle) {
+        // If enrichBaselineSchedule returns a schedule, merge it manually
+        const mergedVehicle = { ...updatedVehicle, maintenanceSchedule: baseline };
+        setState(prev => ({
+          ...prev,
+          vehicles: prev.vehicles.map(v => v.id === mergedVehicle.id ? mergedVehicle : v)
+        }));
+        console.log('[ENRICHMENT] Successfully enriched baseline for vehicle:', vehicleId);
+      }
+    } catch (err) {
+      console.error('[ENRICHMENT] Failed to enrich baseline in background:', err);
+    }
+  };
+
   const handleSubmit = async () => {
     // Validate all required fields
     const makeValid = validateField('make', formData.make);
@@ -177,42 +198,23 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
       cylinders: formData.cylinders ? parseInt(formData.cylinders, 10) : undefined,
       doors: formData.doors ? parseInt(formData.doors, 10) : undefined,
     };
-    
-    // Update vehicle first (this is the critical user action)
-    onUpdateVehicle(finalVehicleData);
-    
-    // Show success message if recalls were updated, then close modal after a delay
-    setTimeout(() => {
-      onClose();
-    }, 2000);
-
-    // Only trigger baseline enrichment if make, model, or year changed
-    const makeChanged = formData.make !== vehicle.make;
-    const modelChanged = formData.model !== vehicle.model;
-    const yearChanged = parseInt(formData.year, 10) !== vehicle.year;
-    if (makeChanged || modelChanged || yearChanged) {
-      enrichBaselineInBackground(finalVehicleData.make as string, finalVehicleData.model as string, finalVehicleData.year as number, finalVehicleData.id);
-    }
-  };
-
-  // Fix enrichment logic to only return Vehicle objects
-  const enrichBaselineInBackground = async (make: string, model: string, year: number, vehicleId: string) => {
+    setIsSubmitting(true);
     try {
-      console.log('[ENRICHMENT] Starting background enrichment for vehicle:', vehicleId);
-      const baseline = await enrichBaselineSchedule(make, model, year);
-      // Find the updated vehicle
-      const updatedVehicle = vehicles.find(v => v.id === vehicleId);
-      if (updatedVehicle) {
-        // If enrichBaselineSchedule returns a schedule, merge it manually
-        const mergedVehicle = { ...updatedVehicle, maintenanceSchedule: baseline };
-        setState(prev => ({
-          ...prev,
-          vehicles: prev.vehicles.map(v => v.id === mergedVehicle.id ? mergedVehicle : v)
-        }));
-        console.log('[ENRICHMENT] Successfully enriched baseline for vehicle:', vehicleId);
+      // Update vehicle first (this is the critical user action)
+      await onUpdateVehicle(finalVehicleData);
+      // Show success message if recalls were updated, then close modal after a delay
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+      // Only trigger baseline enrichment if make, model, or year changed
+      const makeChanged = formData.make !== vehicle.make;
+      const modelChanged = formData.model !== vehicle.model;
+      const yearChanged = parseInt(formData.year, 10) !== vehicle.year;
+      if (makeChanged || modelChanged || yearChanged) {
+        enrichBaselineInBackground(finalVehicleData.make as string, finalVehicleData.model as string, finalVehicleData.year as number, finalVehicleData.id);
       }
-    } catch (err) {
-      console.error('[ENRICHMENT] Failed to enrich baseline in background:', err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -558,8 +560,9 @@ const EditVehicleModal: React.FC<EditVehicleModalProps> = ({ isOpen, onClose, on
             onClick={handleSubmit} 
             variant="primary"
             size="small"
+            disabled={isSubmitting}
           >
-            {t('common.saveChanges')}
+            {isSubmitting ? t('common.processing') : t('common.saveChanges')}
           </Button>
         </div>
       </motion.div>

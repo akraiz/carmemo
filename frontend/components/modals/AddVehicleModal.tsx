@@ -103,6 +103,7 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
   const [isFetchingRecalls, setIsFetchingRecalls] = useState(false);
   const [showManualEntry, setShowManualEntry] = useState(false);
   const [validation, setValidation] = useState<ValidationState>(initialValidation);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const totalSteps = 3;
 
   useEffect(() => {
@@ -367,11 +368,14 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
     const cleanedVehicleData = Object.fromEntries(
       Object.entries(finalVehicleData).filter(([_, v]) => v !== "")
     );
+    setIsSubmitting(true);
     try {
       const vehicleId = await onAddVehicle(cleanedVehicleData as Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { recalls?: RecallInfo[] });
       onClose();
     } catch (err: any) {
       showGenericError(t('addVehicleModal.error.failedToAddVehicle'), err?.message || undefined);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -747,8 +751,9 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ isOpen, onClose, onAd
                 onClick={handleSubmit} 
                 variant="primary"
                 size="small"
+                disabled={isSubmitting}
               >
-                {t('addVehicleModal.finishAndSaveButton')}
+                {isSubmitting ? t('common.processing') : t('addVehicleModal.finishAndSaveButton')}
               </Button>
             )}
           </div>
