@@ -177,20 +177,26 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
       {/* Key Statistics - single column on mobile */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
         <StatCard
-          title={<>{t('analytics.totalTasks')} <span title={t('analytics.totalTasksTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span></>}
+          title={<>{t('analytics.totalTasks')}
+            {/* <span title={t('analytics.totalTasksTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span> */}
+          </>}
           value={analytics.totalTasks}
           icon={<Icons.ListTodo />}
           color="bg-blue-500"
         />
         <StatCard
-          title={<>{t('analytics.completedTasks')} <span title={t('analytics.completedTasksTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span></>}
+          title={<>{t('analytics.completedTasks')}
+            {/* <span title={t('analytics.completedTasksTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span> */}
+          </>}
           value={analytics.completedTasks}
           subtitle={`${analytics.completionRate}% ${t('analytics.completionRate')}`}
           icon={<Icons.CheckCircle />}
           color="bg-green-500"
         />
         <StatCard
-          title={<>{t('analytics.overdueTasks')} <span title={t('analytics.overdueTasksTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span></>}
+          title={<>{t('analytics.overdueTasks')}
+            {/* <span title={t('analytics.overdueTasksTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span> */}
+          </>}
           value={analytics.overdueTasks}
           icon={<Icons.AlertTriangle />}
           color="bg-red-500"
@@ -199,7 +205,7 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
           title={t('analytics.totalSpent')}
           value={<div className="flex items-center gap-2">
             <span>{`$${analytics.totalCost.toFixed(2)}`}</span>
-            <span className="ml-1" title={t('analytics.totalSpentTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span>
+            {/* <span className="ml-1" title={t('analytics.totalSpentTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span> */}
           </div>}
           subtitle={`${t('analytics.averageCost')}: $${analytics.averageCost}`}
           icon={<Icons.DollarSign />}
@@ -222,19 +228,25 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ vehicle }) => {
             value={analytics.completedTasks}
             max={analytics.totalTasks}
             color="bg-green-500"
-            label={<>{t('analytics.completed')} <span title={t('analytics.completedTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span></>}
+            label={<>{t('analytics.completed')}
+              {/* <span title={t('analytics.completedTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span> */}
+            </>}
           />
           <ProgressBar
             value={analytics.overdueTasks}
             max={analytics.totalTasks}
             color="bg-red-500"
-            label={<>{t('analytics.overdue')} <span title={t('analytics.overdueTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span></>}
+            label={<>{t('analytics.overdue')}
+              {/* <span title={t('analytics.overdueTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span> */}
+            </>}
           />
           <ProgressBar
             value={analytics.upcomingTasks}
             max={analytics.totalTasks}
             color="bg-yellow-500"
-            label={<>{t('analytics.upcoming')} <span title={t('analytics.upcomingTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span></>}
+            label={<>{t('analytics.upcoming')}
+              {/* <span title={t('analytics.upcomingTooltip')}><Icons.InformationCircle className="w-4 h-4 text-[#F7C843] inline" /></span> */}
+            </>}
           />
         </motion.div>
         {/* Monthly Spending */}
