@@ -324,9 +324,7 @@ const App: React.FC = () => {
     await rest.handleUpdateVehiclePhoto(vehicleId, file);
   };
   const handleAddVehicleWithId = async (vehicleData: Omit<Vehicle, 'id' | 'maintenanceSchedule'> & { recalls?: RecallInfo[] }) => {
-    await rest.handleAddVehicle(vehicleData);
-    const latestVehicle = vehicles[vehicles.length - 1];
-    return latestVehicle?.id;
+    return await rest.handleAddVehicle(vehicleData);
   };
 
   const handleViewRecalls = (recalls: RecallInfo[]) => {
